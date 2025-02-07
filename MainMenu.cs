@@ -40,11 +40,11 @@ namespace Kahoofection
 
         private static readonly string[] wisdomPhrases =
         [
-            "fake your confidence like everyone else",
-            "life is like a game, we pay to keep up",
-            "water has no effect on fake flowers",
-            "you miss every shot you don't take",
-            "made to last",
+            "ᶠᵃᵏᵉ ʸᵒᵘʳ ᶜᵒⁿᶠⁱᵈᵉⁿᶜᵉ ˡⁱᵏᵉ ᵉᵛᵉʳʸᵒⁿᵉ ᵉˡˢᵉ",
+            "ˡⁱᶠᵉ ⁱˢ ˡⁱᵏᵉ ᵃ ᵍᵃᵐᵉ, ʷᵉ ᵖᵃʸ ᵗᵒ ᵏᵉᵉᵖ ᵘᵖ",
+            "ʷᵃᵗᵉʳ ʰᵃˢ ⁿᵒ ᵉᶠᶠᵉᶜᵗ ᵒⁿ ᶠᵃᵏᵉ ᶠˡᵒʷᵉʳˢ",
+            "ʸᵒᵘ ᵐⁱˢˢ ᵉᵛᵉʳʸ ˢʰᵒᵗ ʸᵒᵘ ᵈᵒⁿ'ᵗ ᵗᵃᵏᵉ",
+            "ᵐᵃᵈᵉ ᵗᵒ ˡᵃˢᵗ",
         ];
 
 
