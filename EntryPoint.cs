@@ -80,7 +80,7 @@ namespace Kahoofection
 
 
 
-            string welcomeMessage = "Hello stranger! Welcome to";
+            string welcomeMessage = "             Hello stranger! Welcome to";
             string kahoofectionSlogan = " ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.";
 
             string[] kahoofectionHeader =
@@ -93,43 +93,48 @@ namespace Kahoofection
 
 
 
-            Console.Write("             ");
             Console.ForegroundColor = ConsoleColor.White;
 
             foreach (char c in welcomeMessage)
             {
                 Console.Write(c);
+
                 await Task.Delay(10);
             }
 
             await Task.Delay(500);
 
+
+
             Console.WriteLine();
             Console.WriteLine();
+
             Console.ForegroundColor = ConsoleColor.Blue;
 
             for (int i = 0; i < kahoofectionHeader.Length; i++)
             {
-                await Task.Delay(100);
-
                 if (i == kahoofectionHeader.Length - 1)
                 {
                     Console.Write(kahoofectionHeader[i]);
-
-                    await Task.Delay(500);
-
-                    Console.ForegroundColor = ConsoleColor.White;
-
-                    foreach (char c in kahoofectionSlogan)
-                    {
-                        Console.Write(c);
-                        await Task.Delay(10);
-                    }
-
                     break;
                 }
 
                 Console.WriteLine(kahoofectionHeader[i]);
+
+                await Task.Delay(100);
+            }
+
+            await Task.Delay(500);
+
+
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            foreach (char c in kahoofectionSlogan)
+            {
+                Console.Write(c);
+
+                await Task.Delay(10);
             }
 
             await Task.Delay(1500);
