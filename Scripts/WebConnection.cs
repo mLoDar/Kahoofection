@@ -12,7 +12,7 @@ namespace Kahoofection.Scripts
 
 
 
-        internal static string CreateRequest(string targetUrl, Dictionary<string, string>? requestParameters = null)
+        internal static async Task<string> CreateRequest(string targetUrl, Dictionary<string, string>? requestParameters = null)
         {
             ActivityLogger.Log(_currentSection, $"Initiating a new web request.");
             ActivityLogger.Log(_currentSection, $"Target url: {targetUrl}");
@@ -34,8 +34,8 @@ namespace Kahoofection.Scripts
 
                 HttpClient httpClient = new();
 
-                HttpResponseMessage responseMessage = httpClient.GetAsync(targetUrl).Result;
-                string response = new StreamReader(responseMessage.Content.ReadAsStreamAsync().Result).ReadToEnd();
+                HttpResponseMessage responseMessage = await httpClient.GetAsync(targetUrl);
+                string response = new StreamReader(await responseMessage.Content.ReadAsStreamAsync()).ReadToEnd();
 
                 ActivityLogger.Log(_currentSection, $"Web request was a success, returning response.");
 
