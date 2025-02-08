@@ -29,7 +29,6 @@ namespace Kahoofection.Scripts
                     }
 
                     targetUrl = sb.ToString();
-                    ActivityLogger.Log(_currentSection, targetUrl);
 
                 }
 
