@@ -143,79 +143,9 @@ namespace Kahoofection.Modules.Information
 
 
 
-            int currentConsoleWidth = Console.BufferWidth;
-            
-            int longestTitleLength = foundQuizzes.Cast<JObject>()
-                .Select(quiz => (JObject?)quiz.SelectToken("card"))
-                .Where(quiz_Data => quiz_Data != null)
-                .Select(quiz_Data =>
-                {
-                    string title = quiz_Data?["title"]?.ToString() ?? "-";
-                    int difference = title.Length + 65 - currentConsoleWidth;
+            ActivityLogger.Log(_currentSection, $"Displaying the formatted search results from the API endpoint.");
 
-                    if (title.Length + 65 > currentConsoleWidth)
-                    {
-                        title = title[..(title.Length - difference - 11)] + " ...";
-                    }
-
-                    return title;
-                })
-                .Max(combo => combo.Length);
-
-            string upperLine = $"┌{new string('─', 40)}─{new string('─', longestTitleLength + 11)}┐";
-            string lowerLine = $"└{new string('─', 40)}─{new string('─', longestTitleLength + 11)}┘";
-
-
-
-            Console.WriteLine($"             {upperLine}");
-
-            foreach (JObject quiz in foundQuizzes.Cast<JObject>())
-            {
-                JObject? quizData = (JObject?)quiz.SelectToken("card");
-
-                if (quizData == null)
-                {
-                    continue;
-                }
-
-
-
-                string quizId = quizData?["uuid"]?.ToString() ?? "-";
-                string quizTitle = quizData?["title"]?.ToString() ?? "-";
-                string quizCreator = quizData?["creator_username"]?.ToString() ?? "-";
-                
-                int titleLineLength = "ᴛɪᴛʟᴇ  ".Length + longestTitleLength;
-                int creatorLineLength = $"ʙʏ      {quizCreator}".Length;
-
-                if (quizCreator.Length > quizTitle.Length)
-                {
-                    quizCreator = quizCreator.Substring(0, quizTitle.Length - 4) + " ...";
-
-                    creatorLineLength = $"ʙʏ      {quizCreator}".Length;
-                }
-
-                if (quizTitle.Length + 65 > currentConsoleWidth)
-                {
-                    int difference = quizTitle.Length + 65 - currentConsoleWidth;
-                    quizTitle = quizTitle[..(quizTitle.Length - difference - 11)] + " ...";
-                }
-
-                int spaceToFill = longestTitleLength - quizTitle.Length + 1;
-
-                if (spaceToFill < 0)
-                {
-                    spaceToFill = 0;
-                }
-
-
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"             │ '\u001b[92m{quizId}\u001b[97m'   ᴛɪᴛʟᴇ   {quizTitle}{new string(' ', spaceToFill)} │");//
-                Console.WriteLine($"             ├───{new string('─', quizId.ToString().Length - 4)}─────┐ ʙʏ      {quizCreator}{new string(' ', longestTitleLength - creatorLineLength + 10)}│");
-                Console.WriteLine($"             │   {new string(' ', quizId.ToString().Length + 1)}└───────────{new string('─', longestTitleLength)}┤");
-            }
-            
-            Console.WriteLine($"             {lowerLine}");
+            DisplayFoundQuizzes(foundQuizzes);
 
             ActivityLogger.Log(_currentSection, $"Formatted all quizzes and displayed them.");
 
@@ -332,6 +262,83 @@ namespace Kahoofection.Modules.Information
             {
                 return (false, exception, null);
             }
+        }
+
+        private static void DisplayFoundQuizzes(JArray foundQuizzes)
+        {
+            int currentConsoleWidth = Console.BufferWidth;
+
+            int longestTitleLength = foundQuizzes.Cast<JObject>()
+                .Select(quiz => (JObject?)quiz.SelectToken("card"))
+                .Where(quiz_Data => quiz_Data != null)
+                .Select(quiz_Data =>
+                {
+                    string title = quiz_Data?["title"]?.ToString() ?? "-";
+                    int difference = title.Length + 65 - currentConsoleWidth;
+
+                    if (title.Length + 65 > currentConsoleWidth)
+                    {
+                        title = title[..(title.Length - difference - 11)] + " ...";
+                    }
+
+                    return title;
+                })
+                .Max(combo => combo.Length);
+
+            string upperLine = $"┌{new string('─', 40)}─{new string('─', longestTitleLength + 11)}┐";
+            string lowerLine = $"└{new string('─', 40)}─{new string('─', longestTitleLength + 11)}┘";
+
+
+
+            Console.WriteLine($"             {upperLine}");
+
+            foreach (JObject quiz in foundQuizzes.Cast<JObject>())
+            {
+                JObject? quizData = (JObject?)quiz.SelectToken("card");
+
+                if (quizData == null)
+                {
+                    continue;
+                }
+
+
+
+                string quizId = quizData?["uuid"]?.ToString() ?? "-";
+                string quizTitle = quizData?["title"]?.ToString() ?? "-";
+                string quizCreator = quizData?["creator_username"]?.ToString() ?? "-";
+
+                int titleLineLength = "ᴛɪᴛʟᴇ  ".Length + longestTitleLength;
+                int creatorLineLength = $"ʙʏ      {quizCreator}".Length;
+
+                if (quizCreator.Length > quizTitle.Length)
+                {
+                    quizCreator = quizCreator.Substring(0, quizTitle.Length - 4) + " ...";
+
+                    creatorLineLength = $"ʙʏ      {quizCreator}".Length;
+                }
+
+                if (quizTitle.Length + 65 > currentConsoleWidth)
+                {
+                    int difference = quizTitle.Length + 65 - currentConsoleWidth;
+                    quizTitle = quizTitle[..(quizTitle.Length - difference - 11)] + " ...";
+                }
+
+                int spaceToFill = longestTitleLength - quizTitle.Length + 1;
+
+                if (spaceToFill < 0)
+                {
+                    spaceToFill = 0;
+                }
+
+
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"             │ '\u001b[92m{quizId}\u001b[97m'   ᴛɪᴛʟᴇ   {quizTitle}{new string(' ', spaceToFill)} │");//
+                Console.WriteLine($"             ├───{new string('─', quizId.ToString().Length - 4)}─────┐ ʙʏ      {quizCreator}{new string(' ', longestTitleLength - creatorLineLength + 10)}│");
+                Console.WriteLine($"             │   {new string(' ', quizId.ToString().Length + 1)}└───────────{new string('─', longestTitleLength)}┤");
+            }
+
+            Console.WriteLine($"             {lowerLine}");
         }
     }
 }
