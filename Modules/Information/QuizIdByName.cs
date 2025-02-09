@@ -34,10 +34,10 @@ namespace Kahoofection.Modules.Information
 
             ConsoleHelper.ResetConsole();
 
-            Console.WriteLine("             ┌ Enter a Quiz name      ");
-            Console.WriteLine("             ├─────────────────────   ");
-            Console.Write("             └─> ");
-
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mEnter a Quiz name      ");
+            Console.WriteLine("             \u001b[94m├─────────────────────   ");
+            Console.Write("             \u001b[94m└─> \u001b[97m");
+            
 
 
             ActivityLogger.Log(_currentSection, $"Prompted to provide a quiz name, waiting for an input.");
@@ -86,6 +86,12 @@ namespace Kahoofection.Modules.Information
             string requestUrl = _appUrls.kahootQuizSearch;
             string apiResponse = await WebConnection.CreateRequest(requestUrl, requestParameters);
 
+
+
+            ConsoleHelper.ResetConsole();
+
+
+
             if (string.IsNullOrEmpty(apiResponse))
             {
                 ActivityLogger.Log(_currentSection, "Received an invalid response from the API, the response was empty.");
@@ -123,8 +129,6 @@ namespace Kahoofection.Modules.Information
 
             if (foundQuizzes.Count == 0)
             {
-                ConsoleHelper.ResetConsole();
-
                 ActivityLogger.Log(_currentSection, "Failed to find any quizze for the current search. Restarting the module.");
 
                 string title = "Quiz search failed";
@@ -138,8 +142,6 @@ namespace Kahoofection.Modules.Information
             ActivityLogger.Log(_currentSection, $"Successfully parsed the API data and found {foundQuizzes.Count} quizzes.");
 
 
-
-            ConsoleHelper.ResetConsole();
 
             int currentConsoleWidth = Console.BufferWidth;
             
@@ -228,13 +230,15 @@ namespace Kahoofection.Modules.Information
 
 
 
+            ActivityLogger.Log(_currentSection, $"Displaying a menu for the next options.");
+
         LabelDisplayMenu:
 
             Console.SetCursorPosition(cursorLeft, cursorTop);
-
+            
             Console.WriteLine("                                  ");
-            Console.WriteLine("             ┌ Options            ");
-            Console.WriteLine("             └──────────────────┐ ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mOptions            ");
+            Console.WriteLine("             \u001b[94m└──────────────────┐\u001b[97m");
             Console.WriteLine("             {0} QuizId by name   ", $"[\u001b[94m{(currentPosition == 1 ? ">" : " ")}\u001b[97m]");
             Console.WriteLine("             {0} Main menu        ", $"[\u001b[94m{(currentPosition == 2 ? ">" : " ")}\u001b[97m]");
 
@@ -273,15 +277,18 @@ namespace Kahoofection.Modules.Information
             }
 
 
-            // ActivityLogger.Log(_currentSection, $"Menu option {selectedMenuOption} ({_kahoofectionOptions[selectedMenuOption]}) was selected, redirecting ...");
+
+            ActivityLogger.Log(_currentSection, $"Waiting for option choice.");
 
             switch (currentPosition)
             {
                 case 1:
+                    ActivityLogger.Log(_currentSection, $"Restarting module.");
                     Console.CursorVisible = true;
                     goto LabelMethodEntryPoint;
 
                 case 2:
+                    ActivityLogger.Log(_currentSection, $"Returning to the main menu.");
                     return;
 
                 default:
