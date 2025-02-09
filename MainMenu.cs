@@ -215,8 +215,8 @@ namespace Kahoofection
             Console.WriteLine("                                                                         ");
             Console.WriteLine("                                                                         ");
             Console.WriteLine("                                                                         ");
-            Console.WriteLine("             ┌ Information                  ┌ Gameplay                   ");
-            Console.WriteLine("             └──────────────────┐           └────────────────────────┐   ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mInformation                  \u001b[94m┌ \u001b[97mGameplay");
+            Console.WriteLine("             \u001b[94m└──────────────────┐           └────────────────────────┐\u001b[97m");
             Console.WriteLine("             {0} QuizId by name             {1} Bruteforce game pins     ", stateQuizIdName, stateBruteforcePins);
             Console.WriteLine("             {0} QuizId checker             {1} Spam game by pin         ", stateQuizIdChecker, stateSpamGameByPin);
             Console.WriteLine("             {0} QuizId answers             {1} Autoplay by pin          ", stateQuizIdAnswers, stateAutoplayByPin);
@@ -225,8 +225,8 @@ namespace Kahoofection
             Console.WriteLine("                                                                         ");
             Console.WriteLine("                                                                         ");
             Console.WriteLine("                                                                         ");
-            Console.WriteLine("             ┌───────────────────────────┬───────────────────────────┐   ");
-            Console.WriteLine("             │ Navigate using ARROW KEYS │ Select anoption via ENTER │   ");
+            Console.WriteLine("             \u001b[94m┌───────────────────────────┬───────────────────────────┐   ");
+            Console.WriteLine("             \u001b[94m│ \u001b[97mNavigate using ARROW KEYS \u001b[94m│ \u001b[97mSelect anoption via ENTER \u001b[94m│   ");
             Console.WriteLine("             {0}", upperLine);
             Console.WriteLine("             {0}", lowerLine);
         }
@@ -256,11 +256,11 @@ namespace Kahoofection
             int spaceLeft = totalBarWidth - lowerLine.Length;
             int halfSpaceLeft = spaceLeft / 2;
             
-            lowerLine = $"{new string(' ', halfSpaceLeft)}{lowerLine}{new string(' ', halfSpaceLeft)}";
-            string upperLine = $"└{new string('─', halfSpaceLeft - 1)}┬{new string('─', halfBarWidth - halfSpaceLeft)}┴";
+            lowerLine = $"\u001b[94m{new string(' ', halfSpaceLeft)}\u001b[94m└─> \u001b[97m{_sessionPhrase} \u001b[94m<─┘{new string(' ', halfSpaceLeft)}";
+            string upperLine = $"\u001b[94m└{new string('─', halfSpaceLeft - 1)}┬{new string('─', halfBarWidth - halfSpaceLeft)}┴";
 
-            string oddLengthFormat = $"{new string('─', halfBarWidth - halfSpaceLeft - 1)}┬{new string('─', halfSpaceLeft)}┘";
-            string evenLengthFormat = $"{new string('─', halfBarWidth - halfSpaceLeft)}┬{new string('─', halfSpaceLeft - 1)}┘";
+            string oddLengthFormat = $"\u001b[94m{new string('─', halfBarWidth - halfSpaceLeft - 1)}┬{new string('─', halfSpaceLeft)}┘";
+            string evenLengthFormat = $"\u001b[94m{new string('─', halfBarWidth - halfSpaceLeft)}┬{new string('─', halfSpaceLeft - 1)}┘";
 
             upperLine += spaceLeft % 2 == 0 ? evenLengthFormat : oddLengthFormat;
 
