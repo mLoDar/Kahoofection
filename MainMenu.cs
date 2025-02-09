@@ -1,4 +1,5 @@
 ﻿using Kahoofection.Scripts;
+using Kahoofection.Modules.Information;
 
 
 
@@ -82,7 +83,7 @@ namespace Kahoofection
                 ActivityLogger.Log(_currentSection, "Failed to get a new phrase for the main menu. Using a placeholder for now.");
                 _sessionPhrase = "mLoDar";
             }
-            
+
 
 
         LabelDrawUi:
@@ -151,10 +152,14 @@ namespace Kahoofection
 
             ActivityLogger.Log(_currentSection, $"Menu option {selectedMenuOption} ({_kahoofectionOptions[selectedMenuOption]}) was selected, redirecting ...");
 
+
+
+            Console.CursorVisible = true;
+
             switch (selectedMenuOption)
             {
                 case 1:
-                    // TODO: Redirect to QuizIdByName
+                    await QuizIdByName.Start();
                     break;
 
                 case 2:
@@ -177,6 +182,8 @@ namespace Kahoofection
                     // TODO: Redirect to AutoplayWithGamePin
                     break;
             }
+
+            Console.CursorVisible = false;
 
 
 
@@ -248,7 +255,7 @@ namespace Kahoofection
             string lowerLine = $"└─> {_sessionPhrase} <─┘";
             int spaceLeft = totalBarWidth - lowerLine.Length;
             int halfSpaceLeft = spaceLeft / 2;
-
+            
             lowerLine = $"{new string(' ', halfSpaceLeft)}{lowerLine}{new string(' ', halfSpaceLeft)}";
             string upperLine = $"└{new string('─', halfSpaceLeft - 1)}┬{new string('─', halfBarWidth - halfSpaceLeft)}┴";
 

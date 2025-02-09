@@ -23,5 +23,10 @@
                 logsFolder = Path.Combine(clientFolder, "RuntimeLogs");
             }
         }
+
+        internal class Urls
+        {
+            internal readonly string kahootQuizSearch = "https://create.kahoot.it/rest/kahoots/?";
+        }
     }
 }
