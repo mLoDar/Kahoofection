@@ -163,7 +163,7 @@ namespace Kahoofection
                     break;
 
                 case 2:
-                    // TODO: Redirect to QuizIdChecker
+                    await QuizIdChecker.Start();
                     break;
 
                 case 3:
@@ -205,7 +205,7 @@ namespace Kahoofection
             (string lowerLine, string upperLine) = FormatPhraseLine();
 
 
-
+            
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(@"              _  __ __  _  _  __   __  ___ ___ ________ _  __  __  _    ");
             Console.WriteLine(@"             | |/ //  \| || |/__\ /__\| __| __/ _/_   _| |/__\|  \| |   ");
@@ -250,7 +250,6 @@ namespace Kahoofection
         {
             int totalBarWidth = 57;
             int halfBarWidth = 27;
-
 
             string lowerLine = $"└─> {_sessionPhrase} <─┘";
             int spaceLeft = totalBarWidth - lowerLine.Length;
