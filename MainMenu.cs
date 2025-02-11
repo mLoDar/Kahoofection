@@ -45,7 +45,6 @@ namespace Kahoofection
             "ˡⁱᶠᵉ ⁱˢ ˡⁱᵏᵉ ᵃ ᵍᵃᵐᵉ, ʷᵉ ᵖᵃʸ ᵗᵒ ᵏᵉᵉᵖ ᵘᵖ",
             "ʷᵃᵗᵉʳ ʰᵃˢ ⁿᵒ ᵉᶠᶠᵉᶜᵗ ᵒⁿ ᶠᵃᵏᵉ ᶠˡᵒʷᵉʳˢ",
             "ʸᵒᵘ ᵐⁱˢˢ ᵉᵛᵉʳʸ ˢʰᵒᵗ ʸᵒᵘ ᵈᵒⁿ'ᵗ ᵗᵃᵏᵉ",
-            "ᵐᵃᵈᵉ ᵗᵒ ˡᵃˢᵗ",
         ];
 
 
@@ -81,7 +80,7 @@ namespace Kahoofection
             catch
             {
                 ActivityLogger.Log(_currentSection, "Failed to get a new phrase for the main menu. Using a placeholder for now.");
-                _sessionPhrase = "mLoDar";
+                _sessionPhrase = "ᵐᵃᵈᵉ ᵗᵒ ˡᵃˢᵗ";
             }
 
 
