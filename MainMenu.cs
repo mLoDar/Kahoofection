@@ -166,7 +166,7 @@ namespace Kahoofection
                     break;
 
                 case 3:
-                    // TODO: Redirect to QuizIdAnswers
+                    await QuizIdAnswers.Start();
                     break;
 
                 case 4:
