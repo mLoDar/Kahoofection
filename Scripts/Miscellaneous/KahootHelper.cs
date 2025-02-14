@@ -107,7 +107,8 @@ namespace Kahoofection.Scripts.Miscellaneous
 
                     if (needToUseImageId)
                     {
-                        questionAnswers.Add(new string(' ', prefix.Length) + $"Correct picture is \u001b[93m'{_appUrls.kahootImageCdn}{questionAnswer}'\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97mCorrect picture is:");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[93m'{_appUrls.kahootImageCdn}{questionAnswer}'\u001b[97m");
                     }
                     else
                     {
