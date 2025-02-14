@@ -20,7 +20,7 @@ namespace Kahoofection.Scripts.Miscellaneous
 
 
 
-        internal static (bool successfullyFetchedAnswer, string fetchedTitle, List<string> fetchedAnswers) GetQuestionsAnswer(JObject questionData)
+        internal static (bool successfullyFetchedAnswer, string fetchedType, string fetchedTitle, List<string> fetchedAnswers) GetQuestionsAnswer(int questionIndex, JObject questionData)
         {
             JToken? questionType = questionData.SelectToken("type");
             JToken? questionTitle = questionData.SelectToken("question");
@@ -32,7 +32,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                 ActivityLogger.Log(_currentSection, $"Failed to fetch the question type.");
                 ActivityLogger.Log(_currentSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
 
-                return (false, string.Empty, []);
+                return (false, string.Empty, string.Empty, []);
             }
 
             if (questionTitle == null && questionType.ToString().Equals("content") == false)
@@ -40,7 +40,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                 ActivityLogger.Log(_currentSection, $"Failed to fetch the questions title. (Questions type is not 'content')");
                 ActivityLogger.Log(_currentSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
 
-                return (false, string.Empty, []);
+                return (false, string.Empty, string.Empty, []);
             }
 
             if (questionType.ToString().Equals("content"))
@@ -63,6 +63,8 @@ namespace Kahoofection.Scripts.Miscellaneous
             bool answerAdded = false;
             List<string> questionAnswers = [];
 
+            string prefix = $"{questionIndex + 1}.) {questionType} | ";
+
             switch (questionType.ToString().ToLower())
             {
                 case "quiz":
@@ -75,7 +77,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                         ActivityLogger.Log(_currentSection, $"Failed to find a correct choice for question type 'quiz'. (firstCorrectChoice is null)");
                         ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                        questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         answerAdded = true;
                         break;
                     }
@@ -95,7 +97,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                             ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'quiz'. (answer and imageId is null or whitespace)");
                             ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                            questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                            questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                             answerAdded = true;
                             break;
                         }
@@ -105,11 +107,11 @@ namespace Kahoofection.Scripts.Miscellaneous
 
                     if (needToUseImageId)
                     {
-                        questionAnswers.Add($"Correct picture is \u001b[93m'{_appUrls.kahootImageCdn}{questionAnswer}'\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"Correct picture is \u001b[93m'{_appUrls.kahootImageCdn}{questionAnswer}'\u001b[97m");
                     }
                     else
                     {
-                        questionAnswers.Add($"\u001b[92m{questionAnswer}\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[92m{questionAnswer}\u001b[97m");
                     }
 
                     answerAdded = true;
@@ -119,23 +121,23 @@ namespace Kahoofection.Scripts.Miscellaneous
 
                     JArray jumbleChoices = questionData.SelectToken("choices") as JArray ?? [];
 
-                    questionAnswers.Add("Order from top to bottom:");
+                    questionAnswers.Add(new string(' ', prefix.Length) + "Order from top to bottom:");
 
                     for (int i = 0; i < jumbleChoices.Count; i++)
                     {
                         if (i == 0)
                         {
-                            questionAnswers.Add($"\u001b[97m┌{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
+                            questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97m┌{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
                             continue;
                         }
 
                         if (i + 1 == jumbleChoices.Count)
                         {
-                            questionAnswers.Add($"\u001b[97m└{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
+                            questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97m└{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
                             continue;
                         }
 
-                        questionAnswers.Add($"\u001b[97m├{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97m├{new string('─', i)}> \u001b[92m{jumbleChoices[i]["answer"]}\u001b[97m");
                     }
 
                     answerAdded = true;
@@ -151,7 +153,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                         ActivityLogger.Log(_currentSection, $"Failed to fetch 'choiceShapes' or 'imageMetadata' for type 'pin_it'. (one or multiple are null)");
                         ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                        questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
                     }
 
@@ -180,13 +182,13 @@ namespace Kahoofection.Scripts.Miscellaneous
                         ActivityLogger.Log(_currentSection, $"ChoiceShapes: {choiceShapes?.ToString(Formatting.None)}", true);
                         ActivityLogger.Log(_currentSection, $"ImageMetadata: {imageMetadata?.ToString(Formatting.None)}", true);
 
-                        questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
                     }
 
                     string approximateLocation = DetermineApproximateWaldoLocation(imageDimension, waldoDimensionLocation, waldoDimensionTolerance);
 
-                    questionAnswers.Add($"\u001b[97mThe object in question is in the \u001b[92m'{approximateLocation} area' \u001b[97mof the picture.");
+                    questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97mThe object in question is in the \u001b[92m'{approximateLocation} area' \u001b[97mof the picture.");
 
                     answerAdded = true;
                     break;
@@ -199,7 +201,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                         ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'slider'. (choiceRange is null)");
                         ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                        questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
                     }
 
@@ -213,7 +215,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                             throw new Exception("Failed to get the sliders correct value or tolerance.");
                         }
 
-                        questionAnswers.Add($"\u001b[97mAdjust the slider to \u001b[92m'{sliderCorrectValue}'\u001b[97m, with a tolerance of {sliderTolerance}.");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"\u001b[97mAdjust the slider to \u001b[92m'{sliderCorrectValue}'\u001b[97m, with a tolerance of {sliderTolerance}.");
                     }
                     catch (Exception exception)
                     {
@@ -221,7 +223,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                         ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}", true);
                         ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                        questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                     }
 
                     answerAdded = true;
@@ -256,7 +258,7 @@ namespace Kahoofection.Scripts.Miscellaneous
 
             if (answerAdded == false && typesWithNoAnswers.Contains(questionType.ToString().ToLower()))
             {
-                questionAnswers.Add("\u001b[93mNo answer is needed for this question.\u001b[97m");
+                questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[93mNo answer is needed for this question.\u001b[97m");
 
                 answerAdded = true;
             }
@@ -274,15 +276,15 @@ namespace Kahoofection.Scripts.Miscellaneous
                     ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type '{questionType}'. (correctAnswers array is null or empty)");
                     ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
-                    questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
+                    questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                 }
                 else
                 {
-                    questionAnswers.Add("\u001b[97mCorrect answers:");
+                    questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[97mCorrect answers:");
 
                     foreach (string? correctAnswer in correctAnswers)
                     {
-                        questionAnswers.Add($"- \u001b[92m'{correctAnswer}'\u001b[97m");
+                        questionAnswers.Add(new string(' ', prefix.Length) + $"- \u001b[92m'{correctAnswer}'\u001b[97m");
                     }
                 }
 
@@ -300,7 +302,7 @@ namespace Kahoofection.Scripts.Miscellaneous
 
 
 
-            return (successfullyFetchedAnswer, $"{questionType} | {questionTitle}", questionAnswers);
+            return (successfullyFetchedAnswer, questionType.ToString(), questionTitle.ToString(), questionAnswers);
         }
 
         private static string DetermineApproximateWaldoLocation(Point imageDimension, Point waldoDimensionLocation, Point waldoDimensionTolerance)
