@@ -28,6 +28,7 @@
         {
             internal readonly string kahootQuizSearch = "https://create.kahoot.it/rest/kahoots/?";
             internal readonly string kahootCheckQuizId = "https://play.kahoot.it/rest/kahoots/";
+            internal readonly string kahootImageCdn = "https://images-cdn.kahoot.it/";
         }
     }
 }

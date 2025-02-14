@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using System.Drawing;
 
+using Kahoofection.Ressources;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,6 +15,8 @@ namespace Kahoofection.Scripts.Miscellaneous
     internal class KahootHelper
     {
         private const string _currentSection = "KahootHelper";
+
+        private static readonly ApplicationSettings.Urls _appUrls = new();
 
 
 
@@ -64,7 +68,7 @@ namespace Kahoofection.Scripts.Miscellaneous
                 case "quiz":
 #pragma warning disable CS8604 // Possible null reference argument.
 
-                    bool needToUseImageAltText = false;
+                    bool needToUseImageId = false;
 
                     if (questionData["choices"].FirstOrDefault(choice => (bool)choice["correct"]) is not JObject firstCorrectChoice)
                     {
@@ -82,13 +86,13 @@ namespace Kahoofection.Scripts.Miscellaneous
 
                     if (string.IsNullOrWhiteSpace(questionAnswer))
                     {
-                        needToUseImageAltText = true;
+                        needToUseImageId = true;
 
-                        questionAnswer = firstCorrectChoice.SelectToken("image.altText")?.ToString() ?? string.Empty;
+                        questionAnswer = firstCorrectChoice.SelectToken("image.id")?.ToString() ?? string.Empty;
 
                         if (string.IsNullOrWhiteSpace(questionAnswer))
                         {
-                            ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'quiz'. (answer and imageAltText is null or whitespace)");
+                            ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'quiz'. (answer and imageId is null or whitespace)");
                             ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                             questionAnswers.Add("\u001b[91mFailed to fetch questions answer.\u001b[97m");
@@ -99,13 +103,13 @@ namespace Kahoofection.Scripts.Miscellaneous
 
 #pragma warning restore CS8604 // Possible null reference argument.
 
-                    if (needToUseImageAltText)
+                    if (needToUseImageId)
                     {
-                        questionAnswers.Add($"The correct picture description is \u001b[93m'{questionAnswer}'\u001b[97m");
+                        questionAnswers.Add($"Correct picture is \u001b[93m'{_appUrls.kahootImageCdn}{questionAnswer}'\u001b[97m");
                     }
                     else
                     {
-                        questionAnswers.Add(questionAnswer);
+                        questionAnswers.Add($"\u001b[92m{questionAnswer}\u001b[97m");
                     }
 
                     answerAdded = true;
