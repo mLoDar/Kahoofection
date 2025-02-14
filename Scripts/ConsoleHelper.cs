@@ -1,5 +1,8 @@
 ﻿using System.Text;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+
+using Kahoofection.Ressources;
 
 
 
@@ -127,6 +130,19 @@ namespace Kahoofection.Scripts
             }
 
             await Task.Delay(durationInSeconds * 1000);
+        }
+
+        internal static int GetCombinedAnsiSequenceLength(string input)
+        {
+            int combinedLength = 0;
+            MatchCollection matches = RegexPatterns.AnsiSequence().Matches(input);
+            
+            foreach (Match match in matches)
+            {
+                combinedLength += match.Length;
+            }
+
+            return combinedLength;
         }
     }
 }
