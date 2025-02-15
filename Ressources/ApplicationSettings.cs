@@ -27,9 +27,10 @@
         internal class Urls
         {
             internal readonly string kahootQuizSearch = "https://create.kahoot.it/rest/kahoots/?";
-            internal readonly string kahootCheckQuizId = "https://play.kahoot.it/rest/kahoots/";
-            internal readonly string kahootImageCdn = "https://images-cdn.kahoot.it/";
-            internal readonly string kahootWebsocket = "wss://kahoot.it/cometd/";
+            internal readonly string kahootCheckQuizId = "https://play.kahoot.it/rest/kahoots/{quizId}";
+            internal readonly string kahootImageCdn = "https://images-cdn.kahoot.it/{imageId}";
+            internal readonly string kahootWebsocket = "wss://kahoot.it/cometd/{gamePin}/{webSocketToken}";
+            internal readonly string kahootSessionReservation = "https://kahoot.it/reserve/session/{gamePin}/?{millisTimestamp}";
         }
     }
 }

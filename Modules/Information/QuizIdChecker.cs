@@ -89,7 +89,7 @@ namespace Kahoofection.Modules.Information
             ActivityLogger.Log(_currentSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
 
             string providedQuizId = convertedQuizId.ToString();
-            string requestUrl = $"{_appUrls.kahootCheckQuizId}{providedQuizId}";
+            string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
             string apiResponse = await WebConnection.CreateRequest(requestUrl);
 
 
