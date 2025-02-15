@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 
 
-namespace Kahoofection.Scripts.Miscellaneous
+namespace Kahoofection.Scripts.Kahoot
 {
     internal class KahootHelper
     {
