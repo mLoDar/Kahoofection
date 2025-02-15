@@ -6,6 +6,10 @@ using Newtonsoft.Json.Linq;
 
 
 
+#pragma warning disable CA1845 // Use span-based 'string.Concat'
+
+
+
 
 
 namespace Kahoofection.Modules.Information

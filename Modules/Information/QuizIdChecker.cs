@@ -5,6 +5,11 @@ using Newtonsoft.Json.Linq;
 
 
 
+#pragma warning disable IDE0057 // Use range operator
+#pragma warning disable CA1845 // Use span-based 'string.Concat'
+
+
+
 
 
 namespace Kahoofection.Modules.Information
