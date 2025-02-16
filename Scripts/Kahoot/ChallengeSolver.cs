@@ -16,15 +16,49 @@ namespace Kahoofection.Scripts.Kahoot
 {
     internal partial class ChallengeSolver
     {
-        internal static string GetWebSocketToken(string decodeChallenge, string encodedSessionToken)
+        internal static (bool fetchedWebSocketToken, string webSocketToken, Exception? occurredError) GetWebSocketToken(string decodeChallenge, string encodedSessionToken)
         {
+            try
+            {
+                (int tokenOffset, Exception? offsetError) = GetTokenOffset(decodeChallenge);
             string encodedChallengeToken = GetEncodedChallengeToken(decodeChallenge);
-            int tokenOffset = GetTokenOffset(decodeChallenge);
 
-            (string sessionToken, string challengeToken) = DecodeTokens(encodedSessionToken, encodedChallengeToken, tokenOffset);
+                if (offsetError != null)
+                {
+                    throw new Exception($"Failed to fetch the token offset from the provided challenge string. {offsetError.Message}");
+                }
 
-            string webSocketToken = ComputeWebSocketToken(sessionToken, challengeToken);
-            return webSocketToken;
+                if (string.IsNullOrWhiteSpace(encodedChallengeToken))
+                {
+                    throw new Exception("Failed to fetch the encoded token from the provided challenge string. The 'encodedChallengeToken' is null or whitespace.");
+                }
+
+
+
+                (string sessionToken, string challengeToken, Exception? decodeError) = DecodeTokens(encodedSessionToken, encodedChallengeToken, tokenOffset);
+
+                if (decodeError != null)
+                {
+                    throw new Exception($"Failed to decode the session and/or challenge token. {decodeError.Message}");
+        }
+
+
+
+                (string webSocketToken, Exception? computeTokenError) = ComputeWebSocketToken(sessionToken, challengeToken);
+
+                if (computeTokenError != null)
+                {
+                    throw new Exception($"Failed to compute the web socket token. {computeTokenError.Message}");
+                }
+
+
+
+                return (true, webSocketToken, null);
+            }
+            catch (Exception exception)
+            {
+                return (false, string.Empty, exception);
+            }
         }
 
         private static string GetEncodedChallengeToken(string challenge)
@@ -33,8 +67,10 @@ namespace Kahoofection.Scripts.Kahoot
             return match.Success ? match.Groups[1].Value : string.Empty;
         }
 
-        private static int GetTokenOffset(string challenge)
+        private static (int tokenOffset, Exception? occurredError) GetTokenOffset(string challenge)
         {
+            try
+            {
             Match match = RegexPatterns.KahootChallengeOffset().Match(challenge);
 
             if (match.Success)
@@ -46,13 +82,26 @@ namespace Kahoofection.Scripts.Kahoot
                 expression = expression.Replace("+", " + ");
 
                 DataTable table = new();
-                return Convert.ToInt32(table.Compute(expression, ""));
+
+                    string? computedExpression = table.Compute(expression, "").ToString() ?? string.Empty;
+
+                    if (int.TryParse(computedExpression, out int tokenOffset) == false)
+                    {
+                        throw new Exception($"Computed expression is not a valid int ({computedExpression}).");
             }
 
-            return -1;
+                    return (tokenOffset, null);
         }
 
-        private static (string sessionToken, string challengeToken) DecodeTokens(string encodedSessionToken, string encodedChallengeToken, int tokenOffset)
+                throw new Exception("Failed to find any matches for the offset expression.");
+            }
+            catch (Exception exception)
+        {
+                return (-1, exception);
+            }
+        }
+
+        private static (string sessionToken, string challengeToken, Exception? occurredError) DecodeTokens(string encodedSessionToken, string encodedChallengeToken, int tokenOffset)
         {
             try
             {
@@ -72,16 +121,18 @@ namespace Kahoofection.Scripts.Kahoot
                 
 
 
-                return (sessionToken, challengeToken);
+                return (sessionToken, challengeToken, null);
             }
-            catch
+            catch (Exception exception)
             {
-                return (string.Empty, string.Empty);
+                return (string.Empty, string.Empty, exception);
             }
         }
 
-        private static string ComputeWebSocketToken(string sessionToken, string challengeToken)
+        private static (string webSocketToken, Exception? occurredError) ComputeWebSocketToken(string sessionToken, string challengeToken)
         {
+            try
+            {
             int maxTokenLength = Math.Max(sessionToken.Length, challengeToken.Length);
             char[] webSocketTokenChars = new char[maxTokenLength];
 
@@ -96,7 +147,12 @@ namespace Kahoofection.Scripts.Kahoot
             string webSocketToken = new(webSocketTokenChars);
             webSocketToken = webSocketToken.Substring(0, webSocketToken.Length - 4);
 
-            return webSocketToken;
+                return (webSocketToken, null);
+            }
+            catch (Exception exception)
+            {
+                return (string.Empty, exception);
+            }
         }
     }
 }
