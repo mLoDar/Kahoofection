@@ -27,7 +27,7 @@ namespace Kahoofection.Scripts
 
 
 
-        internal static (bool ansiSupportEnabled, Exception occuredError) EnableAnsiSupport()
+        internal static (bool ansiSupportEnabled, Exception occurredError) EnableAnsiSupport()
         {
             try
             {

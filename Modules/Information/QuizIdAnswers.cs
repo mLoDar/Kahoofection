@@ -154,7 +154,7 @@ namespace Kahoofection.Modules.Information
 
                     if (successfullyFetchedAnswer == false)
                     {
-                        throw new Exception("Kahoot helper handled the question, but an error occured.");
+                        throw new Exception("Kahoot helper handled the question, but an error occurred.");
                     }
                 }
                 catch (Exception exception)

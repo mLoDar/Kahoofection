@@ -29,12 +29,12 @@ namespace Kahoofection
 
 
             ActivityLogger.Log(_currentSection, "Trying to enable support for ANSI escape sequence.");
-            (bool ansiSupportEnabled, Exception occuredError) = ConsoleHelper.EnableAnsiSupport();
+            (bool ansiSupportEnabled, Exception occurredError) = ConsoleHelper.EnableAnsiSupport();
 
             if (ansiSupportEnabled == false)
             {
                 ActivityLogger.Log(_currentSection, "[ERROR] Failed to enable ANSI support.");
-                ActivityLogger.Log(_currentSection, occuredError.Message, true);
+                ActivityLogger.Log(_currentSection, occurredError.Message, true);
 
                 Console.SetCursorPosition(0, 4);
                 Console.ForegroundColor = ConsoleColor.DarkRed;

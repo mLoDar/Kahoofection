@@ -108,14 +108,14 @@ namespace Kahoofection.Modules.Information
 
             ActivityLogger.Log(_currentSection, "Trying to parse the API response and get quizzes.");
 
-            (bool successfullyParsed, Exception? occuredError, JArray? foundQuizzes) = ParseApiResponse(apiResponse);
+            (bool successfullyParsed, Exception? occurredError, JArray? foundQuizzes) = ParseApiResponse(apiResponse);
 
             if (successfullyParsed == false || foundQuizzes == null)
             {
                 ActivityLogger.Log(_currentSection, "Failed to parse the API response.");
-                if (occuredError != null)
+                if (occurredError != null)
                 {
-                    ActivityLogger.Log(_currentSection, $"Occured error: {occuredError.Message}", true);
+                    ActivityLogger.Log(_currentSection, $"Occurred error: {occurredError.Message}", true);
                 }
                 ActivityLogger.Log(_currentSection, $"API response: {apiResponse}", true);
                 
@@ -228,7 +228,7 @@ namespace Kahoofection.Modules.Information
             goto LabelDisplayMenu;
         }
 
-        private static (bool successfullyParsed, Exception? occuredError, JArray? foundQuizzes) ParseApiResponse(string apiResponse)
+        private static (bool successfullyParsed, Exception? occurredError, JArray? foundQuizzes) ParseApiResponse(string apiResponse)
         {
             JObject? foundData;
 

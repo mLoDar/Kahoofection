@@ -11,7 +11,7 @@ namespace Kahoofection.Scripts
 {
     internal class WebSocketHelper
     {
-        internal static async Task<(bool messageSent, Exception? occuredError)> SendMessageAsync(ClientWebSocket webSocket, object message, CancellationToken cancellationToken = default)
+        internal static async Task<(bool messageSent, Exception? occurredError)> SendMessageAsync(ClientWebSocket webSocket, object message, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Kahoofection.Scripts
             }
         }
 
-        internal static async Task<(bool receivedMessage, string messageContent, Exception? occuredError)> ReceiveMessageAsync(ClientWebSocket webSocket, CancellationToken cancellationToken = default)
+        internal static async Task<(bool receivedMessage, string messageContent, Exception? occurredError)> ReceiveMessageAsync(ClientWebSocket webSocket, CancellationToken cancellationToken = default)
         {
             try
             {

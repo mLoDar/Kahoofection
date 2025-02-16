@@ -43,7 +43,7 @@ namespace Kahoofection.Scripts
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, $"An error occured while performing the web request.");
+                ActivityLogger.Log(_currentSection, $"An error occurred while performing the web request.");
 
                 if (requestParameters != null)
                 {
