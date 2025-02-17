@@ -1,8 +1,9 @@
-﻿using System.Data;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
 using Kahoofection.Ressources;
+
+using NCalc;
 
 
 
@@ -21,7 +22,7 @@ namespace Kahoofection.Scripts.Kahoot
             try
             {
                 (int tokenOffset, Exception? offsetError) = GetTokenOffset(decodeChallenge);
-            string encodedChallengeToken = GetEncodedChallengeToken(decodeChallenge);
+                string encodedChallengeToken = GetEncodedChallengeToken(decodeChallenge);
 
                 if (offsetError != null)
                 {
@@ -40,7 +41,7 @@ namespace Kahoofection.Scripts.Kahoot
                 if (decodeError != null)
                 {
                     throw new Exception($"Failed to decode the session and/or challenge token. {decodeError.Message}");
-        }
+                }
 
 
 
@@ -71,32 +72,36 @@ namespace Kahoofection.Scripts.Kahoot
         {
             try
             {
-            Match match = RegexPatterns.KahootChallengeOffset().Match(challenge);
+                Match match = RegexPatterns.KahootChallengeOffset().Match(challenge);
 
-            if (match.Success)
-            {
-                string expression = match.Groups[1].Value;
+                if (match.Success)
+                {
+                    string expression = match.Groups[1].Value;
 
-                expression = RegexPatterns.AllWhitespaces().Replace(expression, "");
-                expression = expression.Replace("*", " * ");
-                expression = expression.Replace("+", " + ");
+                    expression = RegexPatterns.AllWhitespaces().Replace(expression, "");
+                    expression = expression.Replace("*", " * ");
+                    expression = expression.Replace("+", " + ");
 
-                DataTable table = new();
 
-                    string? computedExpression = table.Compute(expression, "").ToString() ?? string.Empty;
+
+                    var calcExpression = new Expression(expression);
+                    object result = calcExpression.Evaluate() ?? throw new Exception("Failed to evaluate offset expression. The 'result' of the expression was null.");
+                    string computedExpression = result.ToString() ?? throw new Exception("Failed to evaluate offset expression. The 'computedExpression' of the expression was null.");
+
+
 
                     if (int.TryParse(computedExpression, out int tokenOffset) == false)
                     {
                         throw new Exception($"Computed expression is not a valid int ({computedExpression}).");
-            }
+                    }
 
                     return (tokenOffset, null);
-        }
+                }
 
                 throw new Exception("Failed to find any matches for the offset expression.");
             }
             catch (Exception exception)
-        {
+            {
                 return (-1, exception);
             }
         }
@@ -133,19 +138,19 @@ namespace Kahoofection.Scripts.Kahoot
         {
             try
             {
-            int maxTokenLength = Math.Max(sessionToken.Length, challengeToken.Length);
-            char[] webSocketTokenChars = new char[maxTokenLength];
+                int maxTokenLength = Math.Max(sessionToken.Length, challengeToken.Length);
+                char[] webSocketTokenChars = new char[maxTokenLength];
 
-            for (int i = 0; i < maxTokenLength; i++)
-            {
-                char sessionChar = i < sessionToken.Length ? sessionToken[i] : (char)0;
-                char challengeChar = i < challengeToken.Length ? challengeToken[i] : (char)0;
+                for (int i = 0; i < maxTokenLength; i++)
+                {
+                    char sessionChar = i < sessionToken.Length ? sessionToken[i] : (char)0;
+                    char challengeChar = i < challengeToken.Length ? challengeToken[i] : (char)0;
 
-                webSocketTokenChars[i] = (char)(sessionChar ^ challengeChar);
-            }
-            
-            string webSocketToken = new(webSocketTokenChars);
-            webSocketToken = webSocketToken.Substring(0, webSocketToken.Length - 4);
+                    webSocketTokenChars[i] = (char)(sessionChar ^ challengeChar);
+                }
+
+                string webSocketToken = new(webSocketTokenChars);
+                webSocketToken = webSocketToken.Substring(0, webSocketToken.Length - 4);
 
                 return (webSocketToken, null);
             }
