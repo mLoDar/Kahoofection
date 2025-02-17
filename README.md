@@ -30,14 +30,19 @@
 <br>
 
 ## External services used
-- The website [patorjk.com](https://patorjk.com/software/taag/) was used for creating headers within the application.
 - The website [lingojam.com](https://lingojam.com/ItalicTextGenerator) was used for creating text in different fonts.
 - For drawing most of the menu [Wikipedia](https://wikipedia.org/) did a great job, on serving as a documentation on [box-drawing characters](https://en.wikipedia.org/wiki/Box-drawing_characters).
-
+- The library [Ncalc](https://github.com/ncalc/ncalc) takes the heavy lifting of evaluating any mathematical expressions within `Kahoofection`. Thanks! :)
 <br>
 
 ## Credits
-Thanks to [rawnullbyte](https://github.com/rawnullbyte) <3.
+Thanks to [rawnullbyte](https://github.com/rawnullbyte) :)
 - For creating this very own "Kahoot Bot" [KahootConnect](https://github.com/HackySoftOfficial/KahootConnect).
 - For documenting in such a detail on how to create Websockets and connect to the Kahoot Servers/communicate with them.
 - Your project helps me a lot and will have a decent impact on the quality of `Kahoofection`.
+
+Thanks to [patorjk](https://github.com/patorjk) :)
+- For creating this awesome website [patorjk.com](https://patorjk.com/software/taag/) which allows to create headers from normal text in different fonts and styles. It is awesome!
+
+Thanks to [Arewzom](https://github.com/Arwezom) and [bacaala](https://github.com/bacaala) <3
+- For providing their feedback and ideas which lead `Kahoofection` one step closer to perfection.
