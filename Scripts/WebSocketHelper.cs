@@ -11,7 +11,7 @@ namespace Kahoofection.Scripts
 {
     internal class WebSocketHelper
     {
-        internal static async Task<(bool messageSent, Exception? occurredError)> SendMessageAsync(ClientWebSocket webSocket, object message, CancellationToken cancellationToken = default)
+        internal static async Task<Exception?> SendMessageAsync(ClientWebSocket webSocket, object message, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -26,15 +26,15 @@ namespace Kahoofection.Scripts
                 byte[] buffer = Encoding.UTF8.GetBytes(jsonMessage);
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken);
 
-                return (false, null);
+                return (null);
             }
             catch (Exception exception)
             {
-                return (false, exception);
+                return exception;
             }
         }
 
-        internal static async Task<(bool receivedMessage, string messageContent, Exception? occurredError)> ReceiveMessageAsync(ClientWebSocket webSocket, CancellationToken cancellationToken = default)
+        internal static async Task<(string messageContent, Exception? occurredError)> ReceiveMessageAsync(ClientWebSocket webSocket, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -50,11 +50,11 @@ namespace Kahoofection.Scripts
                 WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
                 string messageContent = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-                return (true, messageContent, null);
+                return (messageContent, null);
             }
             catch (Exception exception)
             {
-                return (false, string.Empty, exception);
+                return (string.Empty, exception);
             }
         }
     }
