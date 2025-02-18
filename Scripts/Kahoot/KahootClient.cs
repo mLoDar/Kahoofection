@@ -15,14 +15,14 @@ namespace Kahoofection.Scripts.Kahoot
         private const string _currentSection = "KahootClient";
         private static bool _clientTerminated = false;
 
-        private static readonly ClientWebSocket _kahootWebSocket = new();
-
         private static readonly ApplicationSettings.Urls _appUrls = new();
 
 
 
         internal async Task JoinGame(int gamePin, string gameNickname)
         {
+            ClientWebSocket kahootWebSocket = new();
+
             ActivityLogger.Log(_currentSection, $"Received a new request to join a game with the pin '{gamePin}' as '{gameNickname}'.");
 
             long millisTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -54,7 +54,7 @@ namespace Kahoofection.Scripts.Kahoot
 
             try
             {
-                await _kahootWebSocket.ConnectAsync(new Uri(webSocketUrl), CancellationToken.None);
+                await kahootWebSocket.ConnectAsync(new Uri(webSocketUrl), CancellationToken.None);
             }
             catch (Exception exception)
             {
@@ -71,7 +71,7 @@ namespace Kahoofection.Scripts.Kahoot
 
             requestId++;
 
-            (bool successfullyFetched, string clientId) = await GetWebSocketClientId(requestId);
+            (bool successfullyFetched, string clientId) = await GetWebSocketClientId(kahootWebSocket, requestId);
 
             if (successfullyFetched == false)
             {
@@ -110,7 +110,7 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            bool successfullMessage = await SendKahootWebSocketMessage(requestId, connectionData);
+            bool successfullMessage = await SendKahootWebSocketMessage(kahootWebSocket, requestId, connectionData);
 
             if (successfullMessage == false)
             {
@@ -142,7 +142,7 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendKahootWebSocketMessage(requestId, loginData);
+            successfullMessage = await SendKahootWebSocketMessage(kahootWebSocket, requestId, loginData);
 
             if (successfullMessage == false)
             {
@@ -174,7 +174,7 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendKahootWebSocketMessage(requestId, controllerData);
+            successfullMessage = await SendKahootWebSocketMessage(kahootWebSocket, requestId, controllerData);
 
             if (successfullMessage == false)
             {
@@ -206,7 +206,7 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendKahootWebSocketMessage(requestId, gameData);
+            successfullMessage = await SendKahootWebSocketMessage(kahootWebSocket, requestId, gameData);
 
             if (successfullMessage == false)
             {
@@ -219,16 +219,14 @@ namespace Kahoofection.Scripts.Kahoot
 
             ActivityLogger.Log(_currentSection, "Game connection established! Sending a continous heartbeat to keep the connection alive.");
 
-            _ = Task.Run(async () =>
+            while (_clientTerminated == false)
             {
-                while (_clientTerminated == false)
+                await Task.Delay(10000);
+
+                requestId++;
+
+                var heartbeatData = new[]
                 {
-                    await Task.Delay(10000);
-
-                    requestId++;
-
-                    var heartbeatData = new[]
-                    {
                         new
                         {
                             id = requestId.ToString(),
@@ -248,28 +246,17 @@ namespace Kahoofection.Scripts.Kahoot
                         }
                     };
 
-                    bool heartbeatSent = await SendKahootWebSocketMessage(requestId, heartbeatData);
+                bool heartbeatSent = await SendKahootWebSocketMessage(kahootWebSocket, requestId, heartbeatData);
+                
+                if (heartbeatSent == false)
+                {
+                    ActivityLogger.Log(_currentSection, "Failed to maintain the connection! Last heartbeat failed.");
 
-                    if (heartbeatSent == false)
-                    {
-                        ActivityLogger.Log(_currentSection, "Failed to maintain the connection! Last heartbeat failed.");
-
-                        return false;
-                    }
+                    return;
                 }
-
-                return true;
-            });
-
-
-
-            while (_clientTerminated == false)
-            {
-                _ = await WebSocketHelper.ReceiveMessageAsync(_kahootWebSocket);
             }
 
             ActivityLogger.Log(_currentSection, $"The client '{gameNickname}' with clientId '{clientId}' connected to game '{gamePin}' was terminated, see you soon!");
-            return;
         }
 
         private static async Task<(string webSocketToken, Exception? occurredError)> GetWebSocketToken(string url)
@@ -349,7 +336,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
         }
 
-        private static async Task<(bool successfullyFetched, string clientId)> GetWebSocketClientId(int requestId)
+        private static async Task<(bool successfullyFetched, string clientId)> GetWebSocketClientId(ClientWebSocket kahootWebSocket, int requestId)
         {
             var handShakeData = new[]
             {
@@ -382,8 +369,8 @@ namespace Kahoofection.Scripts.Kahoot
 
             try
             {
-                await WebSocketHelper.SendMessageAsync(_kahootWebSocket, handShakeData);
-                (string messageContent, Exception? occurredError) = await WebSocketHelper.ReceiveMessageAsync(_kahootWebSocket);
+                await WebSocketHelper.SendMessageAsync(kahootWebSocket, handShakeData);
+                (string messageContent, Exception? occurredError) = await WebSocketHelper.ReceiveMessageAsync(kahootWebSocket);
                 
                 if (occurredError != null)
                 {
@@ -415,12 +402,12 @@ namespace Kahoofection.Scripts.Kahoot
             }
         }
 
-        private static async Task<bool> SendKahootWebSocketMessage(int requestId, object message)
+        private static async Task<bool> SendKahootWebSocketMessage(ClientWebSocket kahootWebSocket, int requestId, object message)
         {
             try
             {
-                await WebSocketHelper.SendMessageAsync(_kahootWebSocket, message);
-                (string messageContent, Exception? occurredError) = await WebSocketHelper.ReceiveMessageAsync(_kahootWebSocket);
+                await WebSocketHelper.SendMessageAsync(kahootWebSocket, message);
+                (string messageContent, Exception? occurredError) = await WebSocketHelper.ReceiveMessageAsync(kahootWebSocket);
                 
                 if (occurredError != null)
                 {
