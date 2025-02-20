@@ -1,4 +1,5 @@
 ﻿using Kahoofection.Scripts;
+using Kahoofection.Modules.Gameplay;
 using Kahoofection.Modules.Information;
 
 
@@ -174,7 +175,7 @@ namespace Kahoofection
                     break;
 
                 case 5:
-                    // TODO: Redirect to GamePinSpammer
+                    await GamePinSpammer.Start();
                     break;
 
                 case 6:
