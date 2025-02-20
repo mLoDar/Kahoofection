@@ -144,5 +144,14 @@ namespace Kahoofection.Scripts
 
             return combinedLength;
         }
+
+        internal static void ClearLine()
+        {
+            (int cursorLeft, int cursorTop) = Console.GetCursorPosition();
+
+            Console.SetCursorPosition(0, cursorTop);
+            Console.WriteLine(new string(' ', Console.BufferWidth));
+            Console.SetCursorPosition(cursorLeft, cursorTop);
+        }
     }
 }
