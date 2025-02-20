@@ -17,6 +17,7 @@ namespace Kahoofection.Scripts.Kahoot
         private const string _currentSection = "KahootHelper";
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
+        private static readonly ApplicationSettings.Runtime _appRuntime = new();
 
 
 
@@ -353,6 +354,70 @@ namespace Kahoofection.Scripts.Kahoot
             }
 
             return stringBuilder.ToString();
+        }
+
+        internal static async Task<(bool validGamePin, int convertedGamePin, Exception? occurredError)> ValidGamePin(string input)
+        {
+            ActivityLogger.Log(_currentSection, $"Checking input '{input}' for a valid GamePin.");
+
+            input = RegexPatterns.NoNumbers().Replace(input, string.Empty);
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                ActivityLogger.Log(_currentSection, $"Input is null or whitespace, returning result.");
+                return (false, -1, new Exception("GamePin is null or whitespace."));
+            }
+
+            if (int.TryParse(input, out int gamePin) == false)
+            {
+                ActivityLogger.Log(_currentSection, $"Input is not a valid number, returning result.");
+                return (false, -1, new Exception("GamePin is not a valid number."));
+            }
+
+            if (input.Length > _appRuntime.gamePinFormat.Length)
+            {
+                ActivityLogger.Log(_currentSection, $"Input's format does not match GamePin pattern, returning result.");
+                return (false, -1, new Exception("GamePin's format does not match pattern."));
+            }
+
+
+
+            try
+            {
+                long millisTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                string sessionUrl = _appUrls.kahootSessionReservation;
+                sessionUrl = sessionUrl.Replace("{gamePin}", gamePin.ToString());
+                sessionUrl = sessionUrl.Replace("{millisTimestamp}", millisTimestamp.ToString());
+
+                string apiResponse = await WebConnection.CreateRequest(sessionUrl);
+
+
+
+                JObject gameData = JObject.Parse(apiResponse);
+                JToken? gameTwoFactorAuth = gameData.SelectToken("twoFactorAuth") ?? throw new Exception("Failed to find information about TwoFactorAuthentication. Invalid Pin?");
+
+                if (gameTwoFactorAuth.ToString().ToLower().Equals("true"))
+                {
+                    throw new Exception("Pin has TwoFactorAuthentication enabled.");
+                }
+
+                if (gameTwoFactorAuth.ToString().ToLower().Equals("false") == false)
+                {
+                    throw new Exception("Pin has no specifactions about TwoFactorAuthentication (not true or false).");
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse game data.");
+                ActivityLogger.Log(_currentSection, exception.Message, true);
+
+                return (false, -1, exception);
+            }
+
+            ActivityLogger.Log(_currentSection, $"The provided input '{input}' contains a valid GamePin!");
+
+            return (true, gamePin, null);
         }
     }
 }

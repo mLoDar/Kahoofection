@@ -6,6 +6,8 @@
         {
             internal readonly string appVersion = "v1.0.0";
             internal readonly string appRelease = "TBA";
+
+            internal readonly string gamePinFormat = "0000000";
         }
 
         internal class Paths

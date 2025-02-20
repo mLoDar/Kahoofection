@@ -14,6 +14,9 @@ namespace Kahoofection.Ressources
         [GeneratedRegex(@"\s+")]
         internal static partial Regex AllWhitespaces();
 
+        [GeneratedRegex("[^0-9]")]
+        internal static partial Regex NoNumbers();
+
 
 
         [GeneratedRegex(@"decode\.call\(this, '([^']+)'\)")]
