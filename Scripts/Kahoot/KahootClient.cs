@@ -59,8 +59,8 @@ namespace Kahoofection.Scripts.Kahoot
             catch (Exception exception)
             {
                 ActivityLogger.Log(_currentSection, "Failed to connect to the WebSocket.");
-                ActivityLogger.Log(_currentSection, $"Token: {webSocketToken}");
-                ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}");
+                ActivityLogger.Log(_currentSection, $"Token: {webSocketToken}", true);
+                ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}", true);
 
                 return;
             }

@@ -147,11 +147,11 @@ namespace Kahoofection.Scripts
 
         internal static void ClearLine()
         {
-            (int cursorLeft, int cursorTop) = Console.GetCursorPosition();
+            int cursorTop = Console.GetCursorPosition().Top;
 
             Console.SetCursorPosition(0, cursorTop);
-            Console.WriteLine(new string(' ', Console.BufferWidth));
-            Console.SetCursorPosition(cursorLeft, cursorTop);
+            Console.Write(new string(' ', Console.BufferWidth));
+            Console.SetCursorPosition(0, cursorTop);
         }
     }
 }

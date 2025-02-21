@@ -365,22 +365,24 @@ namespace Kahoofection.Scripts.Kahoot
             if (string.IsNullOrWhiteSpace(input))
             {
                 ActivityLogger.Log(_currentSection, $"Input is null or whitespace, returning result.");
-                return (-1, new Exception("GamePin is null or whitespace."));
+                return (-1, new Exception("The input does not contain any numbers."));
             }
 
             if (int.TryParse(input, out int gamePin) == false)
             {
                 ActivityLogger.Log(_currentSection, $"Input is not a valid number, returning result.");
-                return (-1, new Exception("GamePin is not a valid number."));
+                return (-1, new Exception("The input is not a valid number."));
             }
 
             if (input.Length > _appRuntime.gamePinFormat.Length)
             {
                 ActivityLogger.Log(_currentSection, $"Input's format does not match GamePin pattern, returning result.");
-                return (-1, new Exception("GamePin's format does not match pattern."));
+                return (-1, new Exception($"GamePin's format does not match pattern ({_appRuntime.gamePinFormat.Length} digits)."));
             }
 
 
+
+            JObject gameData;
 
             try
             {
@@ -392,9 +394,22 @@ namespace Kahoofection.Scripts.Kahoot
 
                 string apiResponse = await WebConnection.CreateRequest(sessionUrl);
 
+                gameData = JObject.Parse(apiResponse);
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse game data.");
+                ActivityLogger.Log(_currentSection, exception.Message, true);
+
+                return (-1, new Exception("No valid pin was provided"));
+            }
+            
+            ActivityLogger.Log(_currentSection, $"The provided input '{input}' contains a valid GamePin!");
 
 
-                JObject gameData = JObject.Parse(apiResponse);
+
+            try
+            {
                 JToken? gameTwoFactorAuth = gameData.SelectToken("twoFactorAuth") ?? throw new Exception("Failed to find information about TwoFactorAuthentication. Invalid Pin?");
 
                 if (gameTwoFactorAuth.ToString().ToLower().Equals("true"))
@@ -409,14 +424,11 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse game data.");
+                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse data or find any information about TwoFactorAuthentication.");
                 ActivityLogger.Log(_currentSection, exception.Message, true);
 
                 return (-1, exception);
             }
-
-            ActivityLogger.Log(_currentSection, $"The provided input '{input}' contains a valid GamePin!");
-
             return (gamePin, null);
         }
     }
