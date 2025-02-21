@@ -356,7 +356,7 @@ namespace Kahoofection.Scripts.Kahoot
             return stringBuilder.ToString();
         }
 
-        internal static async Task<(bool validGamePin, int convertedGamePin, Exception? occurredError)> ValidGamePin(string input)
+        internal static async Task<(int gamePin, Exception? occurredError)> CheckGamePin(string input)
         {
             ActivityLogger.Log(_currentSection, $"Checking input '{input}' for a valid GamePin.");
 
@@ -365,19 +365,19 @@ namespace Kahoofection.Scripts.Kahoot
             if (string.IsNullOrWhiteSpace(input))
             {
                 ActivityLogger.Log(_currentSection, $"Input is null or whitespace, returning result.");
-                return (false, -1, new Exception("GamePin is null or whitespace."));
+                return (-1, new Exception("GamePin is null or whitespace."));
             }
 
             if (int.TryParse(input, out int gamePin) == false)
             {
                 ActivityLogger.Log(_currentSection, $"Input is not a valid number, returning result.");
-                return (false, -1, new Exception("GamePin is not a valid number."));
+                return (-1, new Exception("GamePin is not a valid number."));
             }
 
             if (input.Length > _appRuntime.gamePinFormat.Length)
             {
                 ActivityLogger.Log(_currentSection, $"Input's format does not match GamePin pattern, returning result.");
-                return (false, -1, new Exception("GamePin's format does not match pattern."));
+                return (-1, new Exception("GamePin's format does not match pattern."));
             }
 
 
@@ -412,12 +412,12 @@ namespace Kahoofection.Scripts.Kahoot
                 ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse game data.");
                 ActivityLogger.Log(_currentSection, exception.Message, true);
 
-                return (false, -1, exception);
+                return (-1, exception);
             }
 
             ActivityLogger.Log(_currentSection, $"The provided input '{input}' contains a valid GamePin!");
 
-            return (true, gamePin, null);
+            return (gamePin, null);
         }
     }
 }
