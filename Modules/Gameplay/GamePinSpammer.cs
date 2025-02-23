@@ -2,8 +2,6 @@
 using Kahoofection.Ressources;
 using Kahoofection.Scripts.Kahoot;
 
-using System.Collections.ObjectModel;
-
 
 
 
@@ -23,11 +21,7 @@ namespace Kahoofection.Modules.Gameplay
     {
         private const string _currentSection = "GamePinSpammer";
 
-        private static readonly ApplicationSettings.Urls _appUrls = new();
-        private static readonly ApplicationSettings.Runtime _appRuntime = new();
-
-        private static List<Task> _activeBots = [];
-        private static ObservableCollection<string> _spammerRuntimeLog = [];
+        private static List<(KahootClient, Task)> _activeBots = [];
 
 
 
@@ -65,7 +59,53 @@ namespace Kahoofection.Modules.Gameplay
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("             Loading ...");
             Console.WriteLine("             Please be patient.");
-            // TODO: Start the modules main tasks and so on
+
+
+
+            await InitiateSpammer(gameSpammerSettings);
+
+
+
+            Console.CursorVisible = false;
+            ConsoleHelper.ResetConsole();
+
+            Console.WriteLine("             \u001b[94m┌ \u001b[92mKahooo-goo!                            ");
+            Console.WriteLine("             \u001b[94m│ \u001b[97mThe bots should join any moment ;)     ");
+            Console.WriteLine("             \u001b[94m└────────────────────────────────────────          ");
+            Console.WriteLine("                                                                          ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mUse BACKSPACE to restart               ");
+            Console.WriteLine("             \u001b[94m└──────────────────────────────                    ");
+            Console.WriteLine("                                                                          ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mUse ESC to leave                       ");
+            Console.WriteLine("             \u001b[94m└──────────────────────                            ");
+
+
+
+        LabelReadKey:
+
+            ConsoleKey pressedKey = Console.ReadKey(true).Key;
+
+            switch (pressedKey)
+            {
+                case ConsoleKey.Escape:
+                    ActivityLogger.Log(_currentSection, $"Leaving module, as the ESC key was pressed after initiating the spammer.");
+
+                    TerminateActiveBots();
+
+                    Console.CursorVisible = true;
+                    return;
+
+                case ConsoleKey.Backspace:
+                    ActivityLogger.Log(_currentSection, $"Restarting module, as the BACKSPACE key was pressed after initiating the spammer.");
+
+                    TerminateActiveBots();
+
+                    Console.CursorVisible = true;
+                    goto LabelMethodEntryPoint;
+
+                default:
+                    goto LabelReadKey;
+            }
         }
 
         private static async Task<(bool escapeKeyPressed, GameSpammerSettings gameSpammerSettings)> GetGameSettings()
@@ -304,6 +344,30 @@ namespace Kahoofection.Modules.Gameplay
             }
 
             return (null);
+        }
+
+        private static async Task InitiateSpammer(GameSpammerSettings gameSpammerSettings)
+        {
+            for (int i = 0; i < gameSpammerSettings.gameBotCount; i++)
+            {
+                string currentBotName = $"{gameSpammerSettings.gameBotName}{new string('\u200B', i)}";
+
+                KahootClient kahootClient = new();
+
+                _activeBots.Add((kahootClient, kahootClient.JoinGame(gameSpammerSettings.gamePin, currentBotName)));
+
+                await Task.Delay(100);
+            }
+        }
+
+        private static void TerminateActiveBots()
+        {
+            foreach ((KahootClient kahootClient, _) in _activeBots)
+            {
+                kahootClient.Terminate();
+            }
+
+            _activeBots = [];
         }
     }
 }

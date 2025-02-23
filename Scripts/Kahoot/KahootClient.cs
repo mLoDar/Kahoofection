@@ -6,6 +6,10 @@ using Newtonsoft.Json.Linq;
 
 
 
+#pragma warning disable CA1822 // Mark members as static
+
+
+
 
 
 namespace Kahoofection.Scripts.Kahoot
@@ -18,6 +22,11 @@ namespace Kahoofection.Scripts.Kahoot
         private static readonly ApplicationSettings.Urls _appUrls = new();
 
 
+
+        internal void Terminate()
+        {
+            _clientTerminated = true;
+        }
 
         internal async Task JoinGame(int gamePin, string gameNickname)
         {
@@ -223,6 +232,11 @@ namespace Kahoofection.Scripts.Kahoot
             {
                 await Task.Delay(10000);
 
+                if (_clientTerminated == true)
+                {
+                    break;
+                }
+
                 requestId++;
 
                 var heartbeatData = new[]
@@ -256,6 +270,9 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             }
 
+            kahootWebSocket.Abort();
+            await kahootWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+            
             ActivityLogger.Log(_currentSection, $"The client '{gameNickname}' with clientId '{clientId}' connected to game '{gamePin}' was terminated, see you soon!");
         }
 
