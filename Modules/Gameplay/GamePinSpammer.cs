@@ -22,6 +22,7 @@ namespace Kahoofection.Modules.Gameplay
         private const string _currentSection = "GamePinSpammer";
 
         private static List<(KahootClient, Task)> _activeBots = [];
+        private static List<Task> _spamQueue = [];
 
 
 
@@ -52,20 +53,6 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ConsoleHelper.ResetConsole();
-
-
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("             Loading ...");
-            Console.WriteLine("             Please be patient.");
-
-
-
-            await InitiateSpammer(gameSpammerSettings);
-
-
-
             Console.CursorVisible = false;
             ConsoleHelper.ResetConsole();
 
@@ -78,6 +65,10 @@ namespace Kahoofection.Modules.Gameplay
             Console.WriteLine("                                                                          ");
             Console.WriteLine("             \u001b[94m┌ \u001b[97mUse ESC to leave                       ");
             Console.WriteLine("             \u001b[94m└──────────────────────                            ");
+
+
+
+            _spamQueue.Add(InitiateSpammer(gameSpammerSettings));
 
 
 
@@ -368,6 +359,7 @@ namespace Kahoofection.Modules.Gameplay
             }
 
             _activeBots = [];
+            _spamQueue = [];
         }
     }
 }
