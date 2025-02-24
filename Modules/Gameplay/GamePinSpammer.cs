@@ -161,7 +161,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
             Console.WriteLine("                                                                                 ");
-            Console.WriteLine("             \u001b[94m┌ \u001b[97mHow many bots should join? (min. 5, max. 150) ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mHow many bots should join? (min. 3, max. 100) ");
             Console.WriteLine("             \u001b[94m├───────────────────────────────────────────────────      ");
 
             startCursorTop = Console.GetCursorPosition().Top;
@@ -309,7 +309,7 @@ namespace Kahoofection.Modules.Gameplay
                 return (-1, new Exception("The input is not a valid number."));
             }
 
-            if (Enumerable.Range(5, 150).Contains(gameBotCount) == false)
+            if (Enumerable.Range(3, 100).Contains(gameBotCount) == false)
             {
                 ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotCount as the provided input is not in the specified range.");
                 return (-1, new Exception("BotCount is not within the specified range."));
