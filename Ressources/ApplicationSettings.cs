@@ -33,6 +33,7 @@
             internal readonly string kahootImageCdn = "https://images-cdn.kahoot.it/{imageId}";
             internal readonly string kahootWebsocket = "wss://kahoot.it/cometd/{gamePin}/{webSocketToken}";
             internal readonly string kahootSessionReservation = "https://kahoot.it/reserve/session/{gamePin}/?{millisTimestamp}";
+            internal readonly string kahootJoinPin = "https://kahoot.it?pin={gamePin}";
         }
     }
 }

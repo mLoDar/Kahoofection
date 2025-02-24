@@ -171,7 +171,7 @@ namespace Kahoofection
                     break;
 
                 case 4:
-                    // TODO: Redirect to PinBruteforce
+                    await PinBruteforcer.Start();
                     break;
 
                 case 5:
