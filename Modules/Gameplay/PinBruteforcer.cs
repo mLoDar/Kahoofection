@@ -27,8 +27,10 @@ namespace Kahoofection.Modules.Gameplay
 
         internal static async Task Start()
         {
+            string subSection = "Main";
+
             Console.Title = $"Kahoofection | {_currentSection}";
-            ActivityLogger.Log(_currentSection, $"Starting module '{_currentSection}'");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
 
 
 
@@ -36,7 +38,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ActivityLogger.Log(_currentSection, $"Starting the generation of {_totalBruteforceAttempts} pins.");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting the generation of {_totalBruteforceAttempts} pins.");
 
             _creationTask = new Task(async () =>
             {
@@ -81,7 +83,7 @@ namespace Kahoofection.Modules.Gameplay
 
             if (_pressedKey == ConsoleKey.Escape || _pressedKey == ConsoleKey.Backspace)
             {
-                ActivityLogger.Log(_currentSection, $"Leaving module, as the ESC or BACKSPACE key was pressed.");
+                ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the ESC or BACKSPACE key was pressed.");
 
                 _validPins = [];
 
@@ -100,6 +102,8 @@ namespace Kahoofection.Modules.Gameplay
 
         private static async Task GenerateNewPin()
         {
+            string subSection = "GenerateNewPin";
+
             string generatedPin = _numberGenerator.Next(100000, 999999).ToString();
 
             (int gamePin, Exception? occurredError) = await KahootHelper.CheckGamePin(generatedPin);
@@ -111,8 +115,8 @@ namespace Kahoofection.Modules.Gameplay
 
                 _validPins.Add(urlJoinPin);
 
-                ActivityLogger.Log(_currentSection, $"Successfully found a valid pin after {_currentAttempt} attempts.");
-                ActivityLogger.Log(_currentSection, $"Valid pin: {urlJoinPin}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Successfully found a valid pin after {_currentAttempt} attempts.");
+                ActivityLogger.Log(_currentSection, subSection, $"Valid pin: {urlJoinPin}", true);
             }
 
             _interfaceNeedsRedraw = true;

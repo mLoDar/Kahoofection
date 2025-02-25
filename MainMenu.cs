@@ -52,13 +52,15 @@ namespace Kahoofection
 
         internal static async Task Start()
         {
-            ActivityLogger.Log(_currentSection, "Entering main menu.");
+            string subSection = "Main";
+
+            ActivityLogger.Log(_currentSection, subSection, "Entering main menu.");
 
             ConsoleHelper.ResetConsole();
 
 
 
-            ActivityLogger.Log(_currentSection, "Choosing a new phrase for the main menu.");
+            ActivityLogger.Log(_currentSection, subSection, "Choosing a new phrase for the main menu.");
 
             try
             {
@@ -75,12 +77,12 @@ namespace Kahoofection
                     }
                 }
 
-                ActivityLogger.Log(_currentSection, "A new phrase for the main menu was choosen:");
-                ActivityLogger.Log(_currentSection, _sessionPhrase, true);
+                ActivityLogger.Log(_currentSection, subSection, "A new phrase for the main menu was choosen:");
+                ActivityLogger.Log(_currentSection, subSection, _sessionPhrase, true);
             }
             catch
             {
-                ActivityLogger.Log(_currentSection, "Failed to get a new phrase for the main menu. Using a placeholder for now.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to get a new phrase for the main menu. Using a placeholder for now.");
                 _sessionPhrase = "ᵐᵃᵈᵉ ᵗᵒ ˡᵃˢᵗ";
             }
 
@@ -92,11 +94,11 @@ namespace Kahoofection
 
 
 
-            ActivityLogger.Log(_currentSection, "Starting to draw the main menu.");
+            ActivityLogger.Log(_currentSection, subSection, "Starting to draw the main menu.");
 
             DisplayMenu();
 
-            ActivityLogger.Log(_currentSection, "Displayed main menu, waiting for key input.");
+            ActivityLogger.Log(_currentSection, subSection, "Displayed main menu, waiting for key input.");
 
 
 
@@ -150,7 +152,7 @@ namespace Kahoofection
 
             int selectedMenuOption = _menuOptionsGrid[_navigationYPosition, _navigationXPosition];
 
-            ActivityLogger.Log(_currentSection, $"Menu option {selectedMenuOption} ({_kahoofectionOptions[selectedMenuOption]}) was selected, redirecting ...");
+            ActivityLogger.Log(_currentSection, subSection, $"Menu option {selectedMenuOption} ({_kahoofectionOptions[selectedMenuOption]}) was selected, redirecting ...");
 
 
 
@@ -187,7 +189,7 @@ namespace Kahoofection
 
 
 
-            ActivityLogger.Log(_currentSection, $"Redrawing main menu after returning from the selected menu option.");
+            ActivityLogger.Log(_currentSection, subSection, $"Redrawing main menu after returning from the selected menu option.");
 
             Console.Clear();
             goto LabelDrawUi;

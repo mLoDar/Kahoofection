@@ -24,10 +24,12 @@ namespace Kahoofection.Modules.Information
 
         internal static async Task Start()
         {
+            string subSection = "Main";
+
         LabelMethodEntryPoint:
 
             Console.Title = $"Kahoofection | {_currentSection}";
-            ActivityLogger.Log(_currentSection, $"Starting module '{_currentSection}'");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
 
 
 
@@ -39,30 +41,30 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompted to provide a QuizId, waiting for an input.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompted to provide a QuizId, waiting for an input.");
 
             (bool escapeKeyPressed, string lineContent) = await ConsoleHelper.ReadLine();
 
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"Leaving module, as the input was cancelled via the ESC key.");
+                ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the input was cancelled via the ESC key.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(lineContent))
             {
-                ActivityLogger.Log(_currentSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
                 goto LabelMethodEntryPoint;
             }
 
             if (Guid.TryParse(lineContent, out Guid convertedQuizId) == false)
             {
-                ActivityLogger.Log(_currentSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
                 goto LabelMethodEntryPoint;
             }
 
-            ActivityLogger.Log(_currentSection, "Received a valid string as a QuizId.");
-            ActivityLogger.Log(_currentSection, $"Input: '{lineContent}'");
+            ActivityLogger.Log(_currentSection, subSection, "Received a valid string as a QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, $"Input: '{lineContent}'");
 
 
 
@@ -74,7 +76,7 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
 
             string providedQuizId = convertedQuizId.ToString();
             string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
@@ -88,8 +90,8 @@ namespace Kahoofection.Modules.Information
 
             if (string.IsNullOrEmpty(apiResponse))
             {
-                ActivityLogger.Log(_currentSection, "Received an invalid response from the API, the response was empty.");
-                ActivityLogger.Log(_currentSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
+                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, the response was empty.");
+                ActivityLogger.Log(_currentSection, subSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
 
                 string title = "QuizId search failed";
                 string description = "No quiz was found. Please try again with a different QuizId.";
@@ -122,8 +124,8 @@ namespace Kahoofection.Modules.Information
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, "Received an invalid response from the API, failed to parse the response.");
-                ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, failed to parse the response.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
                 string title = "QuizId answers failed";
                 string description = "Please look at the error logs to fix this problem.";
@@ -159,8 +161,8 @@ namespace Kahoofection.Modules.Information
                 }
                 catch (Exception exception)
                 {
-                    ActivityLogger.Log(_currentSection, $"Failed to fetch details for question '{questionIndex}'.");
-                    ActivityLogger.Log(_currentSection, $"Exception: {exception}", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch details for question '{questionIndex}'.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception}", true);
                     
                     formattedQuestions.Add($"\x1B[91m{questionIndex}.) Failed to fetch question\x1B[97m");
                     formattedQuestions.Add(string.Empty);
@@ -200,11 +202,11 @@ namespace Kahoofection.Modules.Information
                 }
                 catch (Exception exception)
                 {
-                    ActivityLogger.Log(_currentSection, "Failed to fetch questions or format them.");
-                    ActivityLogger.Log(_currentSection, $"Excpetion: {exception}", true);
+                    ActivityLogger.Log(_currentSection, subSection, "Failed to fetch questions or format them.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Excpetion: {exception}", true);
                 }
 
-                ActivityLogger.Log(_currentSection, "Successfully fetched all questions with their details and formatted them for the display box.");
+                ActivityLogger.Log(_currentSection, subSection, "Successfully fetched all questions with their details and formatted them for the display box.");
             }
 
 
@@ -214,7 +216,7 @@ namespace Kahoofection.Modules.Information
 
             Console.CursorVisible = false;
 
-            ActivityLogger.Log(_currentSection, $"Starting to draw display box with {linesDisplayedAtOnce} lines at once.");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting to draw display box with {linesDisplayedAtOnce} lines at once.");
 
 
 
@@ -244,11 +246,11 @@ namespace Kahoofection.Modules.Information
                     break;
 
                 case ConsoleKey.Escape:
-                    ActivityLogger.Log(_currentSection, "Returning to the main menu selection via 'ESC'.");
+                    ActivityLogger.Log(_currentSection, subSection, "Returning to the main menu selection via 'ESC'.");
                     return;
 
                 case ConsoleKey.Backspace:
-                    ActivityLogger.Log(_currentSection, "Returning to the main menu via 'BACKSPACE'.");
+                    ActivityLogger.Log(_currentSection, subSection, "Returning to the main menu via 'BACKSPACE'.");
                     return;
 
                 default:

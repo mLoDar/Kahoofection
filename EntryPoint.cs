@@ -19,22 +19,24 @@ namespace Kahoofection
 
         static async Task Main()
         {
+            string subSection = "Main";
+
             string appVersion = _appRuntime.appVersion;
             string appRelease = _appRuntime.appRelease;
 
-            ActivityLogger.Log(_currentSection, string.Empty, true);
-            ActivityLogger.Log(_currentSection, "Starting Kahoofection (C) The only way to play");
-            ActivityLogger.Log(_currentSection, $"Version '{appVersion}' | Release '{appRelease}'");
+            ActivityLogger.Log(_currentSection, subSection, string.Empty, true);
+            ActivityLogger.Log(_currentSection, subSection,"Starting Kahoofection (C) The only way to play");
+            ActivityLogger.Log(_currentSection, subSection, $"Version '{appVersion}' | Release '{appRelease}'");
 
 
 
-            ActivityLogger.Log(_currentSection, "Trying to enable support for ANSI escape sequence.");
+            ActivityLogger.Log(_currentSection, subSection, "Trying to enable support for ANSI escape sequence.");
             (bool ansiSupportEnabled, Exception occurredError) = ConsoleHelper.EnableAnsiSupport();
 
             if (ansiSupportEnabled == false)
             {
-                ActivityLogger.Log(_currentSection, "[ERROR] Failed to enable ANSI support.");
-                ActivityLogger.Log(_currentSection, occurredError.Message, true);
+                ActivityLogger.Log(_currentSection, subSection, "[ERROR] Failed to enable ANSI support.");
+                ActivityLogger.Log(_currentSection, subSection, occurredError.Message, true);
 
                 Console.SetCursorPosition(0, 4);
                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -48,7 +50,7 @@ namespace Kahoofection
             }
             else
             {
-                ActivityLogger.Log(_currentSection, "Successfully enabled ANSI support!");
+                ActivityLogger.Log(_currentSection, subSection, "Successfully enabled ANSI support!");
             }
 
 
@@ -59,15 +61,15 @@ namespace Kahoofection
 
 
 
-            ActivityLogger.Log(_currentSection, "Displaying welcome message.");
+            ActivityLogger.Log(_currentSection, subSection, "Displaying welcome message.");
 
             await DisplayWelcomeMessage();
 
-            ActivityLogger.Log(_currentSection, "Welcome message was displayed, redirecting to the main menu.");
+            ActivityLogger.Log(_currentSection, subSection, "Welcome message was displayed, redirecting to the main menu.");
 
             await MainMenu.Start();
 
-            ActivityLogger.Log(_currentSection, "Shutting down Kahoofection.");
+            ActivityLogger.Log(_currentSection, subSection, "Shutting down Kahoofection.");
 
 
 

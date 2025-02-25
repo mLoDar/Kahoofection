@@ -28,10 +28,12 @@ namespace Kahoofection.Modules.Gameplay
 
         internal static async Task Start()
         {
+            string subSection = "Main";
+
         LabelMethodEntryPoint:
 
             Console.Title = $"Kahoofection | {_currentSection}";
-            ActivityLogger.Log(_currentSection, $"Starting module '{_currentSection}'");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
 
 
 
@@ -39,17 +41,17 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompting for game settings in order to initiate the spammer.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompting for game settings in order to initiate the spammer.");
 
             (bool escapeKeyPressed, GameSpammerSettings gameSpammerSettings) = await GetGameSettings();
 
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"Leaving module, as the input was cancelled via the ESC key.");
+                ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the input was cancelled via the ESC key.");
                 return;
             }
 
-            ActivityLogger.Log(_currentSection, $"Successfully created settings for the spammer.");
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully created settings for the spammer.");
 
 
 
@@ -79,7 +81,7 @@ namespace Kahoofection.Modules.Gameplay
             switch (pressedKey)
             {
                 case ConsoleKey.Escape:
-                    ActivityLogger.Log(_currentSection, $"Leaving module, as the ESC key was pressed after initiating the spammer.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the ESC key was pressed after initiating the spammer.");
 
                     TerminateActiveBots();
 
@@ -87,7 +89,7 @@ namespace Kahoofection.Modules.Gameplay
                     return;
 
                 case ConsoleKey.Backspace:
-                    ActivityLogger.Log(_currentSection, $"Restarting module, as the BACKSPACE key was pressed after initiating the spammer.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Restarting module, as the BACKSPACE key was pressed after initiating the spammer.");
 
                     TerminateActiveBots();
 
@@ -101,6 +103,8 @@ namespace Kahoofection.Modules.Gameplay
 
         private static async Task<(bool escapeKeyPressed, GameSpammerSettings gameSpammerSettings)> GetGameSettings()
         {
+            string subSection = "GetGameSettings";
+
             Console.WriteLine("             \u001b[94m┌ \u001b[97mEnter a GamePin: ");
             Console.WriteLine("             \u001b[94m├──────────────────────      ");
 
@@ -123,18 +127,18 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompted to provide a GamePin, waiting for an input.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompted to provide a GamePin, waiting for an input.");
 
             (bool escapeKeyPressed, string providedGamePin) = await ConsoleHelper.ReadLine();
             
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"The input process was cancelled via the ESC key, returning.");
+                ActivityLogger.Log(_currentSection, subSection, $"The input process was cancelled via the ESC key, returning.");
                 return (true, new GameSpammerSettings());
             }
 
-            ActivityLogger.Log(_currentSection, $"A GamePin was provided, checking for validity.");
-            ActivityLogger.Log(_currentSection, $"Input: '{providedGamePin}'", true);
+            ActivityLogger.Log(_currentSection, subSection, $"A GamePin was provided, checking for validity.");
+            ActivityLogger.Log(_currentSection, subSection, $"Input: '{providedGamePin}'", true);
 
             endCursorTop = Console.GetCursorPosition().Top;
 
@@ -144,8 +148,8 @@ namespace Kahoofection.Modules.Gameplay
 
             if (exceptionGamePin != null)
             {
-                ActivityLogger.Log(_currentSection, $"An invalid GamePin was provided, restarting the input prompt.");
-                ActivityLogger.Log(_currentSection, $"Exception: {exceptionGamePin.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"An invalid GamePin was provided, restarting the input prompt.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exceptionGamePin.Message}", true);
 
                 Console.WriteLine();
                 Console.WriteLine("             \u001b[91mInvalid GamePin");
@@ -156,7 +160,7 @@ namespace Kahoofection.Modules.Gameplay
                 goto LabelInputGamePin;
             }
 
-            ActivityLogger.Log(_currentSection, $"Successfully fetched a GamePin!");
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully fetched a GamePin!");
 
 
 
@@ -182,18 +186,18 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompted to provide a BotCount, waiting for an input.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompted to provide a BotCount, waiting for an input.");
 
             (escapeKeyPressed, string providedBotCount) = await ConsoleHelper.ReadLine();
             
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"The input process was cancelled via the ESC key, returning.");
+                ActivityLogger.Log(_currentSection, subSection, $"The input process was cancelled via the ESC key, returning.");
                 return (true, new GameSpammerSettings());
             }
 
-            ActivityLogger.Log(_currentSection, $"A BotCount was provided, checking for validity.");
-            ActivityLogger.Log(_currentSection, $"Input: '{providedBotCount}'", true);
+            ActivityLogger.Log(_currentSection, subSection, $"A BotCount was provided, checking for validity.");
+            ActivityLogger.Log(_currentSection, subSection, $"Input: '{providedBotCount}'", true);
 
             endCursorTop = Console.GetCursorPosition().Top;
 
@@ -203,8 +207,8 @@ namespace Kahoofection.Modules.Gameplay
 
             if (exceptionBotCount != null)
             {
-                ActivityLogger.Log(_currentSection, $"An invalid BotCount was provided, restarting the input prompt.");
-                ActivityLogger.Log(_currentSection, $"Exception: {exceptionBotCount.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"An invalid BotCount was provided, restarting the input prompt.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exceptionBotCount.Message}", true);
 
                 Console.WriteLine();
                 Console.WriteLine("             \u001b[91mInvalid BotCount");
@@ -215,7 +219,7 @@ namespace Kahoofection.Modules.Gameplay
                 goto LabelInputGameBotCount;
             }
 
-            ActivityLogger.Log(_currentSection, $"Successfully fetched a BotCount!");
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully fetched a BotCount!");
 
 
 
@@ -241,18 +245,18 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompted to provide a BotName, waiting for an input.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompted to provide a BotName, waiting for an input.");
 
             (escapeKeyPressed, string gameBotName) = await ConsoleHelper.ReadLine();
 
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"The input process was cancelled via the ESC key, returning.");
+                ActivityLogger.Log(_currentSection, subSection, $"The input process was cancelled via the ESC key, returning.");
                 return (true, new GameSpammerSettings());
             }
 
-            ActivityLogger.Log(_currentSection, $"A BotName was provided, checking for validity.");
-            ActivityLogger.Log(_currentSection, $"Input: '{gameBotName}'", true);
+            ActivityLogger.Log(_currentSection, subSection, $"A BotName was provided, checking for validity.");
+            ActivityLogger.Log(_currentSection, subSection, $"Input: '{gameBotName}'", true);
 
             endCursorTop = Console.GetCursorPosition().Top;
 
@@ -262,8 +266,8 @@ namespace Kahoofection.Modules.Gameplay
 
             if (exceptionBotName != null)
             {
-                ActivityLogger.Log(_currentSection, $"An invalid BotName was provided, restarting the input prompt.");
-                ActivityLogger.Log(_currentSection, $"Exception: {exceptionBotName.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"An invalid BotName was provided, restarting the input prompt.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exceptionBotName.Message}", true);
 
                 Console.WriteLine();
                 Console.WriteLine("             \u001b[91mInvalid BotName");
@@ -274,7 +278,7 @@ namespace Kahoofection.Modules.Gameplay
                 goto LabelInputGameBotName;
             }
 
-            ActivityLogger.Log(_currentSection, $"Successfully fetched a BotName!");
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully fetched a BotName!");
 
 
 
@@ -285,33 +289,35 @@ namespace Kahoofection.Modules.Gameplay
                 gameBotCount = gameBotCount
             };
 
-            ActivityLogger.Log(_currentSection, $"Returning with the created settings:");
-            ActivityLogger.Log(_currentSection, $"GamePin: {gameSpammerSettings.gamePin}", true);
-            ActivityLogger.Log(_currentSection, $"GameBotName: {gameSpammerSettings.gameBotName}", true);
-            ActivityLogger.Log(_currentSection, $"GameBotCount: {gameSpammerSettings.gameBotCount}", true);
+            ActivityLogger.Log(_currentSection, subSection, $"Returning with the created settings:");
+            ActivityLogger.Log(_currentSection, subSection, $"GamePin: {gameSpammerSettings.gamePin}", true);
+            ActivityLogger.Log(_currentSection, subSection, $"GameBotName: {gameSpammerSettings.gameBotName}", true);
+            ActivityLogger.Log(_currentSection, subSection, $"GameBotCount: {gameSpammerSettings.gameBotCount}", true);
             
             return (false, gameSpammerSettings);
         }
         
         private static (int gameBotCount, Exception? exception) ValidBotCount(string providedInput)
         {
+            string subSection = "ValidBotCount";
+
             providedInput = RegexPatterns.NoNumbers().Replace(providedInput, string.Empty);
 
             if (string.IsNullOrWhiteSpace(providedInput))
             {
-                ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotCount as the provided input is null or whitespace.");
+                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is null or whitespace.");
                 return (-1, new Exception("The input does not contain any numbers."));
             }
 
             if (int.TryParse(providedInput, out int gameBotCount) == false)
             {
-                ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotCount as the provided input is an invalid int.");
+                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is an invalid int.");
                 return (-1, new Exception("The input is not a valid number."));
             }
 
             if (Enumerable.Range(3, 100).Contains(gameBotCount) == false)
             {
-                ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotCount as the provided input is not in the specified range.");
+                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is not in the specified range.");
                 return (-1, new Exception("BotCount is not within the specified range."));
             }
 
@@ -320,17 +326,19 @@ namespace Kahoofection.Modules.Gameplay
 
         private static Exception? ValidBotName(string providedInput)
         {
+            string subSection = "ValidBotName";
+
             providedInput = RegexPatterns.AllWhitespaces().Replace(providedInput, string.Empty);
 
             if (string.IsNullOrWhiteSpace(providedInput))
             {
-                ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotName as the provided input is null or whitespace.");
+                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotName as the provided input is null or whitespace.");
                 return (new Exception("BotName is null or whitespace."));
             }
 
             if (Enumerable.Range(1, 100).Contains(providedInput.Length) == false)
             {
-                ActivityLogger.Log(_currentSection, "Restarting the prompt for a BotName as the provided input's length is not in the specified range.");
+                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotName as the provided input's length is not in the specified range.");
                 return (new Exception("BotName's length is not in the specified range."));
             }
 

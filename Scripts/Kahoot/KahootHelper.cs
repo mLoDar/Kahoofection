@@ -23,6 +23,8 @@ namespace Kahoofection.Scripts.Kahoot
 
         internal static (bool successfullyFetchedAnswer, string fetchedType, string fetchedTitle, List<string> fetchedAnswers) GetQuestionsAnswer(int questionIndex, JObject questionData)
         {
+            string subSection = "GetQuestionsAnswer";
+
             JToken? questionType = questionData.SelectToken("type");
             JToken? questionTitle = questionData.SelectToken("question");
 
@@ -30,16 +32,16 @@ namespace Kahoofection.Scripts.Kahoot
 
             if (questionType == null)
             {
-                ActivityLogger.Log(_currentSection, $"Failed to fetch the question type.");
-                ActivityLogger.Log(_currentSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch the question type.");
+                ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
 
                 return (false, string.Empty, string.Empty, []);
             }
 
             if (questionTitle == null && questionType.ToString().Equals("content") == false)
             {
-                ActivityLogger.Log(_currentSection, $"Failed to fetch the questions title. (Questions type is not 'content')");
-                ActivityLogger.Log(_currentSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch the questions title. (Questions type is not 'content')");
+                ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
 
                 return (false, string.Empty, string.Empty, []);
             }
@@ -51,8 +53,8 @@ namespace Kahoofection.Scripts.Kahoot
 
             if (questionTitle == null)
             {
-                ActivityLogger.Log(_currentSection, $"The questions title is null although it was already fetched.");
-                ActivityLogger.Log(_currentSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"The questions title is null although it was already fetched.");
+                ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData.ToString(Formatting.None)}", true);
 
                 questionTitle = "\u001b[97mFailed to fetch question title";
             }
@@ -75,8 +77,8 @@ namespace Kahoofection.Scripts.Kahoot
 
                     if (questionData["choices"].FirstOrDefault(choice => (bool)choice["correct"]) is not JObject firstCorrectChoice)
                     {
-                        ActivityLogger.Log(_currentSection, $"Failed to find a correct choice for question type 'quiz'. (firstCorrectChoice is null)");
-                        ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to find a correct choice for question type 'quiz'. (firstCorrectChoice is null)");
+                        ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                         questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         answerAdded = true;
@@ -95,8 +97,8 @@ namespace Kahoofection.Scripts.Kahoot
 
                         if (string.IsNullOrWhiteSpace(questionAnswer))
                         {
-                            ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'quiz'. (answer and imageId is null or whitespace)");
-                            ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                            ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch answer for question type 'quiz'. (answer and imageId is null or whitespace)");
+                            ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                             questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                             answerAdded = true;
@@ -152,8 +154,8 @@ namespace Kahoofection.Scripts.Kahoot
 
                     if (choiceShapes == null || choiceShapes == new JObject() || imageMetadata == null || imageMetadata == new JObject())
                     {
-                        ActivityLogger.Log(_currentSection, $"Failed to fetch 'choiceShapes' or 'imageMetadata' for type 'pin_it'. (one or multiple are null)");
-                        ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch 'choiceShapes' or 'imageMetadata' for type 'pin_it'. (one or multiple are null)");
+                        ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                         questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
@@ -178,11 +180,11 @@ namespace Kahoofection.Scripts.Kahoot
                     }
                     catch (Exception exception)
                     {
-                        ActivityLogger.Log(_currentSection, $"Failed to create waldo points for question type 'pin_it'.");
-                        ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}", true);
-                        ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
-                        ActivityLogger.Log(_currentSection, $"ChoiceShapes: {choiceShapes?.ToString(Formatting.None)}", true);
-                        ActivityLogger.Log(_currentSection, $"ImageMetadata: {imageMetadata?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to create waldo points for question type 'pin_it'.");
+                        ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"ChoiceShapes: {choiceShapes?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"ImageMetadata: {imageMetadata?.ToString(Formatting.None)}", true);
 
                         questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
@@ -200,8 +202,8 @@ namespace Kahoofection.Scripts.Kahoot
 
                     if (sliderChoiceRange == null || sliderChoiceRange == new JObject())
                     {
-                        ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'slider'. (choiceRange is null)");
-                        ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch answer for question type 'slider'. (choiceRange is null)");
+                        ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                         questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                         break;
@@ -221,9 +223,9 @@ namespace Kahoofection.Scripts.Kahoot
                     }
                     catch (Exception exception)
                     {
-                        ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type 'slider'.");
-                        ActivityLogger.Log(_currentSection, $"Exception: {exception.Message}", true);
-                        ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch answer for question type 'slider'.");
+                        ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                         questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                     }
@@ -275,8 +277,8 @@ namespace Kahoofection.Scripts.Kahoot
 
                 if (correctAnswers == null || correctAnswers.Count <= 0)
                 {
-                    ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type '{questionType}'. (correctAnswers array is null or empty)");
-                    ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch answer for question type '{questionType}'. (correctAnswers array is null or empty)");
+                    ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                     questionAnswers.Add(new string(' ', prefix.Length) + "\u001b[91mFailed to fetch questions answer.\u001b[97m");
                 }
@@ -295,9 +297,9 @@ namespace Kahoofection.Scripts.Kahoot
 
             if (answerAdded == false)
             {
-                ActivityLogger.Log(_currentSection, $"Failed to fetch answer for question type '{questionType}'.");
-                ActivityLogger.Log(_currentSection, $"ATTENTION: This question type is not recognized by the application.", true);
-                ActivityLogger.Log(_currentSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch answer for question type '{questionType}'.");
+                ActivityLogger.Log(_currentSection, subSection, $"ATTENTION: This question type is not recognized by the application.", true);
+                ActivityLogger.Log(_currentSection, subSection, $"QuestionData: {questionData?.ToString(Formatting.None)}", true);
 
                 successfullyFetchedAnswer = false;
             }
@@ -358,25 +360,27 @@ namespace Kahoofection.Scripts.Kahoot
 
         internal static async Task<(int gamePin, Exception? occurredError)> CheckGamePin(string input)
         {
-            ActivityLogger.Log(_currentSection, $"Checking input '{input}' for a valid GamePin.");
+            string subSection = "CheckGamePin";
+
+            ActivityLogger.Log(_currentSection, subSection, $"Checking input '{input}' for a valid GamePin.");
 
             input = RegexPatterns.NoNumbers().Replace(input, string.Empty);
 
             if (string.IsNullOrWhiteSpace(input))
             {
-                ActivityLogger.Log(_currentSection, $"Input is null or whitespace, returning result.");
+                ActivityLogger.Log(_currentSection, subSection, $"Input is null or whitespace, returning result.");
                 return (-1, new Exception("The input does not contain any numbers."));
             }
 
             if (int.TryParse(input, out int gamePin) == false)
             {
-                ActivityLogger.Log(_currentSection, $"Input is not a valid number, returning result.");
+                ActivityLogger.Log(_currentSection, subSection, $"Input is not a valid number, returning result.");
                 return (-1, new Exception("The input is not a valid number."));
             }
 
             if (input.Length > _appRuntime.gamePinFormat.Length)
             {
-                ActivityLogger.Log(_currentSection, $"Input's format does not match GamePin pattern, returning result.");
+                ActivityLogger.Log(_currentSection, subSection, $"Input's format does not match GamePin pattern, returning result.");
                 return (-1, new Exception($"GamePin's format does not match pattern ({_appRuntime.gamePinFormat.Length} digits)."));
             }
 
@@ -398,13 +402,13 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse game data.");
-                ActivityLogger.Log(_currentSection, exception.Message, true);
+                ActivityLogger.Log(_currentSection, subSection, $"Received invalid game data as response. Failed to parse game data.");
+                ActivityLogger.Log(_currentSection, subSection, exception.Message, true);
 
                 return (-1, new Exception("No valid pin was provided"));
             }
             
-            ActivityLogger.Log(_currentSection, $"The provided input '{input}' contains a valid GamePin!");
+            ActivityLogger.Log(_currentSection, subSection, $"The provided input '{input}' contains a valid GamePin!");
 
 
 
@@ -424,8 +428,8 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, $"Received invalid game data as response. Failed to parse data or find any information about TwoFactorAuthentication.");
-                ActivityLogger.Log(_currentSection, exception.Message, true);
+                ActivityLogger.Log(_currentSection, subSection, $"Received invalid game data as response. Failed to parse data or find any information about TwoFactorAuthentication.");
+                ActivityLogger.Log(_currentSection, subSection, exception.Message, true);
 
                 return (-1, exception);
             }

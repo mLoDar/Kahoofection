@@ -14,8 +14,10 @@ namespace Kahoofection.Scripts
 
         internal static async Task<string> CreateRequest(string targetUrl, Dictionary<string, string>? requestParameters = null)
         {
-            ActivityLogger.Log(_currentSection, $"Initiating a new web request.");
-            ActivityLogger.Log(_currentSection, $"Target url: {targetUrl}");
+            string subSection = "CreateRequest";
+
+            ActivityLogger.Log(_currentSection, subSection, $"Initiating a new web request.");
+            ActivityLogger.Log(_currentSection, subSection, $"Target url: {targetUrl}");
 
             try
             {
@@ -37,30 +39,30 @@ namespace Kahoofection.Scripts
                 HttpResponseMessage responseMessage = await httpClient.GetAsync(targetUrl);
                 string response = new StreamReader(await responseMessage.Content.ReadAsStreamAsync()).ReadToEnd();
 
-                ActivityLogger.Log(_currentSection, $"Web request was a success, returning response.");
+                ActivityLogger.Log(_currentSection, subSection, $"Web request was a success, returning response.");
 
                 return response;
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, $"An error occurred while performing the web request.");
+                ActivityLogger.Log(_currentSection, subSection, $"An error occurred while performing the web request.");
 
                 if (requestParameters != null)
                 {
-                    ActivityLogger.Log(_currentSection, $"Provided parameters:", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Provided parameters:", true);
 
                     foreach (var currentParameter in requestParameters)
                     {
-                        ActivityLogger.Log(_currentSection, $"{currentParameter.Key} -> {currentParameter.Value}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"{currentParameter.Key} -> {currentParameter.Value}", true);
                     }
                 }
                 else
                 {
-                    ActivityLogger.Log(_currentSection, $"No parameters were provided for the request or they are null.", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"No parameters were provided for the request or they are null.", true);
                 }
 
-                ActivityLogger.Log(_currentSection, $"Target url: {exception.Message}", true);
-                ActivityLogger.Log(_currentSection, $"Exception thrown: {exception.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Target url: {exception.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Exception thrown: {exception.Message}", true);
 
                 return string.Empty;
             }

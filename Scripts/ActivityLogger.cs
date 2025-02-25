@@ -13,7 +13,7 @@ namespace Kahoofection.Scripts
 
 
 
-        internal static void Log(string currentSection, string message, bool removePrefix = false)
+        internal static void Log(string currentSection, string subSection, string message, bool removePrefix = false)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Kahoofection.Scripts
                 }
 
                 string logFile = Path.Combine(logsFolder, logFileName);
-                string prefix = $"[{DateTime.Now}] - [ProcessId: {Environment.ProcessId}] - [Section: {currentSection}] - ";
+                string prefix = $"[{DateTime.Now}] - [ProcessId: {Environment.ProcessId}] - [Section: {currentSection} | {subSection}] - ";
 
                 using FileStream fs = new(logFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 using StreamWriter writer = new(fs);

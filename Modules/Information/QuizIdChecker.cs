@@ -36,10 +36,12 @@ namespace Kahoofection.Modules.Information
 
         internal static async Task Start()
         {
+            string subSection = "Main";
+
         LabelMethodEntryPoint:
 
             Console.Title = $"Kahoofection | {_currentSection}";
-            ActivityLogger.Log(_currentSection, $"Starting module '{_currentSection}'");
+            ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
 
 
 
@@ -51,30 +53,30 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, $"Prompted to provide a QuizId, waiting for an input.");
+            ActivityLogger.Log(_currentSection, subSection, $"Prompted to provide a QuizId, waiting for an input.");
 
             (bool escapeKeyPressed, string lineContent) = await ConsoleHelper.ReadLine();
 
             if (escapeKeyPressed == true)
             {
-                ActivityLogger.Log(_currentSection, $"Leaving module, as the input was cancelled via the ESC key.");
+                ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the input was cancelled via the ESC key.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(lineContent))
             {
-                ActivityLogger.Log(_currentSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
                 goto LabelMethodEntryPoint;
             }
 
             if (Guid.TryParse(lineContent, out Guid convertedQuizId) == false)
             {
-                ActivityLogger.Log(_currentSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
                 goto LabelMethodEntryPoint;
             }
 
-            ActivityLogger.Log(_currentSection, "Received a valid string as a QuizId.");
-            ActivityLogger.Log(_currentSection, $"Input: '{lineContent}'");
+            ActivityLogger.Log(_currentSection, subSection, "Received a valid string as a QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, $"Input: '{lineContent}'");
 
 
 
@@ -86,7 +88,7 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
 
             string providedQuizId = convertedQuizId.ToString();
             string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
@@ -100,8 +102,8 @@ namespace Kahoofection.Modules.Information
 
             if (string.IsNullOrEmpty(apiResponse))
             {
-                ActivityLogger.Log(_currentSection, "Received an invalid response from the API, the response was empty.");
-                ActivityLogger.Log(_currentSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
+                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, the response was empty.");
+                ActivityLogger.Log(_currentSection, subSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
 
                 string title = "QuizId check failed";
                 string description = "No quiz was found. Please try again with a different QuizId.";
@@ -115,18 +117,18 @@ namespace Kahoofection.Modules.Information
 
 
             
-            ActivityLogger.Log(_currentSection, "Trying to parse the API response and get quizzes.");
+            ActivityLogger.Log(_currentSection, subSection, "Trying to parse the API response and get quizzes.");
 
             (bool successfullyParsed, Exception? occurredError, QuizIdCheckData quizData) = ParseApiResponse(apiResponse);
 
             if (successfullyParsed == false)
             {
-                ActivityLogger.Log(_currentSection, "Failed to parse the API response.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to parse the API response.");
                 if (occurredError != null)
                 {
-                    ActivityLogger.Log(_currentSection, $"Occurred error: {occurredError.Message}", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Occurred error: {occurredError.Message}", true);
                 }
-                ActivityLogger.Log(_currentSection, $"API response: {apiResponse}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"API response: {apiResponse}", true);
 
                 string title = "QuizId check failed";
                 string description = "Please look at the error logs to fix this problem.";
@@ -142,11 +144,11 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, $"Displaying the formatted search results from the API endpoint.");
+            ActivityLogger.Log(_currentSection, subSection, $"Displaying the formatted search results from the API endpoint.");
 
             DisplayQuizData(quizData);
 
-            ActivityLogger.Log(_currentSection, $"Displayed the formatted quiz data for the current QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, $"Displayed the formatted quiz data for the current QuizId.");
 
 
 
@@ -159,7 +161,7 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, $"Displaying menu for next options.");
+            ActivityLogger.Log(_currentSection, subSection, $"Displaying menu for next options.");
 
         LabelDisplayMenu:
 
@@ -209,17 +211,17 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, $"Waiting for option choice.");
+            ActivityLogger.Log(_currentSection, subSection, $"Waiting for option choice.");
 
             switch (currentPosition)
             {
                 case 1:
-                    ActivityLogger.Log(_currentSection, $"Restarting module.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Restarting module.");
                     Console.CursorVisible = true;
                     goto LabelMethodEntryPoint;
 
                 case 2:
-                    ActivityLogger.Log(_currentSection, $"Returning to the main menu.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Returning to the main menu.");
                     return;
 
                 default:
