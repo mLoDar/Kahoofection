@@ -17,6 +17,9 @@ namespace Kahoofection.Ressources
         [GeneratedRegex("[^0-9]")]
         internal static partial Regex NoNumbers();
 
+        [GeneratedRegex("<[^>]+>")]
+        internal static partial Regex HtmlTags();
+
 
 
         [GeneratedRegex(@"decode\.call\(this, '([^']+)'\)")]
