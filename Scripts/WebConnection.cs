@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 
 
 
@@ -64,6 +65,57 @@ namespace Kahoofection.Scripts
                 ActivityLogger.Log(_currentSection, subSection, $"Exception thrown: {exception.Message}", true);
 
                 return string.Empty;
+            }
+        }
+
+        internal static async Task<Exception?> DownloadFile(string requestUrl, string localSavePath)
+        {
+            string subSection = "DownloadFile";
+
+            ActivityLogger.Log(_currentSection, subSection, $"Initiating a new file download.");
+            ActivityLogger.Log(_currentSection, subSection, $"Request url: {requestUrl}", true);
+            ActivityLogger.Log(_currentSection, subSection, $"Local save path: {localSavePath}", true);
+
+            try
+            {
+                HttpClient httpClient = new();
+
+                using HttpResponseMessage httpResponse = await httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+
+                httpResponse.EnsureSuccessStatusCode();
+
+                ActivityLogger.Log(_currentSection, subSection, $"Received a success status code from the request url.");
+
+
+
+                FileStream fileStream = new(localSavePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+
+                ActivityLogger.Log(_currentSection, subSection, $"Opened a new file stream for the local save path which was provided.");
+
+
+
+                await using Stream contentStream = await httpResponse.Content.ReadAsStreamAsync();
+                await contentStream.CopyToAsync(fileStream);
+
+                ActivityLogger.Log(_currentSection, subSection, $"File was fully written to disk, disposing any streams.");
+
+
+
+                await fileStream.DisposeAsync();
+                await contentStream.DisposeAsync();
+
+                ActivityLogger.Log(_currentSection, subSection, $"All streams were disposed, successfully finished the download.");
+
+
+
+                return null;
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, $"Failed to download file.");
+                ActivityLogger.Log(_currentSection, subSection, exception.Message, true);
+
+                return exception;
             }
         }
     }
