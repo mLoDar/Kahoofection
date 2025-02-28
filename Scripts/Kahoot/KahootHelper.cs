@@ -378,10 +378,10 @@ namespace Kahoofection.Scripts.Kahoot
                 return (-1, new Exception("The input is not a valid number."));
             }
 
-            if (input.Length > _appRuntime.gamePinFormat.Length)
+            if (input.Length > _appRuntime.kahootGamePinFormat.Length)
             {
                 ActivityLogger.Log(_currentSection, subSection, $"Input's format does not match GamePin pattern, returning result.");
-                return (-1, new Exception($"GamePin's format does not match pattern ({_appRuntime.gamePinFormat.Length} digits)."));
+                return (-1, new Exception($"GamePin's format does not match pattern ({_appRuntime.kahootGamePinFormat.Length} digits)."));
             }
 
 

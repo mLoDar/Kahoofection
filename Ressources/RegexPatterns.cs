@@ -27,5 +27,10 @@ namespace Kahoofection.Ressources
 
         [GeneratedRegex(@"var offset = (.+?);")]
         internal static partial Regex KahootChallengeOffset();
+
+
+
+        [GeneratedRegex(@"v(\d+\.\d+\.\d+)")]
+        internal static partial Regex GeckoVersion();
     }
 }
