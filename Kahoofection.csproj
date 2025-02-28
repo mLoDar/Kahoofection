@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="NCalcSync" Version="5.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.29.0" />
   </ItemGroup>
 
 </Project>
