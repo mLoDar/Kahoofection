@@ -12,31 +12,30 @@ namespace Kahoofection.Scripts
 
 
 
-        internal static async Task<string> CreateRequest(string targetUrl, Dictionary<string, string>? requestParameters = null)
+        internal static async Task<string> CreateRequest(string requestUrl, Dictionary<string, string>? requestParameters = null)
         {
             string subSection = "CreateRequest";
 
             ActivityLogger.Log(_currentSection, subSection, $"Initiating a new web request.");
-            ActivityLogger.Log(_currentSection, subSection, $"Target url: {targetUrl}");
+            ActivityLogger.Log(_currentSection, subSection, $"Request url: {requestUrl}", true);
 
             try
             {
                 if (requestParameters != null)
                 {
-                    StringBuilder sb = new(targetUrl);
+                    StringBuilder sb = new(requestUrl);
 
                     foreach (var currentParameter in requestParameters)
                     {
                         sb.Append($"&{currentParameter.Key}={currentParameter.Value}");
                     }
 
-                    targetUrl = sb.ToString();
-
+                    requestUrl = sb.ToString();
                 }
 
                 HttpClient httpClient = new();
 
-                HttpResponseMessage responseMessage = await httpClient.GetAsync(targetUrl);
+                HttpResponseMessage responseMessage = await httpClient.GetAsync(requestUrl);
                 string response = new StreamReader(await responseMessage.Content.ReadAsStreamAsync()).ReadToEnd();
 
                 ActivityLogger.Log(_currentSection, subSection, $"Web request was a success, returning response.");
@@ -61,7 +60,7 @@ namespace Kahoofection.Scripts
                     ActivityLogger.Log(_currentSection, subSection, $"No parameters were provided for the request or they are null.", true);
                 }
 
-                ActivityLogger.Log(_currentSection, subSection, $"Target url: {exception.Message}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Request url: {exception.Message}", true);
                 ActivityLogger.Log(_currentSection, subSection, $"Exception thrown: {exception.Message}", true);
 
                 return string.Empty;

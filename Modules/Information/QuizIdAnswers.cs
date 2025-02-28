@@ -209,8 +209,6 @@ namespace Kahoofection.Modules.Information
                     ActivityLogger.Log(_currentSection, subSection, "Failed to fetch questions or format them.");
                     ActivityLogger.Log(_currentSection, subSection, $"Excpetion: {exception}", true);
                 }
-
-                ActivityLogger.Log(_currentSection, subSection, "Successfully fetched all questions with their details and formatted them for the display box.");
             }
 
 

@@ -15,6 +15,7 @@
             internal readonly string appDataFolder;
             internal readonly string clientFolder;
             internal readonly string logsFolder;
+            internal readonly string driversFolder;
 
 
 
@@ -23,6 +24,7 @@
                 appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 clientFolder = Path.Combine(appDataFolder, "Kahoofection");
                 logsFolder = Path.Combine(clientFolder, "RuntimeLogs");
+                driversFolder = Path.Combine(clientFolder, "Webdrivers");
             }
         }
 
