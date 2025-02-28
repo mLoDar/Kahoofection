@@ -170,6 +170,8 @@ namespace Kahoofection.Modules.Information
                     continue;
                 }
 
+                fetchedTitle = RegexPatterns.HtmlTags().Replace(fetchedTitle, string.Empty);
+
 
 
                 string prefix = $"{questionIndex + 1}.) {fetchedType} │ ";
@@ -192,9 +194,11 @@ namespace Kahoofection.Modules.Information
 
                     foreach (string questionAnswer in fetchedAnswers)
                     {
-                        for (int j = 0; j < questionAnswer.Length; j += maximumBoxWidth)
+                        string questionAnswerNoHtml = RegexPatterns.HtmlTags().Replace(questionAnswer, string.Empty);
+
+                        for (int j = 0; j < questionAnswerNoHtml.Length; j += maximumBoxWidth)
                         {
-                            formattedQuestions.Add(questionAnswer.Substring(j, Math.Min(maximumBoxWidth, questionAnswer.Length - j)));
+                            formattedQuestions.Add(questionAnswerNoHtml.Substring(j, Math.Min(maximumBoxWidth, questionAnswerNoHtml.Length - j)));
                         }
                     }
 
