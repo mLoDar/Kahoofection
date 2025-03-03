@@ -36,7 +36,7 @@ namespace Kahoofection.Scripts.Driver
 
                 if (string.IsNullOrEmpty(chromeVersion))
                 {
-                    throw new Exception("No valid file version of chrome was found.");
+                    throw new Exception("No valid file version of Chrome was found.");
                 }
 
 
@@ -79,7 +79,17 @@ namespace Kahoofection.Scripts.Driver
 
                 try
                 {
-                    ZipFile.ExtractToDirectory(localSavePath, driversFolder, true);
+                    using ZipArchive driverArchive = ZipFile.OpenRead(localSavePath);
+
+                    foreach (ZipArchiveEntry zipEntry in driverArchive.Entries)
+                    {
+                        if (zipEntry.FullName.EndsWith('/') == false && zipEntry.FullName.StartsWith("chromedriver-win64/") == true)
+                        {
+                            string extractedFilePath = Path.Combine(driversFolder, Path.GetFileName(zipEntry.FullName));
+
+                            zipEntry.ExtractToFile(extractedFilePath, true);
+                        }
+                    }
                 }
                 catch (Exception exception)
                 {

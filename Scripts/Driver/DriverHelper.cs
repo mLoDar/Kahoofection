@@ -75,7 +75,7 @@ namespace Kahoofection.Scripts.Driver
             return versionInfo.FileVersion;
         }
 
-        internal static async Task<(string geckoVersion, Exception? occurredError)> GetLatestGeckoVersion()
+        internal static async Task<string> GetLatestGeckoVersion()
         {
             string subSection = "GetLatestGeckoVersion";
 
@@ -110,14 +110,14 @@ namespace Kahoofection.Scripts.Driver
 
                 ActivityLogger.Log(_currentSection, subSection, $"Returning '{latestGeckoVersion}' as the latest gecko version.");
 
-                return (latestGeckoVersion, null);
+                return (latestGeckoVersion);
             }
             catch (Exception exception)
             {
                 ActivityLogger.Log(_currentSection, subSection, $"Failed to fetch the latest gecko version.");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
-                return (string.Empty, exception);
+                return (string.Empty);
             }
         }
     }
