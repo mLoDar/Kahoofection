@@ -67,7 +67,7 @@ namespace Kahoofection.Scripts
             }
         }
 
-        internal static async Task<Exception?> DownloadFile(string requestUrl, string localSavePath)
+        internal static async Task<Exception?> DownloadFile(string requestUrl, string localSavePath, string filePurpose, bool suppressProgressMessage = false)
         {
             string subSection = "DownloadFile";
 
@@ -75,26 +75,70 @@ namespace Kahoofection.Scripts
             ActivityLogger.Log(_currentSection, subSection, $"Request url: {requestUrl}", true);
             ActivityLogger.Log(_currentSection, subSection, $"Local save path: {localSavePath}", true);
 
+
+
+            Console.CursorVisible = false;
+
             try
             {
                 HttpClient httpClient = new();
 
                 using HttpResponseMessage httpResponse = await httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
-
                 httpResponse.EnsureSuccessStatusCode();
 
                 ActivityLogger.Log(_currentSection, subSection, $"Received a success status code from the request url.");
 
+                ConsoleHelper.ResetConsole();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"             Downloading '{filePurpose}'");
 
 
-                FileStream fileStream = new(localSavePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
+                long? totalBytesToDownload = httpResponse.Content.Headers.ContentLength;
+                
+                if (totalBytesToDownload == null)
+                {
+                    Console.WriteLine("             This process may take a moment.");
+
+                    suppressProgressMessage = true;
+                }
+
+                
+
+                using FileStream fileStream = new(localSavePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+                
                 ActivityLogger.Log(_currentSection, subSection, $"Opened a new file stream for the local save path which was provided.");
 
 
 
+                byte[] readBuffer = new byte[8192];
+                long totalReadProgress = 0;
+                int currentReadProgress;
+
+
                 await using Stream contentStream = await httpResponse.Content.ReadAsStreamAsync();
-                await contentStream.CopyToAsync(fileStream);
+
+                while ((currentReadProgress = await contentStream.ReadAsync(readBuffer)) > 0)
+                {
+                    await fileStream.WriteAsync(readBuffer.AsMemory(0, currentReadProgress));
+
+                    if (suppressProgressMessage == true)
+                    {
+                        continue;
+                    }
+
+                    totalReadProgress += currentReadProgress;
+
+                    if (totalBytesToDownload.HasValue)
+                    {
+                        double currentDownloadMb = totalReadProgress / 1024.0 / 1024.0;
+                        double totalDownloadMb = totalBytesToDownload.Value / 1024.0 / 1024.0;
+                        int progressInPercent = (int)(totalReadProgress * 100 / totalBytesToDownload.Value);
+
+                        Console.Write($"\r             Progress: {currentDownloadMb:F2}MB / {totalDownloadMb:F2}MB ({progressInPercent}%)   ");
+                    }
+                }
 
                 ActivityLogger.Log(_currentSection, subSection, $"File was fully written to disk, disposing any streams.");
 
@@ -107,12 +151,16 @@ namespace Kahoofection.Scripts
 
 
 
+                Console.CursorVisible = true;
+
                 return null;
             }
             catch (Exception exception)
             {
                 ActivityLogger.Log(_currentSection, subSection, $"Failed to download file.");
                 ActivityLogger.Log(_currentSection, subSection, exception.Message, true);
+
+                Console.CursorVisible = true;
 
                 return exception;
             }

@@ -68,7 +68,7 @@ namespace Kahoofection.Scripts.Driver
                 
 
 
-                Exception? downloadError = await WebConnection.DownloadFile(requestUrl, localSavePath);
+                Exception? downloadError = await WebConnection.DownloadFile(requestUrl, localSavePath, "Chrome-Driver");
 
                 if (downloadError != null)
                 {
@@ -167,7 +167,7 @@ namespace Kahoofection.Scripts.Driver
 
 
 
-                Exception? downloadError = await WebConnection.DownloadFile(requestUrl, localSavePath);
+                Exception? downloadError = await WebConnection.DownloadFile(requestUrl, localSavePath, "Firefox-Driver");
 
                 if (downloadError != null)
                 {
