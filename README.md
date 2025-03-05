@@ -10,7 +10,7 @@
 
 <br>
 
-`Kahoofection` is a console based application, which uses Selenium for a variety of tasks related to the game/learning plattform [Kahoot](https://kahoot.com/).
+`Kahoofection` is a console based application, which uses Selenium for a variety of tasks related to the plattform [Kahoot](https://kahoot.com/).
 
 > As of 5th March 2025 the project is still work in progress and is not entirly finished, so be patient ;)
 > <br>
@@ -21,6 +21,8 @@
 <p align="center">
     <img style='height: 90%; width: 90%;' alt="mainMenu" src="Ressources/readme-files/mainMenu.PNG"/>
 </p>
+
+<br>
 
 ---
 
