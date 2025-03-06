@@ -1,5 +1,6 @@
 ﻿using Kahoofection.Scripts;
 using Kahoofection.Ressources;
+using Kahoofection.Scripts.Kahoot;
 
 using Newtonsoft.Json.Linq;
 
@@ -63,15 +64,22 @@ namespace Kahoofection.Modules.Information
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(lineContent))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
-                goto LabelMethodEntryPoint;
-            }
 
-            if (Guid.TryParse(lineContent, out Guid convertedQuizId) == false)
+
+            (_, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(lineContent);
+
+            if (quizIdError != null)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {quizIdError.Message}");
+
+                ConsoleHelper.ResetConsole();
+
+                string title = "QuizId check failed";
+                string description = "Most likely an invalid QuizId was provided. Please look at the error logs to fix this problem.";
+
+                await ConsoleHelper.DisplayInformation(title, description, ConsoleColor.Red);
+
                 goto LabelMethodEntryPoint;
             }
 
@@ -88,35 +96,6 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, subSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
-
-            string providedQuizId = convertedQuizId.ToString();
-            string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
-            string apiResponse = await WebConnection.CreateRequest(requestUrl);
-
-
-
-            ConsoleHelper.ResetConsole();
-
-
-
-            if (string.IsNullOrEmpty(apiResponse))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, the response was empty.");
-                ActivityLogger.Log(_currentSection, subSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
-
-                string title = "QuizId check failed";
-                string description = "No quiz was found. Please try again with a different QuizId.";
-
-                ConsoleHelper.ResetConsole();
-
-                await ConsoleHelper.DisplayInformation(title, description, ConsoleColor.Red);
-
-                goto LabelMethodEntryPoint;
-            }
-
-
-            
             ActivityLogger.Log(_currentSection, subSection, "Trying to parse the API response and get quizzes.");
 
             (bool successfullyParsed, Exception? occurredError, QuizIdCheckData quizData) = ParseApiResponse(apiResponse);
@@ -129,6 +108,8 @@ namespace Kahoofection.Modules.Information
                     ActivityLogger.Log(_currentSection, subSection, $"Occurred error: {occurredError.Message}", true);
                 }
                 ActivityLogger.Log(_currentSection, subSection, $"API response: {apiResponse}", true);
+
+                ConsoleHelper.ResetConsole();
 
                 string title = "QuizId check failed";
                 string description = "Please look at the error logs to fix this problem.";
@@ -233,32 +214,17 @@ namespace Kahoofection.Modules.Information
 
         private static (bool successfullyParsed, Exception? occurredError, QuizIdCheckData quizData) ParseApiResponse(string apiResponse)
         {
-            JObject? foundData;
-
             try
             {
-                foundData = JObject.Parse(apiResponse);
+                JObject foundData = JObject.Parse(apiResponse);
 
-                if (foundData == null)
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception exception)
-            {
-                return (false, exception, new());
-            }
-
-
-            try
-            {
                 QuizIdCheckData quizIdCheckData = new()
                 {
-                    title = foundData?["title"]?.ToString() ?? "-",
-                    quizId = foundData?["uuid"]?.ToString() ?? "-",
-                    coverUrl = foundData?["cover"]?.ToString() ?? "-",
-                    creatorId = foundData?["creator"]?.ToString() ?? "-",
-                    creatorName = foundData?["creator_username"]?.ToString() ?? "-"
+                    title = foundData["title"]?.ToString() ?? "-",
+                    quizId = foundData["uuid"]?.ToString() ?? "-",
+                    coverUrl = foundData["cover"]?.ToString() ?? "-",
+                    creatorId = foundData["creator"]?.ToString() ?? "-",
+                    creatorName = foundData["creator_username"]?.ToString() ?? "-"
                 };
                 
                 JArray? quizQuestions = (JArray?)foundData?.SelectToken("questions");
