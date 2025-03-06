@@ -435,5 +435,72 @@ namespace Kahoofection.Scripts.Kahoot
             }
             return (gamePin, null);
         }
+
+        internal static async Task<(Guid convertedQuizId, string apiResponse, Exception? occurredError)> ValidQuizId(string providedQuizId)
+        {
+            string subSection = "ValidQuizId";
+
+            ActivityLogger.Log(_currentSection, subSection, "Received a request to validate a string as a QuizId.");
+            ActivityLogger.Log(_currentSection, subSection, $"Provided input: {providedQuizId}");
+
+
+
+            if (string.IsNullOrWhiteSpace(providedQuizId))
+            {
+                ActivityLogger.Log(_currentSection, subSection, "An invalid QuizId was provided (Empty string).");
+
+                return (new Guid(), string.Empty, new Exception("An invalid QuizId was provided (Empty string)."));
+            }
+
+            if (Guid.TryParse(providedQuizId, out Guid convertedQuizId) == false)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "An invalid QuizId was provided (No valid guuid).");
+
+                return (new Guid(), string.Empty, new Exception("An invalid QuizId was provided (No valid guuid)."));
+            }
+
+
+
+            string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
+            string apiResponse = await WebConnection.CreateRequest(requestUrl);
+
+            if (string.IsNullOrEmpty(apiResponse))
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, the response was empty.");
+                ActivityLogger.Log(_currentSection, subSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
+
+                return (new Guid(), string.Empty, new Exception("Invalid QuizId was provided (API response was empty)."));
+            }
+
+
+
+            JObject? foundData;
+
+            try
+            {
+                foundData = JObject.Parse(apiResponse);
+
+                if (foundData == null)
+                {
+                    throw new Exception("The parsed quiz data is null.");
+                }
+
+                if ((foundData["error"]?.ToString() ?? "NOT_FOUND").Equals("NOT_FOUND"))
+                {
+                    throw new Exception("The provided Guid was not validated as a Kahoot quiz.");
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "An invalid QuizId was provided, as the application failed to convert the received API response.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return (new Guid(), string.Empty, exception);
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "The provided input was prooven as a valid QuizId!");
+
+            return (convertedQuizId, apiResponse, null);
+        }
     }
 }
