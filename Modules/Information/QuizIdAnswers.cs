@@ -51,15 +51,22 @@ namespace Kahoofection.Modules.Information
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(lineContent))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (Empty string).");
-                goto LabelMethodEntryPoint;
-            }
 
-            if (Guid.TryParse(lineContent, out Guid convertedQuizId) == false)
+
+            (_, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(lineContent);
+
+            if (quizIdError != null)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided (No valid guuid).");
+                ActivityLogger.Log(_currentSection, subSection, "Re-entering the module as an invalid QuizId was provided.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {quizIdError.Message}");
+
+                ConsoleHelper.ResetConsole();
+
+                string title = "QuizId answers failed";
+                string description = "Most likely an invalid QuizId was provided. Please look at the error logs to fix this problem.";
+
+                await ConsoleHelper.DisplayInformation(title, description, ConsoleColor.Red);
+
                 goto LabelMethodEntryPoint;
             }
 
@@ -76,45 +83,15 @@ namespace Kahoofection.Modules.Information
 
 
 
-            ActivityLogger.Log(_currentSection, subSection, "Fetching quiz data from the API endpoint with the provided QuizId.");
-
-            string providedQuizId = convertedQuizId.ToString();
-            string requestUrl = $"{_appUrls.kahootCheckQuizId.Replace("{quizId}", providedQuizId)}";
-            string apiResponse = await WebConnection.CreateRequest(requestUrl);
+            ActivityLogger.Log(_currentSection, subSection, "Parsing quiz data from the API's response.");
 
 
 
-            ConsoleHelper.ResetConsole();
-
-
-
-            if (string.IsNullOrEmpty(apiResponse))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Received an invalid response from the API, the response was empty.");
-                ActivityLogger.Log(_currentSection, subSection, $"Most likely no quiz with the QuizId '{providedQuizId}' exists.", true);
-
-                string title = "QuizId search failed";
-                string description = "No quiz was found. Please try again with a different QuizId.";
-
-                await ConsoleHelper.DisplayInformation(title, description, ConsoleColor.Red);
-
-                goto LabelMethodEntryPoint;
-            }
-
-
-
-            JObject quizData;
+            JObject quizData = JObject.Parse(apiResponse);
             JArray quizQuestions;
 
             try
             {
-                quizData = JObject.Parse(apiResponse);
-
-                if (quizData == null || quizData.GetValue("error") != null)
-                {
-                    throw new Exception("Failed to parse data into an object");
-                }
-
                 quizQuestions = quizData.GetValue("questions") as JArray ?? [];
 
                 if (quizQuestions == null || quizQuestions == new JArray())
