@@ -53,7 +53,7 @@ namespace Kahoofection.Modules.Information
 
 
 
-            (_, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(lineContent);
+            (Guid convertedQuizId, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(lineContent);
 
             if (quizIdError != null)
             {
@@ -202,8 +202,8 @@ namespace Kahoofection.Modules.Information
         LabelDrawAnswerBox:
 
             Console.SetCursorPosition(0, 4);
-
-            DrawAnswerBox(maximumBoxWidth, formattedQuestions, viewStartIndex, linesDisplayedAtOnce, providedQuizId);
+            
+            DrawAnswerBox(maximumBoxWidth, formattedQuestions, viewStartIndex, linesDisplayedAtOnce, convertedQuizId);
 
 
             ConsoleKey pressedKey = Console.ReadKey(true).Key;
@@ -241,9 +241,9 @@ namespace Kahoofection.Modules.Information
             goto LabelDrawAnswerBox;
         }
 
-        private static void DrawAnswerBox(int maximumBoxWidth, List<string> formattedQuestions, int viewStartIndex, int linesDisplayedAtOnce, string quizId)
+        private static void DrawAnswerBox(int maximumBoxWidth, List<string> formattedQuestions, int viewStartIndex, int linesDisplayedAtOnce, Guid convertedQuizId)
         {
-            Console.WriteLine("             \u001b[97m┌─> QuizdId: '\u001b[92m{0}\u001b[97m'", quizId);
+            Console.WriteLine("             \u001b[97m┌─> QuizdId: '\u001b[92m{0}\u001b[97m'", convertedQuizId.ToString());
             Console.WriteLine("             \u001b[97m├─────────────────────────────────────────────────────────────────────────────────────────────┐   ┬");
 
             int scrollBarHelper = 0;
