@@ -485,7 +485,7 @@ namespace Kahoofection.Scripts.Kahoot
                     throw new Exception("The parsed quiz data is null.");
                 }
 
-                if ((foundData["error"]?.ToString() ?? "NOT_FOUND").Equals("NOT_FOUND"))
+                if ((foundData["error"]?.ToString() ?? string.Empty).Equals("NOT_FOUND"))
                 {
                     throw new Exception("The provided Guid was not validated as a Kahoot quiz.");
                 }
