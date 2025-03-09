@@ -228,7 +228,7 @@ namespace Kahoofection
             Console.WriteLine("                                                                         ");
             Console.WriteLine("                                                                         ");
             Console.WriteLine("             \u001b[94m┌───────────────────────────┬───────────────────────────┐   ");
-            Console.WriteLine("             \u001b[94m│ \u001b[97mNavigate using ARROW KEYS \u001b[94m│ \u001b[97mSelect anoption via ENTER \u001b[94m│   ");
+            Console.WriteLine("             \u001b[94m│ \u001b[97mNavigate using ARROW KEYS \u001b[94m│ \u001b[97mConfirm choice with ENTER \u001b[94m│   ");
             Console.WriteLine("             {0}", upperLine);
             Console.WriteLine("             {0}", lowerLine);
         }
