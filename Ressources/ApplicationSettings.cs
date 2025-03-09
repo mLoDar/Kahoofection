@@ -36,11 +36,24 @@
             internal readonly string kahootWebsocket = "wss://kahoot.it/cometd/{gamePin}/{webSocketToken}";
             internal readonly string kahootSessionReservation = "https://kahoot.it/reserve/session/{gamePin}/?{millisTimestamp}";
             internal readonly string kahootJoinPin = "https://kahoot.it?pin={gamePin}";
+            internal readonly string kahootJoinNamerator = "https://kahoot.it/namerator";
+            internal readonly string kahootJoinEnterName = "https://kahoot.it/join";
+            internal readonly string kahootLobby = "https://kahoot.it/instructions";
+            internal readonly string kahootGameStarted = "https://kahoot.it/start";
+
 
             internal readonly string geckoDriverReleases = "https://github.com/mozilla/geckodriver/releases/";
             internal readonly string geckoDriverDownload = "https://github.com/mozilla/geckodriver/releases/download/v{geckoVersion}/geckodriver-v{geckoVersion}-win64.zip";
 
             internal readonly string chromeDriverDownload = "https://storage.googleapis.com/chrome-for-testing-public/{chromeVersion}/win64/chromedriver-win64.zip";
+        }
+
+        internal class DriverPaths
+        {
+            internal readonly string inputIdNickname = "nickname";
+
+            internal readonly string buttonXpathNameratorSpin = "/html/body/div/div[1]/div/div/div/div[3]/div/div/div[2]/button";
+            internal readonly string buttonXpathNameratorConfirm = "/html/body/div/div[1]/div/div/div/div[3]/div/div/div[2]/button[2]";
         }
     }
 }
