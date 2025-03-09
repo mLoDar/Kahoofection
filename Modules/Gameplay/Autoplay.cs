@@ -1,6 +1,11 @@
 ﻿using Kahoofection.Scripts;
 using Kahoofection.Ressources;
+using Kahoofection.Scripts.Driver;
 using Kahoofection.Scripts.Kahoot;
+
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 
 
 
@@ -32,8 +37,11 @@ namespace Kahoofection.Modules.Gameplay
         private const string _currentSection = "Autoplay";
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
+        private static readonly ApplicationSettings.Paths _appPaths = new();
 
         private static string _quizIdApiResponse = string.Empty;
+
+        private static IWebDriver _webDriver;
 
 
 
@@ -79,6 +87,37 @@ namespace Kahoofection.Modules.Gameplay
             gameAutoplaySettings.legitMode = legitMode;
 
 
+
+            ConsoleHelper.ResetConsole();
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("             Loading ...");
+            Console.WriteLine("             Please be patient.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, $"Launching a WebDriver in order to join the game.");
+
+            bool successfullyLaunched = await LaunchWebDriver();
+
+            if (successfullyLaunched == false)
+            {
+                ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as no WebDriver could be launched.");
+                ActivityLogger.Log(_currentSection, subSection, $"Details about this problem should be at the error logs above.");
+
+                ConsoleHelper.ResetConsole();
+
+                string title = "Autoplay failed";
+                string description = "Please look at the error logs to fix this problem.";
+
+                await ConsoleHelper.DisplayInformation(title, description, ConsoleColor.Red);
+
+                return;
+            }
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully launched a WebDriver, trying to join the game.");
 
             // TODO: Create mechanics to join/play the gmae
         }
@@ -356,6 +395,146 @@ namespace Kahoofection.Modules.Gameplay
             Console.CursorVisible = true;
 
             return (false, (LegitMode)currentNavigationIndex);
+        }
+
+        private static async Task<bool> LaunchWebDriver()
+        {
+            string subSection = "LaunchWebDriver";
+
+            bool firefoxFailed = false;
+            bool chromeFailed = false;
+
+            SupportedBrowser browserToInitialize = SupportedBrowser.Firefox;
+
+        LabelMethodBeginning:
+
+            ActivityLogger.Log(_currentSection, subSection, $"Trying to initialize a driver for '{browserToInitialize}'.");
+
+            try
+            {
+                if (browserToInitialize == SupportedBrowser.Firefox)
+                {
+                    LaunchFirefox();
+                }
+                else if (browserToInitialize == SupportedBrowser.Chrome)
+                {
+                    LaunchChrome();
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, $"Failed to initialize a driver for '{browserToInitialize}'.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+
+
+                if (chromeFailed == true)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Returning to origin method as no possible driver started.");
+
+                    return false;
+                }
+
+                if (firefoxFailed == true)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Switching to '{SupportedBrowser.Chrome}', as {browserToInitialize} did not work.");
+
+                    browserToInitialize = SupportedBrowser.Chrome;
+                    goto LabelMethodBeginning;
+                }
+
+                if (browserToInitialize == SupportedBrowser.Firefox)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Downloading the latest driver version for '{browserToInitialize}' in order to fix the issue.");
+
+                    bool succesfullyDownloaded = await DriverInstaller.DownloadGeckoDriver();
+
+                    if (succesfullyDownloaded == false)
+                    {
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to download the driver. See the errors above for more information.");
+                    }
+
+                    ConsoleHelper.ResetConsole();
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("             Loading ...");
+                    Console.WriteLine("             Please be patient.");
+
+                    firefoxFailed = true;
+                    goto LabelMethodBeginning;
+                }
+
+                if (browserToInitialize == SupportedBrowser.Chrome)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Downloading the latest driver version for '{browserToInitialize}' in order to fix the issue.");
+
+                    bool succesfullyDownloaded = await DriverInstaller.DownloadChromeDriver();
+
+                    if (succesfullyDownloaded == false)
+                    {
+                        ActivityLogger.Log(_currentSection, subSection, $"Failed to download the driver. See the errors above for more information.");
+                    }
+
+                    ConsoleHelper.ResetConsole();
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("             Loading ...");
+                    Console.WriteLine("             Please be patient.");
+
+                    chromeFailed = true;
+                    goto LabelMethodBeginning;
+                }
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, $"Successfully launched a driver for '{browserToInitialize}'!");
+
+            return true;
+        }
+
+        private static void LaunchFirefox()
+        {
+            string driverPath = _appPaths.driversFolder;
+
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(driverPath);
+            service.SuppressInitialDiagnosticInformation = true;
+            service.HideCommandPromptWindow = true;
+            service.LogLevel = FirefoxDriverLogLevel.Fatal;
+
+            FirefoxOptions options = new();
+
+            options.AddArguments(
+                "--disable-extensions",
+                "--disable-gpu",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-background-networking",
+                "--disable-sync",
+                "--disable-default-apps",
+                "--headless"
+            );
+
+            options.LogLevel = FirefoxDriverLogLevel.Fatal;
+
+            _webDriver = new FirefoxDriver(service, options);
+        }
+
+        private static void LaunchChrome()
+        {
+            string driverPath = _appPaths.driversFolder;
+
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService(driverPath);
+            service.SuppressInitialDiagnosticInformation = true;
+            service.HideCommandPromptWindow = true;
+
+            ChromeOptions options = new();
+
+            options.AddArguments(
+                "no-sandbox",
+                "log-level=3",
+                "headless"
+            );
+
+            _webDriver = new ChromeDriver(service, options);
         }
     }
 }
