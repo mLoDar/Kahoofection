@@ -181,7 +181,7 @@ namespace Kahoofection
                     break;
 
                 case 6:
-                    // TODO: Redirect to AutoplayWithGamePin
+                    await Autoplay.Start();
                     break;
             }
 
