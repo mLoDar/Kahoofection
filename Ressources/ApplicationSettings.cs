@@ -41,7 +41,6 @@
             internal readonly string kahootLobby = "https://kahoot.it/instructions";
             internal readonly string kahootGameStarted = "https://kahoot.it/start";
 
-
             internal readonly string geckoDriverReleases = "https://github.com/mozilla/geckodriver/releases/";
             internal readonly string geckoDriverDownload = "https://github.com/mozilla/geckodriver/releases/download/v{geckoVersion}/geckodriver-v{geckoVersion}-win64.zip";
 
