@@ -19,7 +19,7 @@
 <br>
 
 <p align="center">
-    <img style='height: 90%; width: 90%;' alt="mainMenu" src="Ressources/readme-files/mainMenu.PNG"/>
+    <img style='height: 90%; width: 90%;' alt="mainMenu" src="readme-files/mainMenu.PNG"/>
 </p>
 
 <br>
