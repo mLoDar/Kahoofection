@@ -6,6 +6,8 @@ using Kahoofection.Scripts.Driver;
 using Kahoofection.Scripts.Kahoot;
 
 using OpenQA.Selenium;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 
@@ -107,7 +109,7 @@ namespace Kahoofection.Modules.Gameplay
             if (successfullyLaunched == false)
             {
                 ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as no WebDriver could be launched.");
-                ActivityLogger.Log(_currentSection, subSection, $"Details about this problem should be at the error logs above.");
+                ActivityLogger.Log(_currentSection, subSection, $"Details about this problem should be at the error logs above.", true);
 
                 ConsoleHelper.ResetConsole();
 
@@ -127,6 +129,22 @@ namespace Kahoofection.Modules.Gameplay
             Console.CursorVisible = false;
 
             UpdateWebDriverLog("\u001b[92mSuccessfully launched a WebDriver.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Saving all the questions data.");
+            UpdateWebDriverLog("\u001b[97mSaving all the questions data.");
+
+            bool successfullySaved = await SafeQuizQuestions(gameAutoplaySettings.quizId.ToString());
+
+            if (successfullySaved == false)
+            {
+                UpdateWebDriverLog("\u001b[91mFailed to join the game!");
+                UpdateWebDriverLog("\u001b[91mPlease look at the error logs to fix this issue.");
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "All questions were saved to the local application folder.");
+            UpdateWebDriverLog("\u001b[92mAll questions were saved to the local application folder.");
 
 
 
@@ -158,7 +176,7 @@ namespace Kahoofection.Modules.Gameplay
                     ActivityLogger.Log(_currentSection, subSection, $"Site did not load after 30 seconds, leaving module.");
 
                     UpdateWebDriverLog("\u001b[91mConnection timed out!");
-                    UpdateWebDriverLog("\u001b[97mPlease look at the error logs to fix this issue.");
+                    UpdateWebDriverLog("\u001b[91mPlease look at the error logs to fix this issue.");
 
                     await Task.Delay(5000);
 
@@ -184,10 +202,10 @@ namespace Kahoofection.Modules.Gameplay
             catch (Exception exception)
             {
                 ActivityLogger.Log(_currentSection, subSection, $"Failed to join the game.");
-                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
                 UpdateWebDriverLog("\u001b[91mFailed to join the game!");
-                UpdateWebDriverLog("\u001b[97mPlease look at the error logs to fix this issue.");
+                UpdateWebDriverLog("\u001b[91mPlease look at the error logs to fix this issue.");
 
                 await Task.Delay(5000);
                 
@@ -199,7 +217,18 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            // TODO: Create mechanics to join/play the game
+            while (_webDriver.Url.Equals(_appUrls.kahootGameStarted) == false)
+            {
+                UpdateWebDriverLog("\u001b[97mWaiting for the game to start.");
+
+                await Task.Delay(1000);
+            }
+
+            UpdateWebDriverLog("\u001b[92mGame started!");
+
+
+
+            // TODO: Create mechanics to play the game
 
         }
 
@@ -732,6 +761,120 @@ namespace Kahoofection.Modules.Gameplay
                 }
                 Thread.Sleep(500);
             }
+        }
+
+        private static async Task<bool> SafeQuizQuestions(string quizId)
+        {
+            string subSection = "SafeQuizQuestions";
+
+            string quizData = _quizIdApiResponse;
+
+            if (string.IsNullOrWhiteSpace(quizData))
+            {
+                ActivityLogger.Log(_currentSection, subSection, "QuizData is null or whitespace, check previous logs.");
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Received a valid API response (not empty/not whitespaces).");
+
+
+
+            JArray quizQuestions;
+
+            try
+            {
+                quizQuestions = (JArray?)JObject.Parse(quizData)["questions"] ?? [];
+
+                if (quizQuestions == null)
+                {
+                    throw new Exception("Quiz questions are null/were not parsed correctly.");
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to parse the quizzes questions from the API response.");
+                ActivityLogger.Log(_currentSection, subSection, $"API-Response: {_quizIdApiResponse}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Successfully parsed the quizzes data.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Creating/looking for needed folders within the application folder.");
+
+            string quizzesFolder = _appPaths.quizzesFolder;
+            string currentQuizFolder = Path.Combine(quizzesFolder, quizId);
+
+            try
+            {
+                if (Directory.Exists(quizzesFolder) == false)
+                {
+                    Directory.CreateDirectory(quizzesFolder);
+                }
+
+                if (Directory.Exists(currentQuizFolder) == false)
+                {
+                    Directory.CreateDirectory(currentQuizFolder);
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to create/find necessary folders.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "All needed folders exists.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Saving all questions with their data to the local folder.");
+
+            for (int i = 1; i < quizQuestions.Count; i++)
+            {
+                JObject questionData;
+
+                try
+                {
+                    questionData = (JObject)quizQuestions[i];
+
+                    if (questionData == null)
+                    {
+                        throw new Exception("QuizData is null/was not parsed correctly.");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"[ERROR] - Failed to parse current question '{i}'.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+                    ActivityLogger.Log(_currentSection, subSection, "Please look at the error logs to fix this issue.", true);
+
+                    return false;
+                }
+                
+                string questionDataPath = Path.Combine(currentQuizFolder, $"question{i}.json");
+
+                try
+                {
+                    await File.WriteAllTextAsync(questionDataPath, questionData.ToString(Formatting.Indented));
+
+                    UpdateWebDriverLog($"\u001b[97mSuccessfully saved question '{i}'.");
+                }
+                catch (Exception exception)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to save current questionData for question '{i}' to disk.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+                    
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
