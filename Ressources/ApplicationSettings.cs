@@ -16,6 +16,7 @@
             internal readonly string clientFolder;
             internal readonly string logsFolder;
             internal readonly string driversFolder;
+            internal readonly string quizzesFolder;
 
 
 
@@ -25,6 +26,7 @@
                 clientFolder = Path.Combine(appDataFolder, "Kahoofection");
                 logsFolder = Path.Combine(clientFolder, "RuntimeLogs");
                 driversFolder = Path.Combine(clientFolder, "Webdrivers");
+                quizzesFolder = Path.Combine(clientFolder, "Quizzes");
             }
         }
 
@@ -40,6 +42,8 @@
             internal readonly string kahootJoinEnterName = "https://kahoot.it/join";
             internal readonly string kahootLobby = "https://kahoot.it/instructions";
             internal readonly string kahootGameStarted = "https://kahoot.it/start";
+            internal readonly string kahootGetReady = "https://kahoot.it/getready";
+            internal readonly string kahootGameBlock = "https://kahoot.it/gameblock";
 
             internal readonly string geckoDriverReleases = "https://github.com/mozilla/geckodriver/releases/";
             internal readonly string geckoDriverDownload = "https://github.com/mozilla/geckodriver/releases/download/v{geckoVersion}/geckodriver-v{geckoVersion}-win64.zip";
