@@ -835,13 +835,13 @@ namespace Kahoofection.Modules.Gameplay
 
             ActivityLogger.Log(_currentSection, subSection, "Saving all questions with their data to the local folder.");
 
-            for (int i = 1; i < quizQuestions.Count; i++)
+            for (int i = 1; i <= quizQuestions.Count; i++)
             {
                 JObject questionData;
 
                 try
                 {
-                    questionData = (JObject)quizQuestions[i];
+                    questionData = (JObject)quizQuestions[i - 1];
 
                     if (questionData == null)
                     {
