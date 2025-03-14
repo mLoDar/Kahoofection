@@ -8,8 +8,6 @@ using Kahoofection.Scripts.Kahoot;
 using OpenQA.Selenium;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 
 
 
@@ -526,12 +524,17 @@ namespace Kahoofection.Modules.Gameplay
             {
                 if (browserToInitialize == SupportedBrowser.Firefox)
                 {
-                    LaunchFirefox();
+                    _webDriver = DriverHelper.LaunchFirefox();
                 }
                 else if (browserToInitialize == SupportedBrowser.Chrome)
                 {
-                    LaunchChrome();
+                    _webDriver = DriverHelper.LaunchChrome();
                 }
+
+                if (_webDriver == null)
+                {
+                    throw new Exception("WebDriver is null after initializing.");
+            }
             }
             catch (Exception exception)
             {
@@ -601,52 +604,6 @@ namespace Kahoofection.Modules.Gameplay
             ActivityLogger.Log(_currentSection, subSection, $"Successfully launched a driver for '{browserToInitialize}'!");
 
             return true;
-        }
-
-        private static void LaunchFirefox()
-        {
-            string driverPath = _appPaths.driversFolder;
-
-            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(driverPath);
-            service.SuppressInitialDiagnosticInformation = true;
-            service.HideCommandPromptWindow = true;
-            service.LogLevel = FirefoxDriverLogLevel.Fatal;
-
-            FirefoxOptions options = new();
-
-            options.AddArguments(
-                "--disable-extensions",
-                "--disable-gpu",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-background-networking",
-                "--disable-sync",
-                "--disable-default-apps",
-                "--headless"
-            );
-
-            options.LogLevel = FirefoxDriverLogLevel.Fatal;
-
-            _webDriver = new FirefoxDriver(service, options);
-        }
-
-        private static void LaunchChrome()
-        {
-            string driverPath = _appPaths.driversFolder;
-
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService(driverPath);
-            service.SuppressInitialDiagnosticInformation = true;
-            service.HideCommandPromptWindow = true;
-
-            ChromeOptions options = new();
-
-            options.AddArguments(
-                "no-sandbox",
-                "log-level=3",
-                "headless"
-            );
-
-            _webDriver = new ChromeDriver(service, options);
         }
 
         private static void UpdateWebDriverLog(string message)
