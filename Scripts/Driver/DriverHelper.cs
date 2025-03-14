@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using Kahoofection.Ressources;
 
 using Microsoft.Win32;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 
 
 
@@ -28,6 +31,7 @@ namespace Kahoofection.Scripts.Driver
         private const string _currentSection = "DriverHelper";
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
+        private static readonly ApplicationSettings.Paths _appPaths = new();
 
 
 
@@ -119,6 +123,53 @@ namespace Kahoofection.Scripts.Driver
 
                 return (string.Empty);
             }
+        }
+
+        internal static IWebDriver LaunchFirefox()
+        {
+            string driverPath = _appPaths.driversFolder;
+
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(driverPath);
+            service.SuppressInitialDiagnosticInformation = true;
+            service.HideCommandPromptWindow = true;
+            service.LogLevel = FirefoxDriverLogLevel.Fatal;
+
+            FirefoxOptions options = new()
+            {
+                LogLevel = FirefoxDriverLogLevel.Fatal,
+            };
+
+            options.AddArguments(
+                "--disable-extensions",
+                "--disable-gpu",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-background-networking",
+                "--disable-sync",
+                "--disable-default-apps",
+                "--headless"
+            );
+
+            return new FirefoxDriver(service, options); ;
+        }
+
+        internal static IWebDriver LaunchChrome()
+        {
+            string driverPath = _appPaths.driversFolder;
+
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService(driverPath);
+            service.SuppressInitialDiagnosticInformation = true;
+            service.HideCommandPromptWindow = true;
+
+            ChromeOptions options = new();
+
+            options.AddArguments(
+                "no-sandbox",
+                "log-level=3",
+                "headless"
+            );
+
+            return new ChromeDriver(service, options);
         }
     }
 }
