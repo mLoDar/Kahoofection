@@ -681,7 +681,7 @@ namespace Kahoofection.Modules.Gameplay
             {
                 string currentEntry = _webDriverLog[i];
 
-                int ansiLength = GetCombinedAnsiSequenceLength(currentEntry);
+                int ansiLength = ConsoleHelper.GetCombinedAnsiSequenceLength(currentEntry);
                 int actualLength = currentEntry.Length - ansiLength;
 
                 if (actualLength > maxEntryLength)
@@ -709,19 +709,6 @@ namespace Kahoofection.Modules.Gameplay
             Console.WriteLine("                                                                                                                    ");
             Console.WriteLine("             \u001b[94m┌ \u001b[97mUse 'Backspace' to return                                                        ");
             Console.WriteLine("             \u001b[94m└─────────────────────────────                                                               ");
-        }
-
-        private static int GetCombinedAnsiSequenceLength(string input)
-        {
-            int combinedLength = 0;
-            MatchCollection matches = RegexPatterns.AnsiSequence().Matches(input);
-
-            foreach (Match match in matches)
-            {
-                combinedLength += match.Length;
-            }
-
-            return combinedLength;
         }
 
         private static void JoinLobby(GameAutoplaySettings gameAutoplaySettings)
