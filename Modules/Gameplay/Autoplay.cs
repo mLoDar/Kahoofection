@@ -275,7 +275,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            (int gamePin, Exception? exceptionGamePin) = await KahootHelper.CheckGamePin(providedGamePin);
+            (int gamePin, Exception? exceptionGamePin) = await KahootValidator.ValidGamePin(providedGamePin);
             
             if (exceptionGamePin != null)
             {
@@ -334,7 +334,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            Exception? exceptionUsername = ValidUsername(gameUsername);
+            Exception? exceptionUsername = KahootValidator.ValidAutoplayUsername(gameUsername);
 
             if (exceptionUsername != null)
             {
@@ -387,7 +387,7 @@ namespace Kahoofection.Modules.Gameplay
             }
 
 
-            (Guid convertedQuizId, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(quizId);
+            (Guid convertedQuizId, string apiResponse, Exception? quizIdError) = await KahootValidator.ValidQuizId(quizId);
 
             if (quizIdError != null)
             {

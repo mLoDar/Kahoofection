@@ -106,7 +106,7 @@ namespace Kahoofection.Modules.Gameplay
 
             string generatedPin = _numberGenerator.Next(100000, 999999).ToString();
 
-            (int gamePin, Exception? occurredError) = await KahootHelper.CheckGamePin(generatedPin);
+            (int gamePin, Exception? occurredError) = await KahootValidator.ValidGamePin(generatedPin);
 
             if (occurredError == null)
             {

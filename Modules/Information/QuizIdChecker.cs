@@ -31,8 +31,6 @@ namespace Kahoofection.Modules.Information
     {
         private const string _currentSection = "QuizIdChecker";
 
-        private static readonly ApplicationSettings.Urls _appUrls = new();
-
 
 
         internal static async Task Start()
@@ -66,7 +64,7 @@ namespace Kahoofection.Modules.Information
 
 
 
-            (_, string apiResponse, Exception? quizIdError) = await KahootHelper.ValidQuizId(lineContent);
+            (_, string apiResponse, Exception? quizIdError) = await KahootValidator.ValidQuizId(lineContent);
 
             if (quizIdError != null)
             {

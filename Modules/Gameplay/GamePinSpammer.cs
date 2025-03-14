@@ -144,7 +144,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            (int gamePin, Exception? exceptionGamePin) = await KahootHelper.CheckGamePin(providedGamePin);
+            (int gamePin, Exception? exceptionGamePin) = await KahootValidator.ValidGamePin(providedGamePin);
 
             if (exceptionGamePin != null)
             {
@@ -203,7 +203,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            (int gameBotCount, Exception? exceptionBotCount) = ValidBotCount(providedBotCount);
+            (int gameBotCount, Exception? exceptionBotCount) = KahootValidator.ValidSpammerBotCount(providedBotCount);
 
             if (exceptionBotCount != null)
             {
@@ -262,7 +262,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            Exception? exceptionBotName = ValidBotName(gameBotName);
+            Exception? exceptionBotName = KahootValidator.ValidSpammerBotName(gameBotName);
 
             if (exceptionBotName != null)
             {
@@ -297,54 +297,6 @@ namespace Kahoofection.Modules.Gameplay
             return (false, gameSpammerSettings);
         }
         
-        private static (int gameBotCount, Exception? exception) ValidBotCount(string providedInput)
-        {
-            string subSection = "ValidBotCount";
-
-            providedInput = RegexPatterns.NoNumbers().Replace(providedInput, string.Empty);
-
-            if (string.IsNullOrWhiteSpace(providedInput))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is null or whitespace.");
-                return (-1, new Exception("The input does not contain any numbers."));
-            }
-
-            if (int.TryParse(providedInput, out int gameBotCount) == false)
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is an invalid int.");
-                return (-1, new Exception("The input is not a valid number."));
-            }
-
-            if (Enumerable.Range(3, 100).Contains(gameBotCount) == false)
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotCount as the provided input is not in the specified range.");
-                return (-1, new Exception("BotCount is not within the specified range."));
-            }
-
-            return (gameBotCount, null);
-        }
-
-        private static Exception? ValidBotName(string providedInput)
-        {
-            string subSection = "ValidBotName";
-
-            providedInput = RegexPatterns.AllWhitespaces().Replace(providedInput, string.Empty);
-
-            if (string.IsNullOrWhiteSpace(providedInput))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotName as the provided input is null or whitespace.");
-                return (new Exception("BotName is null or whitespace."));
-            }
-
-            if (Enumerable.Range(1, 100).Contains(providedInput.Length) == false)
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a BotName as the provided input's length is not in the specified range.");
-                return (new Exception("BotName's length is not in the specified range."));
-            }
-
-            return (null);
-        }
-
         private static async Task InitiateSpammer(GameSpammerSettings gameSpammerSettings)
         {
             for (int i = 0; i < gameSpammerSettings.gameBotCount; i++)
