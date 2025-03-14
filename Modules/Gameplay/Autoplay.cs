@@ -49,6 +49,8 @@ namespace Kahoofection.Modules.Gameplay
         private static IWebDriver _webDriver;
         private static List<string> _webDriverLog = [];
 
+        private static List<JObject> _currentQuizQuestions = [];
+
 
 
         internal static async Task Start()
@@ -847,6 +849,8 @@ namespace Kahoofection.Modules.Gameplay
                     {
                         throw new Exception("QuizData is null/was not parsed correctly.");
                     }
+
+                    _currentQuizQuestions.Add(questionData);
                 }
                 catch (Exception exception)
                 {
