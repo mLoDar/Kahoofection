@@ -57,6 +57,10 @@
 
             internal readonly string buttonXpathNameratorSpin = "/html/body/div/div[1]/div/div/div/div[3]/div/div/div[2]/button";
             internal readonly string buttonXpathNameratorConfirm = "/html/body/div/div[1]/div/div/div/div[3]/div/div/div[2]/button[2]";
+
+            internal readonly string divXpathQuestionType = "/html/body/div/div[1]/div/div/div/div[2]/div[2]/div";
+            internal readonly string divXpathQuestionIndex = "/html/body/div/div[1]/div/div/div/div[2]/div[1]/div";
+            internal readonly string spanXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/div[3]/form/div[1]/div[2]/div/span";
         }
     }
 }
