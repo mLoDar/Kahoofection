@@ -57,6 +57,9 @@ namespace Kahoofection.Modules.Gameplay
 
         LabelMethodEntryPoint:
 
+            _webDriverLog = [];
+            _currentQuizQuestions = [];
+
             Console.Title = $"Kahoofection | {_currentSection}";
             ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
 
