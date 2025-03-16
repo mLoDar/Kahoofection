@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-using Kahoofection.Scripts;
+﻿using Kahoofection.Scripts;
 using Kahoofection.Ressources;
 using Kahoofection.Scripts.Driver;
 using Kahoofection.Scripts.Kahoot;
@@ -449,27 +447,6 @@ namespace Kahoofection.Modules.Gameplay
 
 
             return (false, gameAutoplaySettings);
-        }
-
-        private static Exception? ValidUsername(string providedInput)
-        {
-            string subSection = "ValidUsername";
-
-            providedInput = RegexPatterns.AllWhitespaces().Replace(providedInput, string.Empty);
-
-            if (string.IsNullOrWhiteSpace(providedInput))
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a Username as the provided input is null or whitespace.");
-                return (new Exception("Username is null or whitespace."));
-            }
-
-            if (Enumerable.Range(1, 100).Contains(providedInput.Length) == false)
-            {
-                ActivityLogger.Log(_currentSection, subSection, "Restarting the prompt for a Username as the provided input's length is not in the specified range.");
-                return (new Exception("Username's length is not in the specified range."));
-            }
-
-            return (null);
         }
 
         private static (bool escapeKeyPressed, LegitMode legitMode) GetLegitMode()
