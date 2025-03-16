@@ -17,6 +17,7 @@ namespace Kahoofection.Scripts.Kahoot
         private const string _currentSection = "KahootHelper";
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
+        private static readonly ApplicationSettings.Paths _appPaths = new();
 
 
 
@@ -355,6 +356,120 @@ namespace Kahoofection.Scripts.Kahoot
             }
 
             return stringBuilder.ToString();
+        }
+
+        internal static async Task<(bool successfullySaved, List<JObject> quizQuestionsCache)> SafeQuizQuestions(string quizId, string quizData)
+        {
+            string subSection = "SafeQuizQuestions";
+
+            List<JObject> quizQuestionsCache = [];
+
+            if (string.IsNullOrWhiteSpace(quizData))
+            {
+                ActivityLogger.Log(_currentSection, subSection, "QuizData is null or whitespace, check previous logs.");
+
+                return (false, []);
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Received a valid API response (not empty/not whitespaces).");
+
+
+
+            JArray quizQuestions;
+
+            try
+            {
+                quizQuestions = (JArray?)JObject.Parse(quizData)["questions"] ?? [];
+
+                if (quizQuestions == null)
+                {
+                    throw new Exception("Quiz questions are null/were not parsed correctly.");
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to parse the quizzes questions from the API response.");
+                ActivityLogger.Log(_currentSection, subSection, $"API-Response: {quizData}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return (false, []);
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Successfully parsed the quizzes data.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Creating/looking for needed folders within the application folder.");
+
+            string quizzesFolder = _appPaths.quizzesFolder;
+            string currentQuizFolder = Path.Combine(quizzesFolder, quizId);
+
+            try
+            {
+                if (Directory.Exists(quizzesFolder) == false)
+                {
+                    Directory.CreateDirectory(quizzesFolder);
+                }
+
+                if (Directory.Exists(currentQuizFolder) == false)
+                {
+                    Directory.CreateDirectory(currentQuizFolder);
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to create/find necessary folders.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return (false, []);
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "All needed folders exists.");
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Saving all questions with their data to the local folder.");
+
+            for (int i = 1; i <= quizQuestions.Count; i++)
+            {
+                JObject questionData;
+
+                try
+                {
+                    questionData = (JObject)quizQuestions[i - 1];
+
+                    if (questionData == null)
+                    {
+                        throw new Exception("QuizData is null/was not parsed correctly.");
+                    }
+
+                    quizQuestionsCache.Add(questionData);
+                }
+                catch (Exception exception)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"[ERROR] - Failed to parse current question '{i}'.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+                    ActivityLogger.Log(_currentSection, subSection, "Please look at the error logs to fix this issue.", true);
+
+                    return (false, []);
+                }
+
+                string questionDataPath = Path.Combine(currentQuizFolder, $"question{i}.json");
+
+                try
+                {
+                    await File.WriteAllTextAsync(questionDataPath, questionData.ToString(Formatting.Indented));
+                }
+                catch (Exception exception)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to save current questionData for question '{i}' to disk.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                    return (false, []);
+                }
+            }
+
+            return (true, quizQuestionsCache);
         }
     }
 }
