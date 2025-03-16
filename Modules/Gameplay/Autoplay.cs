@@ -180,6 +180,8 @@ namespace Kahoofection.Modules.Gameplay
 
                     await Task.Delay(5000);
 
+                    _webDriver.Close();
+
                     return;
                 }
 
@@ -208,8 +210,38 @@ namespace Kahoofection.Modules.Gameplay
                 UpdateWebDriverLog("\u001b[91mPlease look at the error logs to fix this issue.");
 
                 await Task.Delay(5000);
-                
+
+                _webDriver.Close();
+
                 return;
+            }
+
+
+
+            for (int joinTimeout = 0; joinTimeout < 10; joinTimeout++)
+            {
+                if (_webDriver.Url.Equals(_appUrls.kahootLobby) == true)
+                {
+                    break;
+                }
+
+                if (joinTimeout == 9)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to join the game.");
+                    ActivityLogger.Log(_currentSection, subSection, $"A timeout occurred after sending a name to the game", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Maybe the chosen name is already taken?", true);
+
+                    UpdateWebDriverLog("\u001b[91mFailed to join the game!");
+                    UpdateWebDriverLog("\u001b[91mPlease look at the error logs to fix this issue.");
+
+                    await Task.Delay(3000);
+
+                    _webDriver.Close();
+
+                    return;
+                }
+
+                await Task.Delay(500);
             }
 
             ActivityLogger.Log(_currentSection, subSection, $"Successfully joined the game.");
