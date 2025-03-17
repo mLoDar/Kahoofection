@@ -1,5 +1,4 @@
 ﻿using Kahoofection.Scripts;
-using Kahoofection.Ressources;
 using Kahoofection.Scripts.Kahoot;
 
 
