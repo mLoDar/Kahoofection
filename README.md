@@ -12,7 +12,7 @@
 
 <br>
 
-> As of 11th March 2025 the project is still work in progress and is not entirely finished, so be patient ;)
+> As of 17th March 2025 the project is still work in progress and is not entirely finished, so be patient ;)
 > <br>
 > Feel free to star the repository and watch it, to get all the latest updates! :)
 > <br>
