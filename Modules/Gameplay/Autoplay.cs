@@ -36,15 +36,12 @@ namespace Kahoofection.Modules.Gameplay
         private const string _currentSection = "Autoplay";
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
-        private static readonly ApplicationSettings.Paths _appPaths = new();
         private static readonly ApplicationSettings.DriverPaths _appDriverPaths = new();
 
         private static string _quizIdApiResponse = string.Empty;
 
         private static IWebDriver _webDriver;
         private static List<string> _webDriverLog = [];
-
-        private static List<JObject> _currentQuizQuestions = [];
 
 
 
@@ -55,7 +52,6 @@ namespace Kahoofection.Modules.Gameplay
         LabelMethodEntryPoint:
 
             _webDriverLog = [];
-            _currentQuizQuestions = [];
 
             Console.Title = $"Kahoofection | {_currentSection}";
             ActivityLogger.Log(_currentSection, subSection, $"Starting module '{_currentSection}'");
@@ -145,8 +141,6 @@ namespace Kahoofection.Modules.Gameplay
 
             ActivityLogger.Log(_currentSection, subSection, "All questions were saved to the local application folder.");
             UpdateWebDriverLog("\u001b[92mAll questions were saved to the local application folder.");
-
-            _currentQuizQuestions = quizQuestionCache;
 
 
 
@@ -262,7 +256,20 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            // TODO: Create mechanics to play the game
+            for (int i = 1; i <= quizQuestionCache.Count; i++)
+            {
+                UpdateWebDriverLog($"\u001b[97mMoving on to question '{i}'.");
+
+                // TODO: Answer question
+
+                UpdateWebDriverLog($"\u001b[92mAnswerd question '{i}'!");
+            }
+
+
+
+            // TODO: Display end screen/game ended
+
+            // TODO: Restart feature or exit
 
         }
 
@@ -330,7 +337,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
             Console.WriteLine("                                                                                    ");
-            Console.WriteLine("             \u001b[94m┌ \u001b[97mChoose a username: (min. 1, max. 100 characters) ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mChoose a username: (min. 1, max. 15 characters) ");
             Console.WriteLine("             \u001b[94m├──────────────────────────────────────────────────────      ");
 
             startCursorTop = Console.GetCursorPosition().Top;
@@ -619,7 +626,7 @@ namespace Kahoofection.Modules.Gameplay
             return true;
         }
 
-        private static void UpdateWebDriverLog(string message)
+        internal static void UpdateWebDriverLog(string message)
         {
             Console.SetCursorPosition(0, 4);
 
