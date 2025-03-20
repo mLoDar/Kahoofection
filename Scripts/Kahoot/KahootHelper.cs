@@ -2,9 +2,12 @@
 using System.Drawing;
 
 using Kahoofection.Ressources;
+using Kahoofection.Modules.Gameplay;
 
+using OpenQA.Selenium;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium.Support.UI;
 
 
 
@@ -18,6 +21,7 @@ namespace Kahoofection.Scripts.Kahoot
 
         private static readonly ApplicationSettings.Urls _appUrls = new();
         private static readonly ApplicationSettings.Paths _appPaths = new();
+        private static readonly ApplicationSettings.DriverPaths _appDriverPaths = new();
 
 
 
@@ -470,6 +474,35 @@ namespace Kahoofection.Scripts.Kahoot
             }
 
             return (true, quizQuestionsCache);
+        }
+        private static JObject FindQuestionByQuestionTitle(string titleToFind, List<JObject> quizQuestionsCache)
+        {
+            string subSection = "FindQuestionByQuestionTitle";
+
+            foreach (JObject questionData in quizQuestionsCache)
+            {
+                string questionType = questionData["type"]?.ToString() ?? string.Empty;
+
+                if (questionType.Equals(string.Empty))
+                {
+                    continue;
+                }
+
+                if (questionType.Equals("content") && questionData["title"]?.ToString().Equals(titleToFind) == true)
+                {
+                    return questionData;
+                }
+
+                if (questionType.Equals("content") == false && questionData["question"]?.ToString().Equals(titleToFind) == true)
+                {
+                    return questionData;
+                }
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Failed to find questionData with the provided information.");
+            ActivityLogger.Log(_currentSection, subSection, "Returning an empty list.", true);
+
+            return [];
         }
     }
 }
