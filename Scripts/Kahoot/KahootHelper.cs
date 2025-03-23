@@ -475,6 +475,143 @@ namespace Kahoofection.Scripts.Kahoot
 
             return (true, quizQuestionsCache);
         }
+
+        internal static async Task<bool> AnswerQuestionAutoplay(IWebDriver webDriver, List<JObject> quizQuestionsCache, GameAutoplaySettings gameAutoplaySettings)
+        {
+            string subSection = "AnswerQuestionAutoplay";
+
+            ActivityLogger.Log(_currentSection, subSection, "Answering a new question via the existing webdriver instance.");
+            ActivityLogger.Log(_currentSection, subSection, $"QuizQuestionsCache: {quizQuestionsCache}", true);
+            ActivityLogger.Log(_currentSection, subSection, $"QuizId: {gameAutoplaySettings.quizId}", true);
+
+
+
+            Autoplay.UpdateWebDriverLog($"\u001b[97mWaiting for the question to appear.");
+
+            try
+            {
+                WebDriverWait webDriverWait = new(webDriver, TimeSpan.FromSeconds(30));
+                webDriverWait.Until(driver => driver.Url == _appUrls.kahootGetReady);
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "WebDriver wait timed out! Waiting for the question page to appear was unsuccessfull.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            string questionContent = string.Empty;
+            int questionIndex = -1;
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Awaiting a 1.5 second cooldown, to ensure that the page has fully loaded.");
+
+            await Task.Delay(1500);
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Trying to fetch question content.");
+
+            Autoplay.UpdateWebDriverLog($"\u001b[92mQuestion appeared!.");
+            Autoplay.UpdateWebDriverLog($"\u001b[97mTrying to fetch question.");
+
+            while (webDriver.Url.Equals(_appUrls.kahootGetReady) == true)
+            {
+                try
+                {
+                    questionContent = webDriver.FindElement(By.XPath(_appDriverPaths.headerXpathQuestionTitle)).Text;
+
+                    ActivityLogger.Log(_currentSection, subSection, "Found question content!");
+                    Autoplay.UpdateWebDriverLog($"\u001b[92mFound question content!");
+                    break;
+                }
+                catch
+                {
+                    await Task.Delay(50);
+                }
+            }
+
+            if (questionContent.Equals(string.Empty))
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to fetch question, searching question index.");
+                Autoplay.UpdateWebDriverLog($"\u001b[93mFailed to fetch question, searching question index.");
+
+                try
+                {
+                    string questionIndexHtml = webDriver.FindElement(By.XPath(_appDriverPaths.divXpathQuestionIndex)).Text;
+                    questionIndex = Convert.ToInt32(questionIndexHtml);
+
+                    ActivityLogger.Log(_currentSection, subSection, "Found question index!");
+                    Autoplay.UpdateWebDriverLog($"\u001b[92mFound question index!");
+                }
+                catch (Exception exception)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, "Failed to fetch question content and index.");
+                    ActivityLogger.Log(_currentSection, subSection, "Due to this, the question can not be answered reliably.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                    return false;
+                }
+            }
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Successfully fetched at least one question variables.");
+            ActivityLogger.Log(_currentSection, subSection, $"questionContent: '{questionContent}'", true);
+            ActivityLogger.Log(_currentSection, subSection, $"questionIndex: '{questionIndex}'", true);
+
+
+
+            JObject questionData;
+
+            if (questionIndex != -1)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Fetching question data via questionIndex.");
+                questionData = quizQuestionsCache[questionIndex - 1];
+            }
+            else
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Fetching question data via questionContent.");
+                questionData = FindQuestionByQuestionTitle(questionContent, quizQuestionsCache);
+            }
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Waiting for the answer page to appear.");
+            Autoplay.UpdateWebDriverLog($"\u001b[97mWaiting for the answer page to appear.");
+
+            try
+            {
+                WebDriverWait webDriverWait = new(webDriver, TimeSpan.FromSeconds(30));
+                webDriverWait.Until(driver => driver.Url == _appUrls.kahootGameBlock);
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "WebDriver wait timed out! Waiting for the answer page to appear was unsuccessfull.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+
+
+            await Task.Delay(50);
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Answer page appeared, submitting answer.");
+            
+            bool submittedAnswer = SubmitAnswer(webDriver, questionData);
+
+            ActivityLogger.Log(_currentSection, subSection, $"Answer was submitted, returning result '{submittedAnswer}'.");
+
+
+
+            return submittedAnswer;
+        }
+
         private static JObject FindQuestionByQuestionTitle(string titleToFind, List<JObject> quizQuestionsCache)
         {
             string subSection = "FindQuestionByQuestionTitle";
@@ -504,5 +641,10 @@ namespace Kahoofection.Scripts.Kahoot
 
             return [];
         }
+
+        private static bool SubmitAnswer(IWebDriver webDriver, JObject questionData)
+        {
+            return true;
     }
+}
 }

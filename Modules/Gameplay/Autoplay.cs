@@ -260,7 +260,14 @@ namespace Kahoofection.Modules.Gameplay
             {
                 UpdateWebDriverLog($"\u001b[97mMoving on to question '{i}'.");
 
-                // TODO: Answer question
+                bool questionAnswered = await KahootHelper.AnswerQuestionAutoplay(_webDriver, quizQuestionCache, gameAutoplaySettings);
+
+                if (questionAnswered == false)
+                {
+                    UpdateWebDriverLog($"\u001b[91mFailed to answer question '{i}'!");
+                    UpdateWebDriverLog($"\u001b[91mPlease take a look at the error logs.");
+                    continue;
+                }
 
                 UpdateWebDriverLog($"\u001b[92mAnswerd question '{i}'!");
             }
