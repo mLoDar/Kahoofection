@@ -640,6 +640,107 @@ namespace Kahoofection.Scripts.Kahoot
 
         private static bool SubmitAnswer(IWebDriver webDriver, JObject questionData)
         {
+            string subSection = "SubmitAnswer";
+
+            string questionType = questionData["type"]?.ToString() ?? string.Empty;
+
+            ActivityLogger.Log(_currentSection, subSection, $"Submitting answer for question of type '{questionType}'.");
+
+
+
+            switch (questionType.ToLower())
+            {
+                case "quiz":
+
+                    JArray questionChoices = questionData["choices"] as JArray ?? [];
+
+                    int foundAnswerIndex = -1;
+                    string foundAnswerContent = "";
+
+                    for (int index = 0; index < questionChoices.Count; index++)
+                    {
+                        JObject choice = questionChoices[index] as JObject ?? [];
+
+                        if (Convert.ToBoolean(choice["correct"]) == true)
+                        {
+                            foundAnswerIndex = index;
+                            foundAnswerContent = choice["answer"]?.ToString().ToLower() ?? string.Empty;
+                            break;
+                        }
+                    }
+
+                    if (Enumerable.Range(0, 3).Contains(foundAnswerIndex) == false && string.IsNullOrWhiteSpace(foundAnswerContent) == true)
+                    {
+                        ActivityLogger.Log(_currentSection, subSection, "Received invalid answer parameters.");
+                        ActivityLogger.Log(_currentSection, subSection, $"foundAnswerIndex: {foundAnswerIndex}", true);
+                        ActivityLogger.Log(_currentSection, subSection, $"foundAnswerContent: {foundAnswerContent}", true);
+
+                        return false;
+                    }
+
+                    IWebElement buttonToClick;
+
+                    try
+                    {
+                        IJavaScriptExecutor js = (IJavaScriptExecutor)webDriver;
+                        buttonToClick = (IWebElement)js.ExecuteScript($@"
+                            return [...document.querySelectorAll('button')]
+                            .find(button => button.innerText.toLowerCase()
+                            .trim() === '{foundAnswerContent}');
+                        ");
+                    }
+                    catch (Exception exceptionButtonSearch)
+                    {
+                        ActivityLogger.Log(_currentSection, subSection, "Failed to find quiz button via answer content.");
+                        ActivityLogger.Log(_currentSection, subSection, $"Exception: {exceptionButtonSearch.Message}", true);
+
+                        ActivityLogger.Log(_currentSection, subSection, "Searching button via answer index.");
+
+                        string buttonXpathQuizChoice = _appDriverPaths.buttonXpathQuizChoiceAnswerNotDisplayed;
+
+                        string row = ((foundAnswerIndex / 2) + 1).ToString();
+                        string column = ((foundAnswerIndex % 2) + 1).ToString();
+
+                        string finalPath = buttonXpathQuizChoice.Replace("{row}", row).Replace("{column}", column);
+
+                        try
+                        {
+                            buttonToClick = webDriver.FindElement(By.XPath(finalPath));
+                        }
+                        catch (Exception exception)
+                        {
+                            ActivityLogger.Log(_currentSection, subSection, "Failed to click questions quiz button!");
+                            ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                            return false;
+                        }
+                    }
+
+                    try
+                    {
+                        buttonToClick.Click();
+                    }
+                    catch (Exception exception)
+                    {
+                        ActivityLogger.Log(_currentSection, subSection, "Failed to click questions quiz button!");
+                        ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
+
+                        return false;
+                    }
+
+                    break;
+
+                default:
+                    ActivityLogger.Log(_currentSection, subSection, $"Failed to submit answer for questionType '{questionType}'");
+                    ActivityLogger.Log(_currentSection, subSection, $"The provided questionType is not known by the application.", true);
+
+                    return false;
+            }
+
+
+
+            ActivityLogger.Log(_currentSection, subSection, "Successfully answered question");
+
             return true;
         }
     }
