@@ -597,10 +597,6 @@ namespace Kahoofection.Scripts.Kahoot
 
 
 
-            await Task.Delay(50);
-
-
-
             ActivityLogger.Log(_currentSection, subSection, "Answer page appeared, submitting answer.");
             
             bool submittedAnswer = SubmitAnswer(webDriver, questionData);
