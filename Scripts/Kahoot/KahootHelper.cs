@@ -641,6 +641,6 @@ namespace Kahoofection.Scripts.Kahoot
         private static bool SubmitAnswer(IWebDriver webDriver, JObject questionData)
         {
             return true;
+        }
     }
-}
 }
