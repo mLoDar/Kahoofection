@@ -47,13 +47,17 @@
 <br>
 
 ## Credits
-Thanks to [rawnullbyte](https://github.com/rawnullbyte) :)
+Thanks to [rawnullbyte](https://github.com/rawnullbyte) :thumbsup:
 - For creating this very own "Kahoot Bot" [KahootConnect](https://github.com/HackySoftOfficial/KahootConnect).
 - For documenting in such a detail on how to create Websockets and connect to the Kahoot Servers/communicate with them.
 - Your project helps me a lot and will have a decent impact on the quality of `Kahoofection`.
 
 Thanks to [patorjk](https://github.com/patorjk) :)
 - For creating this awesome website [patorjk.com](https://patorjk.com/software/taag/) which allows to create headers from normal text in different fonts and styles. It is awesome!
+
+Thanks to [czeiffert](https://create.kahoot.it/profiles/ed8e691b-f98b-437c-8207-2fe2645bf9ae) :)
+- For creating a bunch of Kahoot Quizzes, incuding [this one](https://create.kahoot.it/details/40f74c96-44c5-4715-b584-ac34aa1be631)
+where all question types are included for testing purposes.
 
 Thanks to [Arewzom](https://github.com/Arwezom) and [bacaala](https://github.com/bacaala) <3
 - For providing their feedback and ideas which lead `Kahoofection` one step closer to perfection.
