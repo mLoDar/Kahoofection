@@ -2,6 +2,7 @@
 
 using OpenQA.Selenium;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium.Support.UI;
 
 
 
@@ -9,6 +10,16 @@ using Newtonsoft.Json.Linq;
 
 namespace Kahoofection.Scripts.Kahoot
 {
+    internal struct PinItAnswer
+    {
+        internal int xCoordinate;
+        internal int yCoordinate;
+        internal int width;
+        internal int height;
+    }
+
+
+
     class AnswerSubmission
     {
         private const string _currentSection = "AnswerSubmission";
@@ -98,6 +109,103 @@ namespace Kahoofection.Scripts.Kahoot
 
                 return false;
             }
+
+            ActivityLogger.Log(_currentSection, subSection, "Submitted answer.");
+
+            return true;
+        }
+
+        internal static bool PinIt(IWebDriver webDriver, JObject questionData)
+        {
+            string subSection = "PinIt";
+
+
+
+            PinItAnswer pinItRect;
+            JArray choiceShapes = questionData["choiceShapes"] as JArray ?? [];
+            JObject firstChoiceShape = choiceShapes[0] as JObject ?? [];
+
+            try
+            {
+                pinItRect = new()
+                {
+                    width = Convert.ToInt32(firstChoiceShape["width"]),
+                    height = Convert.ToInt32(firstChoiceShape["height"]),
+                    xCoordinate = Convert.ToInt32(firstChoiceShape["x"]),
+                    yCoordinate = Convert.ToInt32(firstChoiceShape["y"])
+                };
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to define the answer rect for the question.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+
+
+            string svgCssSelectorPinItImage = _appDriverPaths.svgCssSelectorPinItImage;
+
+            try
+            {
+                WebDriverWait webDriverWait = new(webDriver, TimeSpan.FromSeconds(5));
+                IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)webDriver;
+
+                IWebElement pinItViewBox = webDriverWait.Until(driver => driver.FindElement(By.CssSelector(svgCssSelectorPinItImage)));
+                IWebElement pinItImage = pinItViewBox.FindElement(By.TagName("image"));
+
+                ActivityLogger.Log(_currentSection, subSection, "Found the needed viewbox with its image element.");
+
+
+
+                int imageWidth = Convert.ToInt32(javaScriptExecutor.ExecuteScript("return arguments[0].width.baseVal.value;", pinItImage));
+                int imageHeight = Convert.ToInt32(javaScriptExecutor.ExecuteScript("return arguments[0].height.baseVal.value;", pinItImage));
+
+                int centerX = pinItRect.xCoordinate + pinItRect.width / 2;
+                int centerY = pinItRect.yCoordinate + pinItRect.height / 2;
+
+                int viewBoxWidth = (int)Math.Max(pinItRect.width * 1.5, imageWidth / 3);
+                int viewBoxHeight = (int)Math.Max(pinItRect.height * 1.5, imageHeight / 3);
+
+                viewBoxWidth = Math.Min(viewBoxWidth, imageWidth);
+                viewBoxHeight = Math.Min(viewBoxHeight, imageHeight);
+
+                ActivityLogger.Log(_currentSection, subSection, "Assigned values for the target rect and viewbox size.");
+
+
+
+                string scriptAdjustment = $"arguments[0].setAttribute('viewBox', '{centerX - viewBoxWidth / 2} {centerY - viewBoxHeight / 2} {viewBoxWidth} {viewBoxHeight}');";
+                javaScriptExecutor.ExecuteScript(scriptAdjustment, pinItViewBox);
+
+                ActivityLogger.Log(_currentSection, subSection, "Successfully adjusted the viewbox!");
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to adjust the viewbox.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
+
+                return false;
+            }
+
+
+
+            try
+            {
+                string buttonXpathPinItSubmit = _appDriverPaths.buttonXpathPinItSubmit;
+
+                IWebElement submitButton = webDriver.FindElement(By.XPath(buttonXpathPinItSubmit));
+                submitButton.Click();
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit moved viewbox via button!");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Submitted answer.");
 
             return true;
         }
