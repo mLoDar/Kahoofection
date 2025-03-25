@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using System.Drawing;
 
 using Kahoofection.Ressources;
 
@@ -66,7 +67,6 @@ namespace Kahoofection.Scripts
                     ActivityLogger.Log(_currentSection, subSection, $"No parameters were provided for the request or they are null.", true);
                 }
 
-                ActivityLogger.Log(_currentSection, subSection, $"Request url: {exception.Message}", true);
                 ActivityLogger.Log(_currentSection, subSection, $"Exception thrown: {exception.Message}", true);
 
                 return string.Empty;
@@ -169,6 +169,52 @@ namespace Kahoofection.Scripts
                 Console.CursorVisible = true;
 
                 return exception;
+            }
+        }
+
+        internal static async Task<(Size imageDimensions, bool successfullyFetched)> GetImageSizeFromUrl(string imageUrl)
+        {
+            string subSection = "GetImageSizeFromUrl";
+
+            ActivityLogger.Log(_currentSection, subSection, "Initiating a new web request.");
+            ActivityLogger.Log(_currentSection, subSection, $"Request url: {imageUrl}", true);
+
+            try
+            {
+                using HttpClient httpClient = new();
+                httpClient.DefaultRequestHeaders.Range = new System.Net.Http.Headers.RangeHeaderValue(0, 4096);
+
+                using HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
+                httpResponseMessage.EnsureSuccessStatusCode();
+
+                using Stream stream = await httpResponseMessage.Content.ReadAsStreamAsync();
+                using MemoryStream memoryStream = new();
+
+                await stream.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+
+
+
+#pragma warning disable CA1416 // Validate platform compatibility
+
+                Image image = Image.FromStream(memoryStream, false, false);
+                Size imageDimensions = new(image.Width, image.Height);
+
+#pragma warning restore CA1416 // Validate platform compatibility
+
+
+
+                ActivityLogger.Log(_currentSection, subSection, "Successfully fetched image dimensions.");
+                ActivityLogger.Log(_currentSection, subSection, $"Returning: {imageDimensions.Width}px width | {imageDimensions.Height}px height", true);
+
+                return (imageDimensions, true);
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "An error occurred while performing the web request.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception thrown: {exception.Message}", true);
+                
+                return (new Size(-1, -1), false);
             }
         }
     }
