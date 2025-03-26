@@ -488,17 +488,9 @@ namespace Kahoofection.Scripts.Kahoot
 
             Autoplay.UpdateWebDriverLog($"\u001b[97mWaiting for the question to appear.");
 
-            try
+            while (webDriver.Url.Equals(_appUrls.kahootGetReady) == false)
             {
-                WebDriverWait webDriverWait = new(webDriver, TimeSpan.FromSeconds(30));
-                webDriverWait.Until(driver => driver.Url == _appUrls.kahootGetReady);
-            }
-            catch (Exception exception)
-            {
-                ActivityLogger.Log(_currentSection, subSection, "WebDriver wait timed out! Waiting for the question page to appear was unsuccessfull.");
-                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
-
-                return false;
+                await Task.Delay(50);
             }
 
             string questionContent = string.Empty;
@@ -506,9 +498,9 @@ namespace Kahoofection.Scripts.Kahoot
 
 
 
-            ActivityLogger.Log(_currentSection, subSection, "Awaiting a 1.5 second cooldown, to ensure that the page has fully loaded.");
+            ActivityLogger.Log(_currentSection, subSection, "Awaiting a 1.8 second cooldown, to ensure that the page has fully loaded.");
 
-            await Task.Delay(1500);
+            await Task.Delay(1800);
 
 
 
