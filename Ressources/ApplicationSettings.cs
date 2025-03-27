@@ -61,7 +61,6 @@
             internal readonly string buttonXpathQuizChoiceAnswerNotDisplayed = "/html/body/div/div[1]/div/div/main/div[3]/form/div/div/div[{row}]/button[{column}]";
             internal readonly string buttonXpathQuizChoiceText = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div[{row}]/button[{column}]/div[2]/p";
             internal readonly string buttonXpathPinItSubmit = "/html/body/div/div[1]/div/div/main/div[3]/form/form/div/button";
-            internal readonly string buttonXpathSliderSubmit = "/html/body/div/div[1]/div/div/main/div[3]/form/div[3]/button";
 
             internal readonly string divXpathQuestionType = "/html/body/div/div[1]/div/div/div/div[2]/div[2]/div";
             internal readonly string divXpathQuestionIndex = "/html/body/div[1]/div[1]/div/div/main/div[2]/div[1]/div";
@@ -69,11 +68,10 @@
             internal readonly string headerXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/main/main/div/div/div[2]/div/h1";
 
             internal readonly string spanXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/div[3]/form/div[1]/div[2]/div/span";
-            internal readonly string spanXpathCurrentSliderValue = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div/div[2]/div/div[2]/span";
+
+            internal readonly string spanCssCurrentSliderValue = ".shadow-text__Text-sc-o7uc06-1 > span:nth-child(1)";
 
             internal readonly string svgCssSelectorPinItImage = ".styles__Svg-sc-1a20dfq-5";
-
-            internal readonly string inputXpathSlider = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div/div[3]/input";
         }
     }
 }
