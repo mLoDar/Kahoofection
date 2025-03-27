@@ -60,8 +60,7 @@
             internal readonly string buttonXpathQuizChoiceAnswerDisplayed = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div[{row}]/button[{column}]";
             internal readonly string buttonXpathQuizChoiceAnswerNotDisplayed = "/html/body/div/div[1]/div/div/main/div[3]/form/div/div/div[{row}]/button[{column}]";
             internal readonly string buttonXpathQuizChoiceText = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div[{row}]/button[{column}]/div[2]/p";
-            internal readonly string buttonXpathPinItSubmit = "/html/body/div/div[1]/div/div/main/div[3]/form/form/div/button";
-
+            
             internal readonly string divXpathQuestionType = "/html/body/div/div[1]/div/div/div/div[2]/div[2]/div";
             internal readonly string divXpathQuestionIndex = "/html/body/div[1]/div[1]/div/div/main/div[2]/div[1]/div";
 

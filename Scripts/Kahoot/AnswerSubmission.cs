@@ -192,9 +192,9 @@ namespace Kahoofection.Scripts.Kahoot
 
             try
             {
-                string buttonXpathPinItSubmit = _appDriverPaths.buttonXpathPinItSubmit;
+                IWebElement submitButton = webDriver.FindElements(By.TagName("button")).FirstOrDefault()
+                    ?? throw new Exception("Clicking failed, as no buttons were found.");
 
-                IWebElement submitButton = webDriver.FindElement(By.XPath(buttonXpathPinItSubmit));
                 submitButton.Click();
             }
             catch (Exception exception)
