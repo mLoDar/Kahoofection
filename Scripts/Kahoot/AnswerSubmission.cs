@@ -209,5 +209,84 @@ namespace Kahoofection.Scripts.Kahoot
 
             return true;
         }
+
+        internal static bool Slider(IWebDriver webDriver, JObject questionData)
+        {
+            string subSection = "Slider";
+
+
+
+            double sliderStep = -1;
+            double sliderCorrect = -1;
+
+            JObject choiceRange = questionData["choiceRange"] as JObject ?? [];
+
+            try
+            {
+                sliderStep = Convert.ToDouble(choiceRange["step"]);
+                sliderCorrect = Convert.ToDouble(choiceRange["correct"]);
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to get the slider step or correct value.");
+                ActivityLogger.Log(_currentSection, subSection, $"Values: sliderStep-{sliderStep} | sliderCorrect-{sliderCorrect}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+
+
+            try
+            {
+                string spanXpathCurrentSliderValue = _appDriverPaths.spanCssCurrentSliderValue;
+                IWebElement sliderValue = webDriver.FindElement(By.CssSelector(spanXpathCurrentSliderValue));
+                
+                IWebElement slider = webDriver.FindElements(By.TagName("input")).FirstOrDefault()
+                    ?? throw new Exception("Slider adjustment failed, as no input field/slider was found.");
+                
+                double startValue = double.Parse(sliderValue.Text);
+
+                double difference = sliderCorrect - startValue;
+                int neededKeyPresses = (int)Math.Abs(difference / sliderStep);
+
+                for (int i = 0; i < neededKeyPresses; i++)
+                {
+                    if (difference > 0)
+                    {
+                        slider.SendKeys(Keys.ArrowRight);
+                        continue;
+                    }
+
+                    slider.SendKeys(Keys.ArrowLeft);
+                }
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to adjust the slider.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            try
+            {
+                IWebElement submitButton = webDriver.FindElements(By.TagName("button")).FirstOrDefault()
+                    ?? throw new Exception("Clicking failed, as no buttons were found.");
+
+                submitButton.Click();
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit the adjusted slider.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Submitted answer.");
+
+            return true;
+        }
     }
 }
