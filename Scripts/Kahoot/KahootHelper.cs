@@ -362,11 +362,11 @@ namespace Kahoofection.Scripts.Kahoot
             return stringBuilder.ToString();
         }
 
-        internal static async Task<(bool successfullySaved, List<JObject> quizQuestionsCache)> SafeQuizQuestions(string quizId, string quizData)
+        internal static async Task<(bool successfullySaved, List<(bool questionAnswered, JObject questionData)> quizQuestionsCache)> SafeQuizQuestions(string quizId, string quizData)
         {
             string subSection = "SafeQuizQuestions";
 
-            List<JObject> quizQuestionsCache = [];
+            List<(bool questionAnswered, JObject questionData)> quizQuestionsCache = [];
 
             if (string.IsNullOrWhiteSpace(quizData))
             {
@@ -447,7 +447,7 @@ namespace Kahoofection.Scripts.Kahoot
                         throw new Exception("QuizData is null/was not parsed correctly.");
                     }
 
-                    quizQuestionsCache.Add(questionData);
+                    quizQuestionsCache.Add((false, questionData));
                 }
                 catch (Exception exception)
                 {
@@ -476,13 +476,11 @@ namespace Kahoofection.Scripts.Kahoot
             return (true, quizQuestionsCache);
         }
 
-        internal static async Task<bool> AnswerQuestionAutoplay(IWebDriver webDriver, List<JObject> quizQuestionsCache, GameAutoplaySettings gameAutoplaySettings)
+        internal static async Task<bool> AnswerQuestionAutoplay(IWebDriver webDriver, List<(bool questionAnswered, JObject questionData)> quizQuestionsCache, GameAutoplaySettings gameAutoplaySettings)
         {
             string subSection = "AnswerQuestionAutoplay";
 
             ActivityLogger.Log(_currentSection, subSection, "Answering a new question via the existing webdriver instance.");
-            ActivityLogger.Log(_currentSection, subSection, $"QuizQuestionsCache: {quizQuestionsCache}", true);
-            ActivityLogger.Log(_currentSection, subSection, $"QuizId: {gameAutoplaySettings.quizId}", true);
 
 
 
@@ -492,7 +490,7 @@ namespace Kahoofection.Scripts.Kahoot
             {
                 await Task.Delay(50);
             }
-
+            
             string questionContent = string.Empty;
             int questionIndex = -1;
 
@@ -561,7 +559,16 @@ namespace Kahoofection.Scripts.Kahoot
             if (questionIndex != -1)
             {
                 ActivityLogger.Log(_currentSection, subSection, "Fetching question data via questionIndex.");
-                questionData = quizQuestionsCache[questionIndex - 1];
+
+                if (quizQuestionsCache[questionIndex - 1].questionAnswered == true)
+                {
+                    ActivityLogger.Log(_currentSection, subSection, "The question with the questionIndex was already answered.");
+                    ActivityLogger.Log(_currentSection, subSection, "This might be a 1 in a million case, but can not answer the current question correctly.", true);
+
+                    return false;
+                }
+
+                questionData = quizQuestionsCache[questionIndex - 1].questionData;
             }
             else
             {
@@ -569,8 +576,12 @@ namespace Kahoofection.Scripts.Kahoot
                 questionData = FindQuestionByQuestionTitle(questionContent, quizQuestionsCache);
             }
 
+            int questionDataIndex = quizQuestionsCache.FindIndex(questionTuple => JToken.DeepEquals(questionTuple.questionData, questionData));
+            quizQuestionsCache[questionDataIndex] = (true, quizQuestionsCache[questionDataIndex].questionData);
 
 
+
+            ActivityLogger.Log(_currentSection, subSection, $"Current question data: {questionData.ToString(Formatting.None)}");
             ActivityLogger.Log(_currentSection, subSection, "Waiting for the answer page to appear.");
             Autoplay.UpdateWebDriverLog($"\u001b[97mWaiting for the answer page to appear.");
 
@@ -627,12 +638,17 @@ namespace Kahoofection.Scripts.Kahoot
             return submittedAnswer;
         }
 
-        private static JObject FindQuestionByQuestionTitle(string titleToFind, List<JObject> quizQuestionsCache)
+        private static JObject FindQuestionByQuestionTitle(string titleToFind, List<(bool questionAnswered, JObject questionData)> quizQuestionsCache)
         {
             string subSection = "FindQuestionByQuestionTitle";
 
-            foreach (JObject questionData in quizQuestionsCache)
+            foreach ((bool questionAnswered, JObject questionData) in quizQuestionsCache)
             {
+                if (questionAnswered == true)
+                {
+                    continue;
+                }
+
                 string questionType = questionData["type"]?.ToString() ?? string.Empty;
 
                 if (questionType.Equals(string.Empty))

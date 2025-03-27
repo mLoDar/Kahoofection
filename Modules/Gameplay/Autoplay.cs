@@ -131,7 +131,7 @@ namespace Kahoofection.Modules.Gameplay
             ActivityLogger.Log(_currentSection, subSection, "Saving all the questions data.");
             UpdateWebDriverLog("\u001b[97mSaving all the questions data.");
 
-            (bool successfullySaved, List<JObject> quizQuestionCache) = await KahootHelper.SafeQuizQuestions(gameAutoplaySettings.quizId.ToString(), _quizIdApiResponse);
+            (bool successfullySaved, List<(bool aleadyAnswered, JObject questionData)> quizQuestionCache) = await KahootHelper.SafeQuizQuestions(gameAutoplaySettings.quizId.ToString(), _quizIdApiResponse);
 
             if (successfullySaved == false)
             {
