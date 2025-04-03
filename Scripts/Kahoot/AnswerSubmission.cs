@@ -70,6 +70,11 @@ namespace Kahoofection.Scripts.Kahoot
                     .find(button => button.innerText.toLowerCase()
                     .trim() === '{foundAnswerContent}');
                 ");
+
+                if (buttonToClick == null)
+                {
+                    throw new Exception("No buttons found where the inner text equals the correct answer.");
+                }
             }
             catch (Exception exceptionButtonSearch)
             {
