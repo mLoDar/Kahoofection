@@ -240,6 +240,8 @@ namespace Kahoofection.Scripts.Kahoot
                 return false;
             }
 
+            ActivityLogger.Log(_currentSection, subSection, $"Got slider values from questionData: sliderStep-{sliderStep} | sliderCorrect-{sliderCorrect}");
+
 
 
             try
@@ -254,6 +256,11 @@ namespace Kahoofection.Scripts.Kahoot
 
                 double difference = sliderCorrect - startValue;
                 int neededKeyPresses = (int)Math.Abs(difference / sliderStep);
+
+                ActivityLogger.Log(_currentSection, subSection, $"Calculated variables for slider adjustment.");
+                ActivityLogger.Log(_currentSection, subSection, $"Start value: {startValue}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Difference: {difference}", true);
+                ActivityLogger.Log(_currentSection, subSection, $"Needed key presses: {neededKeyPresses}", true);
 
                 for (int i = 0; i < neededKeyPresses; i++)
                 {
