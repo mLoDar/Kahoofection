@@ -60,12 +60,16 @@
             internal readonly string buttonXpathQuizChoiceAnswerDisplayed = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div[{row}]/button[{column}]";
             internal readonly string buttonXpathQuizChoiceAnswerNotDisplayed = "/html/body/div/div[1]/div/div/main/div[3]/form/div/div/div[{row}]/button[{column}]";
             internal readonly string buttonXpathQuizChoiceText = "/html/body/div/div[1]/div/div/main/div[3]/form/div[2]/div[{row}]/button[{column}]/div[2]/p";
-            
+
+            internal readonly string buttonCssSelectorScaleSubmit = ".button__Button-sc-c6mvr2-0";
+
             internal readonly string divXpathQuestionType = "/html/body/div/div[1]/div/div/div/div[2]/div[2]/div";
             internal readonly string divXpathQuestionIndex = "/html/body/div[1]/div[1]/div/div/main/div[2]/div[1]/div";
 
-            internal readonly string headerXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/main/main/div/div/div[2]/div/h1";
+            internal readonly string divCssSelectorScaleChoiceButtons = ".scale-input-range__PointsContainer-sc-12kpd6a-5";
 
+            internal readonly string headerXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/main/main/div/div/div[2]/div/h1";
+            
             internal readonly string spanXpathQuestionTitle = "/html/body/div/div[1]/div/div/main/div[3]/form/div[1]/div[2]/div/span";
 
             internal readonly string spanCssCurrentSliderValue = ".shadow-text__Text-sc-o7uc06-1 > span:nth-child(1)";
