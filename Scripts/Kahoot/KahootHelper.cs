@@ -623,6 +623,10 @@ namespace Kahoofection.Scripts.Kahoot
                     submittedAnswer = AnswerSubmission.Slider(webDriver, questionData);
                     break;
 
+                case "drop_pin":
+                    submittedAnswer = AnswerSubmission.DropPin(webDriver, questionData);
+                    break;
+
                 default:
                     ActivityLogger.Log(_currentSection, subSection, $"Failed to submit answer for questionType '{questionType}'");
                     ActivityLogger.Log(_currentSection, subSection, $"The provided questionType is not known by the application.", true);

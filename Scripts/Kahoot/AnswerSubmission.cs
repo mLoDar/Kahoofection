@@ -300,5 +300,31 @@ namespace Kahoofection.Scripts.Kahoot
 
             return true;
         }
+
+        internal static bool DropPin(IWebDriver webDriver, JObject questionData)
+        {
+            string subSection = "DropPin";
+
+
+
+            try
+            {
+                IWebElement submitButton = webDriver.FindElements(By.TagName("button")).FirstOrDefault()
+                    ?? throw new Exception("Clicking failed, as no buttons were found.");
+
+                submitButton.Click();
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit moved viewbox via button!");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Submitted answer.");
+
+            return true;
+        }
     }
 }
