@@ -490,7 +490,7 @@ namespace Kahoofection.Scripts.Kahoot
             {
                 await Task.Delay(50);
             }
-            
+
             string questionContent = string.Empty;
             int questionIndex = -1;
 
@@ -623,6 +623,14 @@ namespace Kahoofection.Scripts.Kahoot
                     submittedAnswer = AnswerSubmission.Slider(webDriver, questionData);
                     break;
 
+                case "scale":
+                    submittedAnswer = AnswerSubmission.ScaleNps(webDriver);
+                    break;
+
+                case "nps":
+                    submittedAnswer = AnswerSubmission.ScaleNps(webDriver);
+                    break;
+
                 case "drop_pin":
                     submittedAnswer = AnswerSubmission.DropPin(webDriver);
                     break;
@@ -634,7 +642,7 @@ namespace Kahoofection.Scripts.Kahoot
                     submittedAnswer = false;
                     break;
             }
-            
+
             ActivityLogger.Log(_currentSection, subSection, $"Question was handled, returning result '{submittedAnswer}'.");
 
 

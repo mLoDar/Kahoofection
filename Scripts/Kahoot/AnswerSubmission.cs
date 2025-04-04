@@ -248,10 +248,10 @@ namespace Kahoofection.Scripts.Kahoot
             {
                 string spanXpathCurrentSliderValue = _appDriverPaths.spanCssCurrentSliderValue;
                 IWebElement sliderValue = webDriver.FindElement(By.CssSelector(spanXpathCurrentSliderValue));
-                
+
                 IWebElement slider = webDriver.FindElements(By.TagName("input")).FirstOrDefault()
                     ?? throw new Exception("Slider adjustment failed, as no input field/slider was found.");
-                
+
                 double startValue = double.Parse(sliderValue.Text);
 
                 double difference = sliderCorrect - startValue;
@@ -301,7 +301,62 @@ namespace Kahoofection.Scripts.Kahoot
             return true;
         }
 
-        internal static bool DropPin(IWebDriver webDriver, JObject questionData)
+        internal static bool ScaleNps(IWebDriver webDriver)
+        {
+            string subSection = "ScaleNps";
+
+
+
+            try
+            {
+                string divCssSelectorScaleChoiceButtons = _appDriverPaths.divCssSelectorScaleChoiceButtons;
+
+                IWebElement container = webDriver.FindElement(By.CssSelector(divCssSelectorScaleChoiceButtons));
+                IReadOnlyCollection<IWebElement> buttons = container.FindElements(By.TagName("button"));
+
+                if (buttons.Count <= 0)
+                {
+                    throw new Exception("No buttons from the scale were found.");
+                }
+
+                Random random = new();
+                int randomIndex = random.Next(buttons.Count);
+
+                IWebElement randomButton = buttons.ElementAt(randomIndex);
+                randomButton.Click();
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to select a random button on the scale.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, $"Selected a random button from the scale.");
+
+
+
+            try
+            {
+                string buttonCssSelectorScaleSubmit = _appDriverPaths.buttonCssSelectorScaleSubmit;
+
+                IWebElement submitButton = webDriver.FindElement(By.CssSelector(buttonCssSelectorScaleSubmit));
+                submitButton.Click();
+            }
+            catch (Exception exception)
+            {
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit the selected button from the scale.");
+                ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
+
+                return false;
+            }
+
+            ActivityLogger.Log(_currentSection, subSection, "Submitted answer.");
+
+            return true;
+        }
+
         internal static bool DropPin(IWebDriver webDriver)
         {
             string subSection = "DropPin";
