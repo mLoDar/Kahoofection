@@ -12,12 +12,16 @@
 
 <br>
 
-> As of 17th March 2025 the project is still work in progress and is not entirely finished, so be patient ;)
+> As of 4th April 2025 the project is still work in progress and mostly finished ;)
+> <br>
+> Support for some question types is still outstanding, but actively worked on.
+> <br>
 > <br>
 > Feel free to star the repository and watch it, to get all the latest updates! :)
-> <br>
-> Currently all modules are active, except Autoplay as it is being worked on right now.
-> <br>
+
+<br>
+
+---
 
 <br>
 
