@@ -302,6 +302,7 @@ namespace Kahoofection.Scripts.Kahoot
         }
 
         internal static bool DropPin(IWebDriver webDriver, JObject questionData)
+        internal static bool DropPin(IWebDriver webDriver)
         {
             string subSection = "DropPin";
 
@@ -316,7 +317,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to submit moved viewbox via button!");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit viewbox via button!");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
 
                 return false;

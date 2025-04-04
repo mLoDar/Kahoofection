@@ -624,7 +624,7 @@ namespace Kahoofection.Scripts.Kahoot
                     break;
 
                 case "drop_pin":
-                    submittedAnswer = AnswerSubmission.DropPin(webDriver, questionData);
+                    submittedAnswer = AnswerSubmission.DropPin(webDriver);
                     break;
 
                 default:
