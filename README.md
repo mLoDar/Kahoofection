@@ -12,9 +12,9 @@
 
 <br>
 
-> As of 4th April 2025 the project is still work in progress and mostly finished ;)
+> As of 30th July 2025 the project is still work in progress and mostly finished ;)
 > <br>
-> Support for some question types is still outstanding, but actively worked on.
+> Support for some question types within Autoplay is still outstanding.
 > <br>
 > <br>
 > Feel free to star the repository and watch it, to get all the latest updates! :)
