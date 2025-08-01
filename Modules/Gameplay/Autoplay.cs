@@ -272,12 +272,41 @@ namespace Kahoofection.Modules.Gameplay
                 UpdateWebDriverLog($"\u001b[92mAnswerd question '{i}'!");
             }
 
+            UpdateWebDriverLog($"\u001b[92mGame has ended!");
+            
 
 
-            // TODO: Display end screen/game ended
+            Console.WriteLine("                                                                          ");
+            Console.WriteLine("                                                                          ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mUse BACKSPACE to restart               ");
+            Console.WriteLine("             \u001b[94m└──────────────────────────────                    ");
+            Console.WriteLine("                                                                          ");
+            Console.WriteLine("             \u001b[94m┌ \u001b[97mUse ESC to leave                       ");
+            Console.WriteLine("             \u001b[94m└──────────────────────                            ");
 
-            // TODO: Restart feature or exit
 
+
+        LabelReadKey:
+
+            ConsoleKey pressedKey = Console.ReadKey(true).Key;
+
+            switch (pressedKey)
+            {
+                case ConsoleKey.Escape:
+                    ActivityLogger.Log(_currentSection, subSection, $"Leaving module, as the ESC key was pressed after the Autoplay finished.");
+
+                    Console.CursorVisible = true;
+                    return;
+
+                case ConsoleKey.Backspace:
+                    ActivityLogger.Log(_currentSection, subSection, $"Restarting module, as the BACKSPACE key was pressed  after the Autoplay finished.");
+
+                    Console.CursorVisible = true;
+                    goto LabelMethodEntryPoint;
+
+                default:
+                    goto LabelReadKey;
+            }
         }
 
         private static async Task<(bool escapeKeyPressed, GameAutoplaySettings gameAutoplaySettings)> GetGameSettings()
@@ -689,10 +718,6 @@ namespace Kahoofection.Modules.Gameplay
 
 
             Console.WriteLine("             \u001b[94m└──────────────────────────────────────────────────────────────────────────────────────────┘ ");
-            Console.WriteLine("                                                                                                                    ");
-            Console.WriteLine("                                                                                                                    ");
-            Console.WriteLine("             \u001b[94m┌ \u001b[97mUse 'Backspace' to return                                                        ");
-            Console.WriteLine("             \u001b[94m└─────────────────────────────                                                               ");
         }
 
         private static void JoinLobby(GameAutoplaySettings gameAutoplaySettings)
