@@ -12,7 +12,7 @@
 
 <br>
 
-> As of 30th July 2025 the project is still work in progress and mostly finished ;)
+> As of 7th August 2025 the project is still work in progress and mostly finished ;)
 > <br>
 > Support for some question types within Autoplay is still outstanding.
 > <br>
@@ -39,6 +39,29 @@
 >
 > This content is not affiliated with, endorsed, sponsored, or specifically approved by Kahoot and Kahoot is not responsible for it.
 > In addition, you are the only person responsible for your actions when using it.
+
+---
+
+## Features:
+
+<details>
+
+<summary>PinBruteforcer</summary>
+
+<br>
+
+- Find active Kahoot games randomly by bruteforcing game pins and checking them live.
+- Kahoofection is able to generate and check up to 10 generated game pins per second.
+- In about 50 game pins, on average there are 2 valid game pins.
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="PinBruteforcer" src="readme-files/gifs/PinBruteforcer.gif"/>
+</p>
+
+</details>
+
+
+
 
 ---
 
