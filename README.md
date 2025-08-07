@@ -88,6 +88,26 @@ _**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
 
 <details>
 
+<summary>QuizIdChecker</summary>
+
+> Description will be added soon!
+
+</details>
+
+
+
+<details>
+
+<summary>QuizIdAnswers</summary>
+
+> Description will be added soon!
+
+</details>
+
+
+
+<details>
+
 <summary>PinBruteforcer</summary>
 
 <br>
@@ -101,6 +121,26 @@ _**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
 </p>
 
 <br>
+
+</details>
+
+
+
+<details>
+
+<summary>GamePinSpammer</summary>
+
+> Description will be added soon!
+
+</details>
+
+
+
+<details>
+
+<summary>Autoplay</summary>
+
+> Description will be added soon!
 
 </details>
 
