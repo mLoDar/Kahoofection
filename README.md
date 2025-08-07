@@ -1,4 +1,4 @@
-<br>
+﻿<br>
 
 ```
  _  __ __  _  _  __   __  ___ ___ ________ _  __  __  _ 
@@ -10,9 +10,20 @@
 
 <br>
 
-`Kahoofection` is a console based application, which uses Selenium for a variety of tasks related to the game/learning plattform [Kahoot](https://kahoot.com/).
+Hello stranger! Welcome to `Kahoofection`.
+
+_**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
 
 ---
+
+<br>
+
+> :trident: **About**
+>
+> `Kahoofection` is a console based application, which uses Selenium and a range of bare-bone HTTP calls/Websockets for a variety of tasks related to the game/learning plattform [Kahoot](https://kahoot.com/).
+> <br>
+> <br>
+> The goal of this application was to understand Kahoot on a deeper level and make private Kahoot game more interesting/fun.
 
 <br>
 
