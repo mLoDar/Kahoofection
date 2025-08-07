@@ -12,12 +12,23 @@
 
 <br>
 
+> :information_source: **Information**
+>
 > As of 7th August 2025 the project is still work in progress and mostly finished ;)
 > <br>
 > Support for some question types within Autoplay is still outstanding.
 > <br>
 > <br>
 > Feel free to star the repository and watch it, to get all the latest updates! :)
+
+<br>
+
+> :warning: **Disclaimer**
+>
+> This application was created for educational and learning purpose and is not intended to be abused in any form.
+>
+> This content is not affiliated with, endorsed, sponsored, or specifically approved by Kahoot and Kahoot is not responsible for it.
+> In addition, you are the only person responsible for your actions when using it.
 
 <br>
 
@@ -33,14 +44,7 @@
 
 ---
 
-> :warning: **Disclaimer** :warning:
->
-> This application was created for educational and learning purpose and is not intended to be abused in any form.
->
-> This content is not affiliated with, endorsed, sponsored, or specifically approved by Kahoot and Kahoot is not responsible for it.
-> In addition, you are the only person responsible for your actions when using it.
-
----
+<br>
 
 ## Features:
 
