@@ -122,7 +122,7 @@ _**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
 Thanks to [rawnullbyte](https://github.com/rawnullbyte) :thumbsup:
 - For creating this very own "Kahoot Bot" [KahootConnect](https://github.com/HackySoftOfficial/KahootConnect).
 - For documenting in such a detail on how to create Websockets and connect to the Kahoot Servers/communicate with them.
-- Your project helps me a lot and will have a decent impact on the quality of `Kahoofection`.
+- Your project helped a lot during the development of `Kahoofection` and made a decent impact on its quality.
 
 Thanks to [patorjk](https://github.com/patorjk) :)
 - For creating this awesome website [patorjk.com](https://patorjk.com/software/taag/) which allows to create headers from normal text in different fonts and styles. It is awesome!
