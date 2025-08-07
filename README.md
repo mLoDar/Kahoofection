@@ -63,6 +63,29 @@ _**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
 
 ## Features:
 
+
+
+<details>
+
+<summary>QuizIdByName</summary>
+
+<br>
+
+- Every created Kahoot quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
+- When the unique id of the quiz is known, basic information such as title, description, information about the creator or even answers for questions can be found.
+- Within `Kahoofection` the steps of finding a QuizId are made more comfortable, by hiding the API calls from Kahoot behind `Kahoofection`'s simple UI.
+- Based on the input, the best matching quizzes will be displayed alongside with their QuizId. 
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="QuizIdByName" src="readme-files/gifs/QuizIdByName.gif"/>
+</p>
+
+<br>
+
+</details>
+
+
+
 <details>
 
 <summary>PinBruteforcer</summary>
@@ -77,10 +100,13 @@ _**ᴛʜᴇ ᴏɴʟʏ ᴡᴀʏ ᴛᴏ ᴘʟᴀʏ.**_
     <img style='height: 80%; width: 80%;' alt="PinBruteforcer" src="readme-files/gifs/PinBruteforcer.gif"/>
 </p>
 
+<br>
+
 </details>
 
 
 
+<br>
 
 ---
 
