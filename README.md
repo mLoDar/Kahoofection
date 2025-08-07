@@ -1,8 +1,12 @@
 <br>
 
-<h1 align="center">
-  Kahoofection
-</h1>
+```
+ _  __ __  _  _  __   __  ___ ___ ________ _  __  __  _ 
+| |/ //  \| || |/__\ /__\| __| __/ _/_   _| |/__\|  \| |
+|   <| /\ | >< | \/ | \/ | _|| _| \__ | | | | \/ | | ' |
+|_|\_\_||_|_||_|\__/ \__/|_| |___\__/ |_| |_|\__/|_|\__|
+
+```
 
 <br>
 
@@ -55,7 +59,7 @@
 <br>
 
 - Find active Kahoot games randomly by bruteforcing game pins and checking them live.
-- Kahoofection is able to generate and check up to 10 generated game pins per second.
+- `Kahoofection` is able to generate and check up to 10 generated game pins per second.
 - In about 50 game pins, on average there are 2 valid game pins.
 
 <p align="center">
