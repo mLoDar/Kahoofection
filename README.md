@@ -6,15 +6,9 @@
 
 <div align="center">
 
-```
-
- _  __ __  _  _  __   __  ___ ___ ________ _  __  __  _ 
-| |/ //  \| || |/__\ /__\| __| __/ _/_   _| |/__\|  \| |
-|   <| /\ | >< | \/ | \/ | _|| _| \__ | | | | \/ | | ' |
-|_|\_\_||_|_||_|\__/ \__/|_| |___\__/ |_| |_|\__/|_|\__|
-
-
-```
+<p align="center">
+    <img style='height: 90%; width: 90%;' alt="Header" src="readme-files/Header.PNG"/>
+</p>
 
 </div>
 
@@ -74,7 +68,7 @@
 <br>
 
 <p align="center">
-    <img style='height: 90%; width: 90%;' alt="mainMenu" src="readme-files/mainMenu.PNG"/>
+    <img style='height: 90%; width: 90%;' alt="MainMenu" src="readme-files/MainMenu.PNG"/>
 </p>
 
 <br>
