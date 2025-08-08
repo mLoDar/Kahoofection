@@ -172,6 +172,11 @@
 - The website [lingojam.com](https://lingojam.com/ItalicTextGenerator) was used for creating text in different fonts.
 - For drawing most of the menu [Wikipedia](https://wikipedia.org/) did a great job, on serving as a documentation on [box-drawing characters](https://en.wikipedia.org/wiki/Box-drawing_characters).
 - The library [Ncalc](https://github.com/ncalc/ncalc) takes the heavy lifting of evaluating any mathematical expressions within `Kahoofection`. Thanks! :)
+
+<br>
+
+---
+
 <br>
 
 ## Credits
@@ -189,3 +194,7 @@ where all question types are included for testing purposes.
 
 Thanks to [Arewzom](https://github.com/Arwezom) and [bacaala](https://github.com/bacaala) <3
 - For providing their feedback and ideas which lead `Kahoofection` one step closer to perfection.
+
+<br>
+
+---
