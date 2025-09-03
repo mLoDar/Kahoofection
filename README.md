@@ -87,7 +87,7 @@
 
 <br>
 
-- Every created Kahoot quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
+- Every created Kahoot-Quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
 - When the unique id of the quiz is known, basic information such as title, description, information about the creator or even answers for questions can be found.
 - Within `Kahoofection` the steps of finding a QuizId are made more comfortable, by hiding the API calls from Kahoot behind `Kahoofection`'s simple UI.
 - Based on the input, the best matching quizzes will be displayed alongside with their QuizId. 
@@ -106,7 +106,17 @@
 
 <summary>QuizIdChecker</summary>
 
-> Description will be added soon!
+<br>
+
+- Every created Kahoot-Quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
+- When the unique id of the quiz is known, basic information such as title, description or information about the creator can be found.
+- Simply enter a QuizId and all important information about a quiz will displayed within `Kahoofection`. 
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="QuizIdChecker" src="readme-files/gifs/QuizIdChecker.gif"/>
+</p>
+
+<br>
 
 </details>
 
@@ -118,7 +128,7 @@
 
 <br>
 
-- Every created Kahoot quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
+- Every created Kahoot-Quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
 - When the unique id of the quiz is known answers for questions can be found.
 - Within `Kahoofection` the steps of finding a QuizId's answers are made comfortable by the intuitive UI.
 - Simply enter a QuizId and get all the answers for this specific quiz.
@@ -139,7 +149,7 @@
 
 <br>
 
-- Find active Kahoot games randomly by bruteforcing game pins and checking them live.
+- Find active Kahoot-Games randomly by bruteforcing game pins and checking them live.
 - `Kahoofection` is able to generate and check up to 10 generated game pins per second.
 - In about 50 game pins, on average there are 2 valid game pins.
 
@@ -159,7 +169,7 @@
 
 <br>
 
-- With this feature every public Kahoot game without 2FA can be flooded.
+- With this feature every public Kahoot-Game without 2FA can be flooded.
 - First the game pin needs to be entered, after that the amount of bots and a name for them.
 - Bots should typically join within ~5-10 seconds.
 - Currently there is no feedback for single bots if they joined. This might be added in the future. 
