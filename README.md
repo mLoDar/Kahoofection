@@ -116,7 +116,18 @@
 
 <summary>QuizIdAnswers</summary>
 
-> Description will be added soon!
+<br>
+
+- Every created Kahoot quiz will be assigned an unique id ([UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier)).
+- When the unique id of the quiz is known answers for questions can be found.
+- Within `Kahoofection` the steps of finding a QuizId's answers are made comfortable by the intuitive UI.
+- Simply enter a QuizId and get all the answers for this specific quiz.
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="QuizIdAnswers" src="readme-files/gifs/QuizIdAnswers.gif"/>
+</p>
+
+<br>
 
 </details>
 
