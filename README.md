@@ -188,7 +188,22 @@
 
 <summary>Autoplay</summary>
 
-> Description will be added soon!
+<br>
+
+- This feature allows to create a bot which is able to answer all different kinds of questions.
+- It simply requires the games pin, the QuizId in use and a name for the bot.
+
+> Note: Currently Autoplay requires the game to have no 2FA enabled.
+ 
+- Within `Kahoofection`'s simple UI there will be constant logs to show the state of the bot.
+- There are different settings to make the bot more or less detectable.
+  (Combination of answer speed and accuracy)
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="Autoplay" src="readme-files/gifs/Autoplay.gif"/>
+</p>
+
+<br>
 
 </details>
 
