@@ -146,7 +146,18 @@
 
 <summary>GamePinSpammer</summary>
 
-> Description will be added soon!
+<br>
+
+- With this feature every public Kahoot game without 2FA can be flooded.
+- First the game pin needs to be entered, after that the amount of bots and a name for them.
+- Bots should typically join within ~5-10 seconds.
+- Currently there is no feedback for single bots if they joined. This might be added in the future. 
+
+<p align="center">
+    <img style='height: 80%; width: 80%;' alt="GamePinSpammer" src="readme-files/gifs/GamePinSpammer.gif"/>
+</p>
+
+<br>
 
 </details>
 
