@@ -160,7 +160,7 @@ namespace Kahoofection.Scripts.Kahoot
                 IWebElement pinItViewBox = webDriverWait.Until(driver => driver.FindElement(By.CssSelector(svgCssSelectorPinItImage)));
                 IWebElement pinItImage = pinItViewBox.FindElement(By.TagName("image"));
 
-                ActivityLogger.Log(_currentSection, subSection, "Found the needed viewbox with its image element.");
+                ActivityLogger.Log(_currentSection, subSection, "Found the needed ViewBox with its image element.");
 
 
 
@@ -176,18 +176,18 @@ namespace Kahoofection.Scripts.Kahoot
                 viewBoxWidth = Math.Min(viewBoxWidth, imageWidth);
                 viewBoxHeight = Math.Min(viewBoxHeight, imageHeight);
 
-                ActivityLogger.Log(_currentSection, subSection, "Assigned values for the target rect and viewbox size.");
+                ActivityLogger.Log(_currentSection, subSection, "Assigned values for the target rect and ViewBox size.");
 
 
 
                 string scriptAdjustment = $"arguments[0].setAttribute('viewBox', '{centerX - viewBoxWidth / 2} {centerY - viewBoxHeight / 2} {viewBoxWidth} {viewBoxHeight}');";
                 javaScriptExecutor.ExecuteScript(scriptAdjustment, pinItViewBox);
 
-                ActivityLogger.Log(_currentSection, subSection, "Successfully adjusted the viewbox!");
+                ActivityLogger.Log(_currentSection, subSection, "Successfully adjusted the ViewBox!");
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to adjust the viewbox.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to adjust the ViewBox.");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
 
                 return false;
@@ -204,7 +204,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to submit moved viewbox via button!");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit moved ViewBox via button!");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
 
                 return false;
@@ -372,7 +372,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to submit viewbox via button!");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to submit ViewBox via button!");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}");
 
                 return false;

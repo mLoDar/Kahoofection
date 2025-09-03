@@ -26,7 +26,7 @@ namespace Kahoofection
             { 1, "QuizIdByName" },
             { 2, "QuizIdChecker" },
             { 3, "QuizIdAnswers" },
-            { 4, "PinBruteforce" },
+            { 4, "PinBruteforcer" },
             { 5, "GamePinSpammer" },
             { 6, "AutoplayWithGamePin" }
         };

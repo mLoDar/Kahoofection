@@ -61,7 +61,7 @@ namespace Kahoofection.Scripts.Kahoot
             webSocketUrl = webSocketUrl.Replace("{gamePin}", gamePin.ToString());
             webSocketUrl = webSocketUrl.Replace("{webSocketToken}", webSocketToken);
 
-            ActivityLogger.Log(_currentSection, subSection, "Attempting to connect to the websocket.");
+            ActivityLogger.Log(_currentSection, subSection, "Attempting to connect to the WebSocket.");
 
             try
             {
@@ -121,9 +121,9 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            bool successfullMessage = await SendWebSocketMessage(kahootWebSocket, requestId, connectionData);
+            bool successfulMessage = await SendWebSocketMessage(kahootWebSocket, requestId, connectionData);
 
-            if (successfullMessage == false)
+            if (successfulMessage == false)
             {
                 ActivityLogger.Log(_currentSection, subSection, "Failed to establish a game connection!");
 
@@ -153,9 +153,9 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendWebSocketMessage(kahootWebSocket, requestId, loginData);
+            successfulMessage = await SendWebSocketMessage(kahootWebSocket, requestId, loginData);
 
-            if (successfullMessage == false)
+            if (successfulMessage == false)
             {
                 ActivityLogger.Log(_currentSection, subSection, "Failed to establish a game connection!");
 
@@ -185,11 +185,11 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendWebSocketMessage(kahootWebSocket, requestId, controllerData);
+            successfulMessage = await SendWebSocketMessage(kahootWebSocket, requestId, controllerData);
 
-            if (successfullMessage == false)
+            if (successfulMessage == false)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to send intial controller data!");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to send initial controller data!");
 
                 return;
             }
@@ -217,18 +217,18 @@ namespace Kahoofection.Scripts.Kahoot
                 }
             };
 
-            successfullMessage = await SendWebSocketMessage(kahootWebSocket, requestId, gameData);
+            successfulMessage = await SendWebSocketMessage(kahootWebSocket, requestId, gameData);
 
-            if (successfullMessage == false)
+            if (successfulMessage == false)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to send intial controller data!");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to send initial controller data!");
 
                 return;
             }
 
 
 
-            ActivityLogger.Log(_currentSection, subSection, "Game connection established! Sending a continous heartbeat to keep the connection alive.");
+            ActivityLogger.Log(_currentSection, subSection, "Game connection established! Sending a continuous heartbeat to keep the connection alive.");
 
             while (_clientTerminated == false)
             {
@@ -357,7 +357,7 @@ namespace Kahoofection.Scripts.Kahoot
 
         private static async Task<(bool successfullyFetched, string clientId)> GetWebSocketClientId(ClientWebSocket kahootWebSocket, int requestId)
         {
-            string subSection = "GetWebsocketClientId";
+            string subSection = "GetWebSocketClientId";
 
             var handShakeData = new[]
             {
@@ -416,7 +416,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to fetch the WebSocket's clientId with the inital handshake.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to fetch the WebSocket's clientId with the initial handshake.");
                 ActivityLogger.Log(_currentSection, subSection, exception.Message, true);
 
                 return (false, string.Empty);

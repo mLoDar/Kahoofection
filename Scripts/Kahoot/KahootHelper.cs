@@ -480,7 +480,7 @@ namespace Kahoofection.Scripts.Kahoot
         {
             string subSection = "AnswerQuestionAutoplay";
 
-            ActivityLogger.Log(_currentSection, subSection, "Answering a new question via the existing webdriver instance.");
+            ActivityLogger.Log(_currentSection, subSection, "Answering a new question via the existing WebDriver instance.");
 
 
 
@@ -592,7 +592,7 @@ namespace Kahoofection.Scripts.Kahoot
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "WebDriver wait timed out! Waiting for the answer page to appear was unsuccessfull.");
+                ActivityLogger.Log(_currentSection, subSection, "WebDriver wait timed out! Waiting for the answer page to appear was unsuccessful.");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
                 return false;

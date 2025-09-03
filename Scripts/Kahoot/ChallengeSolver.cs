@@ -84,8 +84,8 @@ namespace Kahoofection.Scripts.Kahoot
 
 
 
-                    var calcExpression = new Expression(expression);
-                    object result = calcExpression.Evaluate() ?? throw new Exception("Failed to evaluate offset expression. The 'result' of the expression was null.");
+                    Expression tokenExpression = new Expression(expression);
+                    object result = tokenExpression.Evaluate() ?? throw new Exception("Failed to evaluate offset expression. The 'result' of the expression was null.");
                     string computedExpression = result.ToString() ?? throw new Exception("Failed to evaluate offset expression. The 'computedExpression' of the expression was null.");
 
 

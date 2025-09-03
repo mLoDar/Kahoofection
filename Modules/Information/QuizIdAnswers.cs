@@ -182,7 +182,7 @@ namespace Kahoofection.Modules.Information
                 catch (Exception exception)
                 {
                     ActivityLogger.Log(_currentSection, subSection, "Failed to fetch questions or format them.");
-                    ActivityLogger.Log(_currentSection, subSection, $"Excpetion: {exception}", true);
+                    ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception}", true);
                 }
             }
 

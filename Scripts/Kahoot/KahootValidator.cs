@@ -82,7 +82,7 @@ namespace Kahoofection.Scripts.Kahoot
 
                 if (gameTwoFactorAuth.ToString().ToLower().Equals("false") == false)
                 {
-                    throw new Exception("Pin has no specifactions about TwoFactorAuthentication (not true or false).");
+                    throw new Exception("Pin has no specifications about TwoFactorAuthentication (not true or false).");
                 }
             }
             catch (Exception exception)
@@ -113,9 +113,9 @@ namespace Kahoofection.Scripts.Kahoot
 
             if (Guid.TryParse(providedQuizId, out Guid convertedQuizId) == false)
             {
-                ActivityLogger.Log(_currentSection, subSection, "An invalid QuizId was provided (No valid guuid).");
+                ActivityLogger.Log(_currentSection, subSection, "An invalid QuizId was provided (No valid UUID).");
 
-                return (new Guid(), string.Empty, new Exception("An invalid QuizId was provided (No valid guuid)."));
+                return (new Guid(), string.Empty, new Exception("An invalid QuizId was provided (No valid UUID)."));
             }
 
 
@@ -157,7 +157,7 @@ namespace Kahoofection.Scripts.Kahoot
                 return (new Guid(), string.Empty, exception);
             }
 
-            ActivityLogger.Log(_currentSection, subSection, "The provided input was prooven as a valid QuizId!");
+            ActivityLogger.Log(_currentSection, subSection, "The provided input was proven as a valid QuizId!");
 
             return (convertedQuizId, apiResponse, null);
         }

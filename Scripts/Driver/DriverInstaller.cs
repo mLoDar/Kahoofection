@@ -100,7 +100,7 @@ namespace Kahoofection.Scripts.Driver
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to download a chromedriver.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to download a ChromeDriver.");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
                 return false;
@@ -189,7 +189,7 @@ namespace Kahoofection.Scripts.Driver
             }
             catch (Exception exception)
             {
-                ActivityLogger.Log(_currentSection, subSection, "Failed to download a geckodriver.");
+                ActivityLogger.Log(_currentSection, subSection, "Failed to download a GeckoDriver.");
                 ActivityLogger.Log(_currentSection, subSection, $"Exception: {exception.Message}", true);
 
                 return false;

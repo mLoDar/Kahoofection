@@ -269,7 +269,7 @@ namespace Kahoofection.Modules.Gameplay
                     continue;
                 }
 
-                UpdateWebDriverLog($"\u001b[92mAnswerd question '{i}'!");
+                UpdateWebDriverLog($"\u001b[92mAnswered question '{i}'!");
             }
 
             UpdateWebDriverLog($"\u001b[92mGame has ended!");
@@ -299,7 +299,7 @@ namespace Kahoofection.Modules.Gameplay
                     return;
 
                 case ConsoleKey.Backspace:
-                    ActivityLogger.Log(_currentSection, subSection, $"Restarting module, as the BACKSPACE key was pressed  after the Autoplay finished.");
+                    ActivityLogger.Log(_currentSection, subSection, $"Restarting module, as the BACKSPACE key was pressed after the Autoplay finished.");
 
                     Console.CursorVisible = true;
                     goto LabelMethodEntryPoint;
@@ -514,7 +514,7 @@ namespace Kahoofection.Modules.Gameplay
             string stateRage = (currentNavigationIndex == 3 ? "\u001b[94m├─>\u001b[31m RAGE" : "\u001b[94m│  \u001b[31m Rage"); ;
 
             Console.WriteLine("             \u001b[94m┌ \u001b[97mLegit mode                                         ");
-            Console.WriteLine("             \u001b[94m│ \u001b[97mHow undetected should the Autoplay be?             ");
+            Console.WriteLine("             \u001b[94m│ \u001b[97mHow undetectable should the Autoplay be?             ");
             Console.WriteLine("             \u001b[94m├──────────────┬────────────────────────────────────┐");
             Console.WriteLine("             │              │                                    │");
             Console.WriteLine("             {0}      \u001b[94m│ \u001b[97mAnswer delay and incorrect answers \u001b[94m│", stateLegit);
@@ -618,9 +618,9 @@ namespace Kahoofection.Modules.Gameplay
                 {
                     ActivityLogger.Log(_currentSection, subSection, $"Downloading the latest driver version for '{browserToInitialize}' in order to fix the issue.");
 
-                    bool succesfullyDownloaded = await DriverInstaller.DownloadGeckoDriver();
+                    bool successfullyDownloaded = await DriverInstaller.DownloadGeckoDriver();
 
-                    if (succesfullyDownloaded == false)
+                    if (successfullyDownloaded == false)
                     {
                         ActivityLogger.Log(_currentSection, subSection, $"Failed to download the driver. See the errors above for more information.");
                     }
@@ -639,9 +639,9 @@ namespace Kahoofection.Modules.Gameplay
                 {
                     ActivityLogger.Log(_currentSection, subSection, $"Downloading the latest driver version for '{browserToInitialize}' in order to fix the issue.");
 
-                    bool succesfullyDownloaded = await DriverInstaller.DownloadChromeDriver();
+                    bool successfullyDownloaded = await DriverInstaller.DownloadChromeDriver();
 
-                    if (succesfullyDownloaded == false)
+                    if (successfullyDownloaded == false)
                     {
                         ActivityLogger.Log(_currentSection, subSection, $"Failed to download the driver. See the errors above for more information.");
                     }
@@ -739,7 +739,7 @@ namespace Kahoofection.Modules.Gameplay
 
 
 
-            UpdateWebDriverLog("\u001b[97mStarted to spin the wheel for the namerator.");
+            UpdateWebDriverLog("\u001b[97mStarted to spin the wheel for the Namerator.");
 
             _webDriver.FindElement(By.XPath(_appDriverPaths.buttonXpathNameratorSpin)).Click();
 
@@ -749,7 +749,7 @@ namespace Kahoofection.Modules.Gameplay
                 {
                     _webDriver.FindElement(By.XPath(_appDriverPaths.buttonXpathNameratorConfirm)).Click();
 
-                    UpdateWebDriverLog("\u001b[92mConfirmed namerator name!");
+                    UpdateWebDriverLog("\u001b[92mConfirmed Namerator name!");
 
                     break;
                 }
