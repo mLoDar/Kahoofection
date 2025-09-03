@@ -81,7 +81,7 @@ namespace Kahoofection
                     }
                 }
 
-                ActivityLogger.Log(_currentSection, subSection, "A new phrase for the main menu was choosen:");
+                ActivityLogger.Log(_currentSection, subSection, "A new phrase for the main menu was chosen:");
                 ActivityLogger.Log(_currentSection, subSection, _sessionPhrase, true);
             }
             catch
@@ -94,6 +94,7 @@ namespace Kahoofection
 
         LabelDrawUi:
 
+            Console.Title = "Kahoofection";
             Console.SetCursorPosition(0, 4);
 
 
