@@ -635,6 +635,42 @@ namespace Kahoofection.Scripts.Kahoot
                     submittedAnswer = AnswerSubmission.DropPin(webDriver);
                     break;
 
+                case "multiple_select_quiz":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "jumble":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "open_ended":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "multiple_select_poll":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "survey":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "brainstorming":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "word_cloud":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "content":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
+                case "feedback":
+                    // TODO: Implement in AnswerSubmission
+                    break;
+
                 default:
                     ActivityLogger.Log(_currentSection, subSection, $"Failed to submit answer for questionType '{questionType}'");
                     ActivityLogger.Log(_currentSection, subSection, $"The provided questionType is not known by the application.", true);

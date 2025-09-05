@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Text;
 using System.Drawing;
-using System.Text.RegularExpressions;
 
 using Kahoofection.Ressources;
 
