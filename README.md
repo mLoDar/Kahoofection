@@ -236,7 +236,7 @@ Thanks to [patorjk](https://github.com/patorjk) :)
 - For creating this awesome website [patorjk.com](https://patorjk.com/software/taag/) which allows to create headers from normal text in different fonts and styles. It is awesome!
 
 Thanks to [czeiffert](https://create.kahoot.it/profiles/ed8e691b-f98b-437c-8207-2fe2645bf9ae) :)
-- For creating a bunch of Kahoot Quizzes, incuding [this one](https://create.kahoot.it/details/40f74c96-44c5-4715-b584-ac34aa1be631)
+- For creating a bunch of Kahoot Quizzes, including [this one](https://create.kahoot.it/details/40f74c96-44c5-4715-b584-ac34aa1be631)
 where all question types are included for testing purposes.
 
 Thanks to [Arewzom](https://github.com/Arwezom) and [bacaala](https://github.com/bacaala) <3
