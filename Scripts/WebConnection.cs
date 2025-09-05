@@ -43,7 +43,6 @@ namespace Kahoofection.Scripts
                 HttpResponseMessage responseMessage = await httpClient.GetAsync(requestUrl);
                 string response = new StreamReader(await responseMessage.Content.ReadAsStreamAsync()).ReadToEnd();
 
-                response = Regex.Unescape(response);
                 response = RegexPatterns.HtmlTags().Replace(response, string.Empty);
                 response = WebUtility.HtmlDecode(response);
 
