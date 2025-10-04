@@ -45,7 +45,9 @@
 
 > :information_source: **Information**
 >
-> As of 7th August 2025 the project is still work in progress and mostly finished ;)
+> As of 4th October 2025 the project is still work in progress and mostly finished ;)
+> 
+> An exact date for everything finished is not clear yet.
 > <br>
 > Support for some question types within Autoplay is still outstanding.
 > <br>
