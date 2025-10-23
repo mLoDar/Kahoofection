@@ -217,6 +217,28 @@
 
 <br>
 
+## How to use
+
+Clone this repository
+> git clone https://github.com/mLoDar/Kahoofection.git
+
+Navigate to the repositories folder
+> cd Kahoofection
+
+Open the solution file (`.sln`) inside this folder
+> The .sln file needs to be opened with Visual Studio
+
+Once the project is open in Visual Studio, build the project and then run it
+> Ctrl+Shift+B and Crtl+F5
+
+After these steps, `Kahoofection` is ready to run :)
+
+<br>
+
+---
+
+<br>
+
 ## External services used
 - The website [lingojam.com](https://lingojam.com/ItalicTextGenerator) was used for creating text in different fonts.
 - For drawing most of the menu [Wikipedia](https://wikipedia.org/) did a great job, on serving as a documentation on [box-drawing characters](https://en.wikipedia.org/wiki/Box-drawing_characters).
